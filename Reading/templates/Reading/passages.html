@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  {#height: 300px; /* Should be removed. Only for demonstration */#}
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+<h1>{{ passage.title }}</h1>
+
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
+    <p>{{ passage.text }}</p>
+  </div>
+  <div class="column" style="background-color:#bbb;">
+
+  <h2>Choose the right answer from the choices for any question.</h2>
+      <form action="{% url 'Reading:submit' passage.id %}" method="post">
+      {% csrf_token %}
+      {% for question in passage.question_set.all %}
+          <h5>{{ forloop.counter }}-{{question.text }}</h5>
+          {% for answer in question.answer_set.all %}
+{#              <input type="radio" name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}" > {{ answer.text }}<br>#}
+              <input type="radio" name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+              <label for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+          {% endfor %}
+      {% endfor %}
+      <hr>
+      <input type="submit" value="Submit" />
+      </form>
+
+  </div>
+</div>
+
+</body>
+</html>
