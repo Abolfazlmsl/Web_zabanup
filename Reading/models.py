@@ -1,6 +1,16 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    phone_number = models.IntegerField(primary_key=True)
+    address = models.TextField()
+
+    def __str__(self):
+        return '{}, {}'.format(self.user.first_name, self.user.last_name)
 
 
 class Passage(models.Model):

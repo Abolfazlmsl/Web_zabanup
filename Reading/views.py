@@ -1,4 +1,5 @@
-from django.shortcuts import render, reverse, get_object_or_404
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, reverse, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 # Create your views here.
@@ -31,3 +32,18 @@ def submit(request, passage_id):
     }
     return render(request, 'Reading/submit.html', context)
 
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        print(user)
+        print(request.user)
+        if user:
+            login(request, user)
+            return redirect('http://127.0.0.1:8000/')
+        else:
+            return render(request, 'login.html', context={})
+    else:
+        return render(request, 'login.html', context={})
