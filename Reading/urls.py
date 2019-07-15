@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('Reading', views.reading, name='Reading'),
     path('login/', views.login_view, name='Login'),
+    path('logout/', views.logout_view, name='LogOut'),
     url(r'^Reading/(?P<passage_id>[0-9]+)/$', views.passage_body, name='passage_body'),
     url(r'^Reading/(?P<passage_id>[0-9]+)/submit$', views.submit, name='submit'),
 ]

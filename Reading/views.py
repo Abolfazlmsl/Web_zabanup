@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, reverse, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from . import models
@@ -6,7 +6,11 @@ from . import models
 
 
 def home(request):
-    return render(request, 'home.html')
+    if request.user:
+        username = request.user.username
+        return render(request, 'home.html', context={'user': username, })
+    else:
+        return render(request, 'home.html')
 
 
 def reading(request):
@@ -38,12 +42,16 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-        print(user)
-        print(request.user)
         if user:
             login(request, user)
             return redirect('http://127.0.0.1:8000/')
         else:
-            return render(request, 'login.html', context={})
+            return render(request, 'login.html', context={'alert': 'The information is wrong!', })
     else:
         return render(request, 'login.html', context={})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('http://127.0.0.1:8000/')
+

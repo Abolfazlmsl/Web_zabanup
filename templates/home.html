@@ -14,5 +14,14 @@
 <hr>
 <button type="button">Writing</button>
 </form>
+    {% if user %}
+        <p>
+            currently user : {{ user }}
+        </p>
+        <form action="{% url 'Reading:LogOut' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="logout" name="btn">
+        </form>
+    {% endif %}
 </body>
 </html>

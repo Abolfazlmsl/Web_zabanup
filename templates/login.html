@@ -17,5 +17,12 @@
         </label>
         <input type="submit" name="btn" value="submit">
     </form>
+    {% if alert %}
+        <p>
+            {{ alert }}
+            pls try again
+        </p>
+    {% endif %}
+
 </body>
 </html>
