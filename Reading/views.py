@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, reverse, get_object_or_404, redirect
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 # Create your views here.
@@ -55,3 +56,13 @@ def logout_view(request):
     logout(request)
     return redirect('http://127.0.0.1:8000/')
 
+
+def change_password(request):
+    if request.method == 'POST':
+        u = User.objects.get(username=request.user.username)
+        newpass = request.POST['newpass']
+        u.set_password(newpass)
+        u.save()
+        return redirect('http://127.0.0.1:8000/')
+    else:
+        return render(request, 'change password.html')
