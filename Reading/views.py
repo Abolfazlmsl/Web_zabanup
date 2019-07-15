@@ -16,6 +16,13 @@ def home(request):
 
 def reading(request):
     passages = models.Passage.objects.all()
+
+    query_g1 = request.GET.get("group1")
+    query_g2 = request.GET.get("group2")
+    if query_g1 and query_g2:
+        # pass
+        return render(request, 'Reading/Detail.html', {'group1': query_g1, 'group2': query_g2})
+
     context = {'passages': passages}
     return render(request, 'Reading/reading.html', context)
 
@@ -36,6 +43,8 @@ def submit(request, passage_id):
         'passage': passage,
     }
     return render(request, 'Reading/submit.html', context)
+
+
 
 
 def login_view(request):
@@ -65,4 +74,4 @@ def change_password(request):
         u.save()
         return redirect('http://127.0.0.1:8000/')
     else:
-        return render(request, 'change password.html')
+        return render(request, 'change_password.html')
