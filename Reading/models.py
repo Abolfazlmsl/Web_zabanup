@@ -27,7 +27,7 @@ class Question(models.Model):
     text = models.CharField(max_length=700)
 
     def __str__(self):
-        return '%s' % self.id
+        return '%s' % self.text
 
 
 class Answer(models.Model):
@@ -36,7 +36,7 @@ class Answer(models.Model):
     truth = models.BooleanField(default=False)
 
     def __str__(self):
-        return '%s' % self.id
+        return '%s' % self.question
 
 
 class UserAnswer(models.Model):
