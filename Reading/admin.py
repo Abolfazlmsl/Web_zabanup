@@ -3,6 +3,10 @@ from . import models
 
 # Register your models here.
 
+admin.site.register(models.Profile)
+admin.site.register(models.Answer)
+admin.site.register(models.UserAnswer)
+
 
 class QuestionInline(admin.TabularInline):
     model = models.Question
