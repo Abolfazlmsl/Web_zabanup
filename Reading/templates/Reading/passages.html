@@ -35,14 +35,83 @@
   <h2>Choose the right answer from the choices for any question.</h2>
       <form action="{% url 'Reading:submit' passage.id %}" method="post">
       {% csrf_token %}
-      {% for question in passage.question_set.all %}
-          <h5>{{ forloop.counter }}-{{question.text }}</h5>
-          {% for answer in question.answer_set.all %}
-{#              <input type="radio" name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}" > {{ answer.text }}<br>#}
-              <input type="radio" name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-              <label for="answer{{ answer.id }}">{{ answer.text }}</label><br />
-          {% endfor %}
-      {% endfor %}
+          <h5>1 -{{passage.question_set.all.0}}</h5>
+                answer:
+            <select name="q1">
+                <option disabled selected></option>
+             {% for answer in passage.question_set.all.0.answer_set.all %}
+                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+             {% endfor %}
+            </select>
+            <br>
+
+          <h5>2 -{{passage.question_set.all.1}}</h5>
+                answer:
+                <select name="q2">
+                    <option disabled selected></option>
+                 {% for answer in passage.question_set.all.1.answer_set.all %}
+                    <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                 {% endfor %}
+                </select>
+                <br>
+
+            <h5>3 -{{passage.question_set.all.2}}</h5>
+            answer:
+            <select name="q3">
+            <option disabled selected></option>
+             {% for answer in passage.question_set.all.2.answer_set.all %}
+                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+             {% endfor %}
+            </select>
+            <br>
+
+            <h5>4 -{{passage.question_set.all.3}}</h5>
+                answer:
+                <input type="text" name="hidden1" hidden value="{{ passage.question_set.all.3.id }}">
+                <input type="text"  name="q4" id="answer{{ answer.id }}" value="{{ answer.id }}">
+                <br>
+
+            <h5>5 -{{passage.question_set.all.4}}</h5>
+                answer:
+                <input type="text" name="hidden2" hidden value="{{ passage.question_set.all.4.id }}">
+                <input type="text"  name="q5" id="answer{{ answer.id }}" value="{{ answer.id }}">
+                <br>
+
+        <h5>6 -{{passage.question_set.all.5}}</h5>
+                answer:
+                <input type="text" name="hidden3" hidden value="{{ passage.question_set.all.5.id }}">
+                <input type="text"  name="q6" id="answer{{ answer.id }}" value="{{ answer.id }}">
+                <br>
+        <h5>7 - {{ passage.question_set.all.6 }}</h5>
+            answer: <br>
+            {% for answer in passage.question_set.all.6.answer_set.all %}
+                <input type="radio" name="q7" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                <label for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+             {% endfor %} <br>
+        <h5>8 - {{ passage.question_set.all.7 }}</h5>
+            answer: <br>
+            {% for answer in passage.question_set.all.7.answer_set.all %}
+                <input type="radio" name="q8" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                <label for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+             {% endfor %} <br>
+      <h5>9 - {{ passage.question_set.all.8 }}</h5>
+            answer: <br>
+            {% for answer in passage.question_set.all.8.answer_set.all %}
+                <input type="radio" name="q9" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                <label for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+             {% endfor %} <br>
+
+      <h5>10 - {{ passage.question_set.all.9 }}</h5>
+            answer: <br>
+            {% for answer in passage.question_set.all.9.answer_set.all %}
+                <input type="text" name="q10_id" value="{{ passage.question_set.all.9.id }}" hidden>
+                <input type="checkbox" name="q10" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                <label for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+             {% endfor %} <br>
+
+
+
+
       <hr>
       <input type="submit" value="Submit" />
       </form>
@@ -52,3 +121,5 @@
 
 </body>
 </html>
+
+
