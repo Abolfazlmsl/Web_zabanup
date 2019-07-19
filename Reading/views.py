@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, reverse, get_object_or_404, redirect
+from django.shortcuts import render, reverse, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from . import models
@@ -32,13 +32,41 @@ def reading(request):
 
 def passage_body(request, passage_id):
     passage = get_object_or_404(models.Passage, pk=passage_id)
-    return render(request, 'Reading/passages.html', {'passage': passage})
+    questions = get_list_or_404(models.Question, passage=passage)
+    dropdown = []
+    textbox = []
+    radiobutton = []
+    checkbox = []
+    for question in questions:
+        if question.type == 'dropdown':
+            dropdown.append(question)
+        elif question.type == 'text':
+            textbox.append(question)
+        elif question.type == 'radiobutton':
+            radiobutton.append(question)
+        elif question.type == 'checkbox':
+            checkbox.append(question)
+    print(dropdown)
+    print(textbox)
+    print(radiobutton)
+    print(checkbox)
+    context = {
+        'passage': passage,
+        'dropdown': dropdown,
+        'textbox': textbox,
+        'radiobutton': radiobutton,
+        'checkbox': checkbox,
+        'counter': 0,
+        'plus': 1,
+    }
+    return render(request, 'Reading/passages.html', context=context)
 
 
 def submit(request, passage_id):
     if request.method == 'POST':
         answer_list = []
         answer_text = []
+        correct_answers = []
         passage = get_object_or_404(models.Passage, pk=passage_id)
 
         q1 = request.POST.get('q1')
@@ -69,13 +97,16 @@ def submit(request, passage_id):
 
         grade = 0
         for answer in answer_list:
-            my_answer = models.Answer.objects.get(id=answer).truth
-            if my_answer:
-                grade += 1
+            if answer:
+                my_answer = get_object_or_404(models.Answer, id=answer).truth
+                if my_answer:
+                    correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
+                    grade += 1
 
         for answer in answer_text:
-            my_question = models.Question.objects.get(id=answer[0])
-            if answer[1] == models.Answer.objects.get(question=my_question).text:
+            # my_question = models.Question.objects.get(id=answer[0])
+            if answer[1] == get_object_or_404(models.Answer, question=answer[0]).text:
+                correct_answers.append(int(answer[0]))
                 grade += 1
 
         count_q10 = 0
@@ -84,14 +115,18 @@ def submit(request, passage_id):
             if answer.truth:
                 count_q10 += 1
         for answer in q10:
-            if models.Answer.objects.get(id=answer).truth:
+            if get_object_or_404(models.Answer, id=answer).truth:
                 count_q10 -= 1
         if count_q10 == 0:
+            correct_answers.append(int(q10_id))
             grade += 1
+        print(correct_answers)
+        print(request.user.first_name)
         context = {
             'List': answer_list,
             'passage': passage,
             'grade': grade*10,
+            'correct_answers': correct_answers,
         }
         return render(request, 'Reading/submit.html', context)
 
@@ -103,7 +138,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('Reading:home')
         else:
             return render(request, 'login.html', context={'alert': 'The information is wrong!', })
     else:
@@ -112,7 +147,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('http://127.0.0.1:8000/')
+    return redirect('Reading:home')
 
 
 def change_password(request):
@@ -121,6 +156,6 @@ def change_password(request):
         newpass = request.POST['newpass']
         u.set_password(newpass)
         u.save()
-        return redirect('http://127.0.0.1:8000/')
+        return redirect('Reading:submit')
     else:
         return render(request, 'change_password.html')

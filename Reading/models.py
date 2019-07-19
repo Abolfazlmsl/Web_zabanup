@@ -23,8 +23,15 @@ class Passage(models.Model):
 
 
 class Question(models.Model):
+    CHOICES = [
+        ('dropdown', 'Dropdown'),
+        ('text', 'Text'),
+        ('radiobutton', 'Radiobutton'),
+        ('checkbox', 'Checkbox'),
+    ]
     passage = models.ForeignKey(Passage, on_delete=models.SET_NULL, null=True)
     text = models.CharField(max_length=700)
+    type = models.CharField(max_length=32, choices=CHOICES)
 
     def __str__(self):
         return '%s' % self.text
