@@ -228,8 +228,8 @@
                                     <div class="form-check custom-radio my-1">
                                         {% for answer in rb.answer_set.all %}
                                             <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
-                                            <input class="form-check-input custom-control-input" type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-                                            <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+                                            <input class="form-check-input custom-control-input" type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                         {% endfor %} <br>
                                     </div>
                                 </div>
@@ -241,7 +241,7 @@
                             <div class="col-auto mr-auto align-middle">
 
                                 <h5 class="mb-4">
-                                    Questions {{ dropdown|add:textbox|add:radiobutton|length|add:1 }}
+                                    Questions {{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}
                                 </h5>
                             </div>
                             <div class="col-auto">
@@ -249,9 +249,9 @@
                             </div>
                         </div>
                         <p><i>Check the items that are true in your idea.</i></p>
-                        <p><i>Check the correct items in <b> boxes {{ dropdown|add:textbox|add:radiobutton|length|add:1 }}</b> on your answer sheet.</i></p>
+                        <p><i>Check the correct items in <b> boxes {{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</b> on your answer sheet.</i></p>
+                        {# checkbox question start #}
                         {% for cb in checkbox %}
-
                             <div class="row container border checkboxQuestion ml-0 align-items-center mb-2">
                             <div class="col-1 ml-2 mt-1">
                                 <div class="row">
@@ -267,16 +267,15 @@
                                 <div class="form-check custom-checkbox my-1">
                                     {% for answer in cb.answer_set.all %}
                                         <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
-                                        <input type="text" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.counter }}_id" value="{{ cb.id }}" hidden>
-                                        <input class="form-check-input custom-control-input" type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                        <input type="text" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
+                                        <input class="form-check-input custom-control-input" type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
                                         <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br />
-                                     {% endfor %}
+                                     {% endfor %}<br>
                                 </div>
                             </div>
                         </div>
-
                         {% endfor %}
-
+                        {# checkbox question end #}
                         <input class="btn btn-light btn-sm mx-2 navbarButton" style="color: rgb(40, 70, 100)" type="submit" value="Submit" />
 
 
