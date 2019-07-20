@@ -159,3 +159,28 @@ def change_password(request):
         return redirect('Reading:submit')
     else:
         return render(request, 'change_password.html')
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        phone_number = request.POST.get('phone_number')
+        password = request.POST.get('password')
+        re_password = request.POST.get('re_password')
+        address = request.POST.get('address')
+        if password != re_password:
+            context = {
+                'alert': 'Passwords does not match!',
+            }
+            return render(request, 'signup.html', context)
+        else:
+            us = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username,
+                                          password=password)
+            us.save()
+            models.Profile(user=us, phone_number=phone_number, address=address).save()
+            return redirect('Reading:Login')
+    else:
+        return render(request, 'signup.html')
