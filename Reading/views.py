@@ -94,7 +94,8 @@ def submit(request, passage_id):
 
         q10 = request.POST.getlist('q10')
         q10_id = request.POST.get('q10_id')
-
+        print(answer_list)
+        print(answer_text)
         grade = 0
         for answer in answer_list:
             if answer:
@@ -121,7 +122,6 @@ def submit(request, passage_id):
             correct_answers.append(int(q10_id))
             grade += 1
         print(correct_answers)
-        print(request.user.first_name)
         context = {
             'List': answer_list,
             'passage': passage,
