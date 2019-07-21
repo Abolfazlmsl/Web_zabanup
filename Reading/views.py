@@ -9,7 +9,7 @@ from . import models
 def home(request):
     if request.user:
         username = request.user.username
-        return render(request, 'home.html', context={'user': username, })
+        return render(request, 'home.html', context={'user': username})
     else:
         return render(request, 'home.html')
 
@@ -171,10 +171,9 @@ def submit(request, passage_id):
             q = request.POST.get('q' + plus)
             radiobutton_list.append(q)
         for i in range(checkbox_count):
-            iplus = str(i + 1)
             plus = str(i+1+dropdown_count+textbox_count+radiobutton_count)
             q = request.POST.getlist('q' + plus)
-            h = request.POST.get('q' + iplus + '_id')
+            h = request.POST.get('q' + plus + '_id')
             checkbox_list.append([h, q])
         print(dropdown_list)
         print(textbox_list)
@@ -201,21 +200,25 @@ def submit(request, passage_id):
 
         for i in checkbox_list:
             count_q = 0
-            q_id = 'q' + i[0]
-            answers_q = models.Answer.objects.filter(question=q_id)
-            for answer in answers_q:
-                if answer.truth:
+            answers_q = models.Answer.objects.filter(question=i[0])
+            j = i[1]
+            for j in answers_q:
+                print(j)
+                if j.truth:
                     count_q += 1
-            for answer in q_id:
+            for answer in i[0]:
                 if get_object_or_404(models.Answer, id=answer).truth:
                     count_q -= 1
             if count_q == 0:
-                correct_answers.append(int(q_id))
+                correct_answers.append(int(i[0]))
                 grade += 1
-
+        context = {
+                    'passage': passage,
+                    'grade': grade*10,
+                    'correct_answers': correct_answers,
+                    }
         print(grade)
-        return render(request, 'Reading/submit.html')
-
+        return render(request, 'Reading/submit.html', context)
 
 
 def login_view(request):

@@ -22,6 +22,12 @@
             {% csrf_token %}
             <input type="submit" value="logout" name="btn">
         </form>
+
+    {% endif %}
+
+    {% if not user %}
+        <a class="btn " href="/signup">signup</a> <br>
+        <a class="btn " href="/login">login</a>
     {% endif %}
 </body>
 </html>
