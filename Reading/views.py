@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, reverse, get_object_or_404, redirect, get_list_or_404
+from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 # Create your views here.
 
@@ -60,75 +59,6 @@ def passage_body(request, passage_id):
         'plus': 1,
     }
     return render(request, 'Reading/passages.html', context=context)
-
-
-# def submit(request, passage_id):
-#     if request.method == 'POST':
-#         answer_list = []
-#         answer_text = []
-#         correct_answers = []
-#         passage = get_object_or_404(models.Passage, pk=passage_id)
-#
-#         q1 = request.POST.get('q1')
-#         answer_list.append(q1)
-#         q2 = request.POST.get('q2')
-#         answer_list.append(q2)
-#         q3 = request.POST.get('q3')
-#         answer_list.append(q3)
-#         q7 = request.POST.get('q7')
-#         answer_list.append(q7)
-#         q8 = request.POST.get('q8')
-#         answer_list.append(q8)
-#         q9 = request.POST.get('q9')
-#         answer_list.append(q9)
-#
-#         hidden1 = request.POST.get('hidden1')
-#         hidden2 = request.POST.get('hidden2')
-#         hidden3 = request.POST.get('hidden3')
-#         q4 = request.POST.get('q4')
-#         q5 = request.POST.get('q5')
-#         q6 = request.POST.get('q6')
-#         answer_text.append([hidden1, q4])
-#         answer_text.append([hidden2, q5])
-#         answer_text.append([hidden3, q6])
-#
-#         q10 = request.POST.getlist('q10')
-#         q10_id = request.POST.get('q10_id')
-#         print(answer_list)
-#         print(answer_text)
-#         grade = 0
-#         for answer in answer_list:
-#             if answer:
-#                 my_answer = get_object_or_404(models.Answer, id=answer).truth
-#                 if my_answer:
-#                     correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
-#                     grade += 1
-#
-#         for answer in answer_text:
-#             # my_question = models.Question.objects.get(id=answer[0])
-#             if answer[1] == get_object_or_404(models.Answer, question=answer[0]).text:
-#                 correct_answers.append(int(answer[0]))
-#                 grade += 1
-#
-#         count_q10 = 0
-#         answers_10 = models.Answer.objects.filter(question=q10_id)
-#         for answer in answers_10:
-#             if answer.truth:
-#                 count_q10 += 1
-#         for answer in q10:
-#             if get_object_or_404(models.Answer, id=answer).truth:
-#                 count_q10 -= 1
-#         if count_q10 == 0:
-#             correct_answers.append(int(q10_id))
-#             grade += 1
-#         print(correct_answers)
-#         context = {
-#             'List': answer_list,
-#             'passage': passage,
-#             'grade': grade*10,
-#             'correct_answers': correct_answers,
-#         }
-#         return render(request, 'Reading/submit.html', context)
 
 
 def submit(request, passage_id):
@@ -221,7 +151,6 @@ def submit(request, passage_id):
             else:
                 save_list[question.id] = 'wrong'
         models.UserAnswer(user=request.user, answer=save_list).save()
-        # models.UserAnswer(user=request.user, )
         return render(request, 'Reading/submit.html', context)
     else:
         return redirect('Reading:Reading')
