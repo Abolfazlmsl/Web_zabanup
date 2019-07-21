@@ -219,6 +219,8 @@ def submit(request, passage_id):
                     }
         print(grade)
         return render(request, 'Reading/submit.html', context)
+    else:
+        return redirect('Reading:Reading')
 
 
 def login_view(request):

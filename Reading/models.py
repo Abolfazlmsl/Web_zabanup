@@ -47,5 +47,5 @@ class Answer(models.Model):
 
 
 class UserAnswer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True)
-    answer = models.ForeignKey(Answer, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    answer = models.TextField()
