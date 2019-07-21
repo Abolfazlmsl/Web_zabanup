@@ -145,6 +145,7 @@ def submit(request, passage_id):
         checkbox_list = []
         correct_answers = []
         grade = 0
+        # calculate question of each type
         for question in questions:
             if question.type == 'dropdown':
                 dropdown_count += 1
@@ -159,7 +160,6 @@ def submit(request, passage_id):
             plus = str(i+1)
             q = request.POST.get('q' + plus)
             dropdown_list.append(q)
-
         for i in range(textbox_count):
             iplus = str(i+1)
             plus = str(i+1+dropdown_count)
@@ -175,10 +175,7 @@ def submit(request, passage_id):
             q = request.POST.getlist('q' + plus)
             h = request.POST.get('q' + plus + '_id')
             checkbox_list.append([h, q])
-        print(dropdown_list)
-        print(textbox_list)
-        print(radiobutton_list)
-        print(checkbox_list)
+
         for answer in dropdown_list:
             if answer:
                 my_answer = get_object_or_404(models.Answer, id=answer).truth
@@ -200,24 +197,31 @@ def submit(request, passage_id):
 
         for i in checkbox_list:
             count_q = 0
-            answers_q = models.Answer.objects.filter(question=i[0])
-            j = i[1]
-            for j in answers_q:
-                print(j)
-                if j.truth:
+            question = get_object_or_404(models.Question, id=i[0])
+            answers_q = get_list_or_404(models.Answer, question=question)
+            for answer in answers_q:
+                if answer.truth:
                     count_q += 1
-            for answer in i[0]:
+            for answer in i[1]:
                 if get_object_or_404(models.Answer, id=answer).truth:
                     count_q -= 1
             if count_q == 0:
                 correct_answers.append(int(i[0]))
                 grade += 1
+        multi_number = 100 / passage.question_set.all().__len__()
         context = {
                     'passage': passage,
-                    'grade': grade*10,
+                    'grade': grade*multi_number,
                     'correct_answers': correct_answers,
                     }
-        print(grade)
+        save_list = {}
+        for question in passage.question_set.all():
+            if question.id in correct_answers:
+                save_list[question.id] = 'correct'
+            else:
+                save_list[question.id] = 'wrong'
+        models.UserAnswer(user=request.user, answer=save_list).save()
+        # models.UserAnswer(user=request.user, )
         return render(request, 'Reading/submit.html', context)
     else:
         return redirect('Reading:Reading')
