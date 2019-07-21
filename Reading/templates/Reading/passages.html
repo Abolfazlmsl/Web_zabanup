@@ -225,9 +225,9 @@
                                     <p class="my-0">{{ rb }}</p>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-check custom-radio my-1">
+                                    <div class="form-check custom-control custom-radio my-1">
                                         {% for answer in rb.answer_set.all %}
-                                            <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
+                                            <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
                                             <input class="form-check-input custom-control-input" type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
                                             <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                         {% endfor %} <br>
@@ -288,8 +288,8 @@
     </main>
 
     <script src="{% static 'JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
-    <script src="{% static 'JavaScript/popper.min.js' %}"></script>
     <script src="{% static 'JavaScript/bootstrap.min.js' %}"></script>
+    <script src="{% static 'JavaScript/popper.min.js' %}"></script>
 </body>
 </html>
 

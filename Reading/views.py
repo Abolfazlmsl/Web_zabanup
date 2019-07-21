@@ -62,73 +62,160 @@ def passage_body(request, passage_id):
     return render(request, 'Reading/passages.html', context=context)
 
 
+# def submit(request, passage_id):
+#     if request.method == 'POST':
+#         answer_list = []
+#         answer_text = []
+#         correct_answers = []
+#         passage = get_object_or_404(models.Passage, pk=passage_id)
+#
+#         q1 = request.POST.get('q1')
+#         answer_list.append(q1)
+#         q2 = request.POST.get('q2')
+#         answer_list.append(q2)
+#         q3 = request.POST.get('q3')
+#         answer_list.append(q3)
+#         q7 = request.POST.get('q7')
+#         answer_list.append(q7)
+#         q8 = request.POST.get('q8')
+#         answer_list.append(q8)
+#         q9 = request.POST.get('q9')
+#         answer_list.append(q9)
+#
+#         hidden1 = request.POST.get('hidden1')
+#         hidden2 = request.POST.get('hidden2')
+#         hidden3 = request.POST.get('hidden3')
+#         q4 = request.POST.get('q4')
+#         q5 = request.POST.get('q5')
+#         q6 = request.POST.get('q6')
+#         answer_text.append([hidden1, q4])
+#         answer_text.append([hidden2, q5])
+#         answer_text.append([hidden3, q6])
+#
+#         q10 = request.POST.getlist('q10')
+#         q10_id = request.POST.get('q10_id')
+#         print(answer_list)
+#         print(answer_text)
+#         grade = 0
+#         for answer in answer_list:
+#             if answer:
+#                 my_answer = get_object_or_404(models.Answer, id=answer).truth
+#                 if my_answer:
+#                     correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
+#                     grade += 1
+#
+#         for answer in answer_text:
+#             # my_question = models.Question.objects.get(id=answer[0])
+#             if answer[1] == get_object_or_404(models.Answer, question=answer[0]).text:
+#                 correct_answers.append(int(answer[0]))
+#                 grade += 1
+#
+#         count_q10 = 0
+#         answers_10 = models.Answer.objects.filter(question=q10_id)
+#         for answer in answers_10:
+#             if answer.truth:
+#                 count_q10 += 1
+#         for answer in q10:
+#             if get_object_or_404(models.Answer, id=answer).truth:
+#                 count_q10 -= 1
+#         if count_q10 == 0:
+#             correct_answers.append(int(q10_id))
+#             grade += 1
+#         print(correct_answers)
+#         context = {
+#             'List': answer_list,
+#             'passage': passage,
+#             'grade': grade*10,
+#             'correct_answers': correct_answers,
+#         }
+#         return render(request, 'Reading/submit.html', context)
+
+
 def submit(request, passage_id):
     if request.method == 'POST':
-        answer_list = []
-        answer_text = []
-        correct_answers = []
         passage = get_object_or_404(models.Passage, pk=passage_id)
-
-        q1 = request.POST.get('q1')
-        answer_list.append(q1)
-        q2 = request.POST.get('q2')
-        answer_list.append(q2)
-        q3 = request.POST.get('q3')
-        answer_list.append(q3)
-        q7 = request.POST.get('q7')
-        answer_list.append(q7)
-        q8 = request.POST.get('q8')
-        answer_list.append(q8)
-        q9 = request.POST.get('q9')
-        answer_list.append(q9)
-
-        hidden1 = request.POST.get('hidden1')
-        hidden2 = request.POST.get('hidden2')
-        hidden3 = request.POST.get('hidden3')
-        q4 = request.POST.get('q4')
-        q5 = request.POST.get('q5')
-        q6 = request.POST.get('q6')
-        answer_text.append([hidden1, q4])
-        answer_text.append([hidden2, q5])
-        answer_text.append([hidden3, q6])
-
-        q10 = request.POST.getlist('q10')
-        q10_id = request.POST.get('q10_id')
-        print(answer_list)
-        print(answer_text)
+        questions = get_list_or_404(models.Question, passage=passage)
+        dropdown_count = 0
+        textbox_count = 0
+        radiobutton_count = 0
+        checkbox_count = 0
+        dropdown_list = []
+        textbox_list = []
+        radiobutton_list = []
+        checkbox_list = []
+        correct_answers = []
         grade = 0
-        for answer in answer_list:
+        for question in questions:
+            if question.type == 'dropdown':
+                dropdown_count += 1
+            elif question.type == 'text':
+                textbox_count += 1
+            elif question.type == 'radiobutton':
+                radiobutton_count += 1
+            elif question.type == 'checkbox':
+                checkbox_count += 1
+
+        for i in range(dropdown_count):
+            plus = str(i+1)
+            q = request.POST.get('q' + plus)
+            dropdown_list.append(q)
+
+        for i in range(textbox_count):
+            iplus = str(i+1)
+            plus = str(i+1+dropdown_count)
+            q = request.POST.get('q' + plus)
+            h = request.POST.get('hidden' + iplus)
+            textbox_list.append([h, q])
+        for i in range(radiobutton_count):
+            plus = str(i+1+dropdown_count+textbox_count)
+            q = request.POST.get('q' + plus)
+            radiobutton_list.append(q)
+        for i in range(checkbox_count):
+            iplus = str(i + 1)
+            plus = str(i+1+dropdown_count+textbox_count+radiobutton_count)
+            q = request.POST.getlist('q' + plus)
+            h = request.POST.get('q' + iplus + '_id')
+            checkbox_list.append([h, q])
+        print(dropdown_list)
+        print(textbox_list)
+        print(radiobutton_list)
+        print(checkbox_list)
+        for answer in dropdown_list:
             if answer:
                 my_answer = get_object_or_404(models.Answer, id=answer).truth
                 if my_answer:
                     correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
                     grade += 1
 
-        for answer in answer_text:
-            # my_question = models.Question.objects.get(id=answer[0])
+        for answer in textbox_list:
             if answer[1] == get_object_or_404(models.Answer, question=answer[0]).text:
                 correct_answers.append(int(answer[0]))
                 grade += 1
 
-        count_q10 = 0
-        answers_10 = models.Answer.objects.filter(question=q10_id)
-        for answer in answers_10:
-            if answer.truth:
-                count_q10 += 1
-        for answer in q10:
-            if get_object_or_404(models.Answer, id=answer).truth:
-                count_q10 -= 1
-        if count_q10 == 0:
-            correct_answers.append(int(q10_id))
-            grade += 1
-        print(correct_answers)
-        context = {
-            'List': answer_list,
-            'passage': passage,
-            'grade': grade*10,
-            'correct_answers': correct_answers,
-        }
-        return render(request, 'Reading/submit.html', context)
+        for answer in radiobutton_list:
+            if answer:
+                my_answer = get_object_or_404(models.Answer, id=answer).truth
+                if my_answer:
+                    correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
+                    grade += 1
+
+        for i in checkbox_list:
+            count_q = 0
+            q_id = 'q' + i[0]
+            answers_q = models.Answer.objects.filter(question=q_id)
+            for answer in answers_q:
+                if answer.truth:
+                    count_q += 1
+            for answer in q_id:
+                if get_object_or_404(models.Answer, id=answer).truth:
+                    count_q -= 1
+            if count_q == 0:
+                correct_answers.append(int(q_id))
+                grade += 1
+
+        print(grade)
+        return render(request, 'Reading/submit.html')
+
 
 
 def login_view(request):
