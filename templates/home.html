@@ -14,23 +14,20 @@
 <hr>
 <button type="button">Writing</button>
 </form>
+    {% if user %}
+        <p>
+            currently user : {{ user }}
+        </p>
+        <form action="{% url 'Reading:LogOut' %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="logout" name="btn">
+        </form>
 
-<div class="container py-2">
-    <br>
-    <form  method="get" action="{% url 'Reading:Reading' %}">
-      <fieldset id="group1">
-        <input text="r1" type="radio" value="value1" name="group1"> رادیو اول
-        <input type="radio" value="value2" name="group1"> رادیو دوم
-      </fieldset>
+    {% endif %}
 
-      <fieldset id="group2">
-        <input type="radio" value="value1" name="group2"> First radio
-        <input type="radio" value="value2" name="group2"> Second radio
-        <input type="radio" value="value3" name="group2"> Third radio
-      </fieldset>
-        <input type="submit" value="Submit">
-    </form>
-</div>
-
+    {% if not user %}
+        <a class="btn " href="/signup">signup</a> <br>
+        <a class="btn " href="/login">login</a>
+    {% endif %}
 </body>
 </html>

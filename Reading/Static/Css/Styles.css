@@ -1,0 +1,145 @@
+/* Giving the header nav bar a static height*/
+.navbar{
+    height: 67px;
+}
+
+/* Divide Screen in two horizontal part in extra large screens */
+* {
+    box-sizing: border-box;
+}
+body {
+    overflow-x: hidden;
+}
+html,body {
+    padding: 0;
+    margin: 0;
+}
+.leftAndRight {
+    display: flex;
+    overflow: hidden;
+    height: 100vh;
+    width: 100%;
+}
+.leftContent, .rightContent {
+    flex: 1;
+    overflow: auto;
+    height: auto;
+    padding-right: 30px;
+    padding-left: 30px;
+    margin-top: 67px;
+}
+
+/* Divide screen in two vertical part in large screen and less */
+@media (max-width: 992px) {
+    .leftAndRight {
+        display: block;
+    }
+    .leftContent {
+        height: 50vh;
+        width: 100%;
+    }
+    .rightContent{
+        margin-top: 0px;
+        height: 50vh;
+        width: 100%;
+    }
+    .navbarButton{
+        margin-bottom: 13px;
+    }
+}
+.leftContent{
+    background-color: rgb(210, 210, 240);
+}
+
+/* Scroll Customization
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px gray;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+
+/*Fonts*/
+@font-face {
+  font-family: "Helvetica";
+  src: url(../Fonts/Helvetica.ttf);
+}
+@font-face {
+    font-family: "ErasBold";
+    src: url("../Fonts/ErasBold.ttf");
+}
+strong, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+    font-family: "ErasBold";
+}
+p, span, small, i, b{
+    font-family: "Calibri";
+    font-size: 17px;
+}
+
+/* Questions customization*/
+.questionsRow{
+    min-height: 70px;
+    border-color: #CCCCFF !important;
+}
+.questionNumber{
+    background-color: #6A5ACD	;
+    padding: 2px 8px !important;
+
+}
+.textboxQuestionRow{
+    min-height: 110px;
+    border-color: #CCCCFF !important;
+}
+.textboxAnswer{
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+.section{
+    color: #6A5ACD;
+}
+.showTestInfo{
+}
+.BottomHeader{
+    background-color: rgb(40, 70, 100);
+    height: 50px;
+    ;
+}
+.navbarButton{
+    width: 100px;
+}
+.checkboxQuestion{
+    min-height: 190px;
+    border-color: #CCCCFF !important;
+}
+.checkboxAnsIcon{
+    background-color: lightgray;
+    margin-right: 35px;
+    padding: 2px 8px;
+    border-radius: 50%;
+}
+.custom-control-input{
+    background-color: darkgray;
+}
+/* Bottom Section Nav bar*/
+/*.bottomNav{
+    position: fixed;
+    bottom: 0px;
+    width: 730px;
+}*/
+
