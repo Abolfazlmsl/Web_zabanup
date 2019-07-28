@@ -6,23 +6,16 @@ from . import models
 
 
 def home(request):
-    if request.user:
+    if request.user.is_authenticated:
         username = request.user.username
         return render(request, 'home.html', context={'user': username})
     else:
-        return render(request, 'home.html')
+        return redirect('Reading:Login')
 
 
 def reading(request):
     if request.user.is_authenticated:
         passages = models.Passage.objects.all()
-
-        query_g1 = request.GET.get("group1")
-        query_g2 = request.GET.get("group2")
-        if query_g1 and query_g2:
-            # pass
-            return render(request, 'Reading/Detail.html', {'group1': query_g1, 'group2': query_g2})
-
         context = {'passages': passages}
         return render(request, 'Reading/reading.html', context)
     else:
@@ -30,35 +23,38 @@ def reading(request):
 
 
 def passage_body(request, passage_id):
-    passage = get_object_or_404(models.Passage, pk=passage_id)
-    questions = get_list_or_404(models.Question, passage=passage)
-    dropdown = []
-    textbox = []
-    radiobutton = []
-    checkbox = []
-    for question in questions:
-        if question.type == 'dropdown':
-            dropdown.append(question)
-        elif question.type == 'text':
-            textbox.append(question)
-        elif question.type == 'radiobutton':
-            radiobutton.append(question)
-        elif question.type == 'checkbox':
-            checkbox.append(question)
-    print(dropdown)
-    print(textbox)
-    print(radiobutton)
-    print(checkbox)
-    context = {
-        'passage': passage,
-        'dropdown': dropdown,
-        'textbox': textbox,
-        'radiobutton': radiobutton,
-        'checkbox': checkbox,
-        'counter': 0,
-        'plus': 1,
-    }
-    return render(request, 'Reading/passages.html', context=context)
+    if request.user.is_authenticated:
+        passage = get_object_or_404(models.Passage, pk=passage_id)
+        questions = get_list_or_404(models.Question, passage=passage)
+        dropdown = []
+        textbox = []
+        radiobutton = []
+        checkbox = []
+        for question in questions:
+            if question.type == 'dropdown':
+                dropdown.append(question)
+            elif question.type == 'text':
+                textbox.append(question)
+            elif question.type == 'radiobutton':
+                radiobutton.append(question)
+            elif question.type == 'checkbox':
+                checkbox.append(question)
+        print(dropdown)
+        print(textbox)
+        print(radiobutton)
+        print(checkbox)
+        context = {
+            'passage': passage,
+            'dropdown': dropdown,
+            'textbox': textbox,
+            'radiobutton': radiobutton,
+            'checkbox': checkbox,
+            'counter': 0,
+            'plus': 1,
+        }
+        return render(request, 'Reading/passages.html', context=context)
+    else:
+        return redirect('Reading:Login')
 
 
 def submit(request, passage_id):

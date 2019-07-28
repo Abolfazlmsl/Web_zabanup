@@ -22,6 +22,34 @@ class Passage(models.Model):
         return self.title
 
 
+class Exam(models.Model):
+    BOOK_List = [
+        ('oxford', 'Oxford'),
+        ('cambridge', 'Cambridge')
+    ]
+    CATEGORY = [
+        ('politic', 'Politic'),
+        ('scientific', 'Scientific'),
+        ('economic', 'Economic'),
+        ('sport', 'Sport'),
+        ('biography', 'Biography'),
+    ]
+    DIFFICULTY = [
+        ('beginner', 'Beginner'),
+        ('pre_intermediate', 'Pre intermediate'),
+        ('intermediate', 'Intermediate'),
+        ('upper_intermediate', 'Upper intermediate'),
+        ('advance', 'Advance'),
+    ]
+    book = models.CharField(max_length=32, choices=BOOK_List)
+    category = models.CharField(max_length=32, choices=CATEGORY)
+    difficulty = models.CharField(max_length=32, choices=DIFFICULTY)
+    reading = models.OneToOneField('Passage', on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return '{}, {}'.format(self.book, self.reading)
+
+
 class Question(models.Model):
     CHOICES = [
         ('dropdown', 'Dropdown'),
@@ -49,3 +77,6 @@ class Answer(models.Model):
 class UserAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.TextField()
+
+    def __str__(self):
+        return '{}, {}'.format(str(self.user), str(self.answer))

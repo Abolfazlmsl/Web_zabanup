@@ -95,9 +95,10 @@
                         </h3>
                     </div>
                     <div class="row mb-5">
-                        <p class="text-justify">
-                            {{ passage.text }}
-                        </p>
+                    <p>
+                        {{ passage.text|linebreaks }}
+                    </p>
+
                     </div>
                 </div>
             </div>
@@ -225,11 +226,11 @@
                                     <p class="my-0">{{ rb }}</p>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-check custom-control custom-radio my-1">
+                                    <div class="form-check  my-1">
                                         {% for answer in rb.answer_set.all %}
                                             <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
-                                            <input class="form-check-input custom-control-input" type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-                                            <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                            <input class="form-check-input " type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                         {% endfor %} <br>
                                     </div>
                                 </div>
