@@ -44,6 +44,7 @@ class Exam(models.Model):
     book = models.CharField(max_length=32, choices=BOOK_List)
     category = models.CharField(max_length=32, choices=CATEGORY)
     difficulty = models.CharField(max_length=32, choices=DIFFICULTY)
+    image = models.FileField(null=True, blank=True)
     reading = models.OneToOneField('Passage', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):

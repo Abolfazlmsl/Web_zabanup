@@ -205,3 +205,7 @@ def signup_view(request):
             return redirect('Reading:Login')
     else:
         return render(request, 'signup.html')
+
+
+def exam(request):
+    return render(request, 'filter.html')
