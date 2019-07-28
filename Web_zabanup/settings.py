@@ -55,8 +55,8 @@ ROOT_URLCONF = 'Web_zabanup.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'Reading/Static/media')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,4 +123,4 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/Reading/Static")
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/Reading/media")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/Reading/Static/media")

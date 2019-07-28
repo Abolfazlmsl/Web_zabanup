@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
+from django.template import loader
+
 from . import models
 # Create your views here.
 
@@ -39,18 +41,18 @@ def passage_body(request, passage_id):
                 radiobutton.append(question)
             elif question.type == 'checkbox':
                 checkbox.append(question)
-        print(dropdown)
-        print(textbox)
-        print(radiobutton)
-        print(checkbox)
+        image = 'media/'+str(passage.image)
+        print(image)
+        ht = str(passage.text)
+        template = loader.get_template(ht).render()
         context = {
             'passage': passage,
             'dropdown': dropdown,
             'textbox': textbox,
             'radiobutton': radiobutton,
             'checkbox': checkbox,
-            'counter': 0,
-            'plus': 1,
+            'image': image,
+            'temp': template
         }
         return render(request, 'Reading/passages.html', context=context)
     else:

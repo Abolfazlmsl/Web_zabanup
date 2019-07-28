@@ -16,7 +16,8 @@ class Profile(models.Model):
 class Passage(models.Model):
     # pk slang
     title = models.CharField(max_length=200)
-    text = models.TextField()
+    text = models.FileField()
+    image = models.FileField()
 
     def __str__(self):
         return self.title
@@ -58,7 +59,7 @@ class Question(models.Model):
         ('radiobutton', 'Radiobutton'),
         ('checkbox', 'Checkbox'),
     ]
-    passage = models.ForeignKey(Passage, on_delete=models.SET_NULL, null=True)
+    passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
     text = models.CharField(max_length=700)
     type = models.CharField(max_length=32, choices=CHOICES)
 
@@ -67,7 +68,7 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.SET_NULL, null=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
     text = models.CharField(max_length=300)
     truth = models.BooleanField(default=False)
 
