@@ -56,7 +56,8 @@ def passage_body(request, passage_id):
 
 
 def submit(request, passage_id):
-    if request.method == 'POST':
+    # if request.method == 'POST':
+    if request.POST.get('Submit'):
         passage = get_object_or_404(models.Passage, pk=passage_id)
         questions = get_list_or_404(models.Question, passage=passage)
         dropdown_count = 0
@@ -129,23 +130,29 @@ def submit(request, passage_id):
             for answer in i[1]:
                 if get_object_or_404(models.Answer, id=answer).truth:
                     count_q -= 1
+                else:
+                    count_q += 1
             if count_q == 0:
                 correct_answers.append(int(i[0]))
                 grade += 1
         multi_number = 100 / passage.question_set.all().__len__()
         final_grade = grade*multi_number
-        context = {
-                    'passage': passage,
-                    'grade': final_grade,
-                    'correct_answers': correct_answers,
-                    }
         save_list = {}
         for question in passage.question_set.all():
             if question.id in correct_answers:
                 save_list[question.id] = 'correct'
             else:
                 save_list[question.id] = 'wrong'
-        models.UserAnswer(user=request.user, answer=save_list, grade=final_grade).save()
+        models.UserAnswer(user=request.user, passage=passage, grade=final_grade, answer=save_list).save()
+        users_answer = models.UserAnswer.objects.all().order_by('-grade')
+        last_user_answer = models.UserAnswer.objects.last()
+        context = {
+            'passage': passage,
+            'grade': final_grade,
+            'correct_answers': correct_answers,
+            'users_answer': users_answer,
+            'last_user_answer': last_user_answer
+        }
         return render(request, 'Reading/submit.html', context)
     else:
         return redirect('Reading:Reading')

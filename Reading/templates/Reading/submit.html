@@ -15,5 +15,30 @@
     {% endif %}
 {% endfor %}
 <p>your grade is: {{ grade }}</p>
+
+<h3>Compare with yourself</h3>
+{% for grades in users_answer %}
+    {% if grades.user == request.user %}
+        {% if grades.time == last_user_answer.time %}
+            <p style="color: red">{{ grades.user }} :{{ grades.grade }} - {{ grades.time }}</p>
+        {% else %}
+            <p>{{ grades.user }} {{ grades.grade }} - {{ grades.time }}</p>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+
+<h3>Compare with Others</h3>
+{% for grades in users_answer %}
+    {% if grades.user == request.user %}
+        {% if grades.time == last_user_answer.time %}
+            <p style="color: red"> You:{{ grades.grade }} - {{ grades.time }}</p>
+        {% endif %}
+    {% endif %}
+    {% if grades.user != request.user %}
+        <p> {{ grades.user }}:{{ grades.grade }} - {{ grades.time }}</p>
+    {% endif %}
+{% endfor %}
+
 </body>
 </html>

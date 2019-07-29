@@ -78,8 +78,11 @@ class Answer(models.Model):
 
 class UserAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
     answer = models.TextField()
     grade = models.FloatField()
+    time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}, {}'.format(str(self.user), str(self.answer))
+        return '{}, {}, {}, {}, {}'.format(str(self.user), str(self.passage), str(self.grade), str(self.answer),
+                                           str(self.time))
