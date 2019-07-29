@@ -40,7 +40,7 @@ class Exam(models.Model):
         ('pre_intermediate', 'Pre intermediate'),
         ('intermediate', 'Intermediate'),
         ('upper_intermediate', 'Upper intermediate'),
-        ('advance', 'Advance'),
+        ('advanced', 'Advanced'),
     ]
     book = models.CharField(max_length=32, choices=BOOK_List)
     category = models.CharField(max_length=32, choices=CATEGORY)
@@ -79,6 +79,7 @@ class Answer(models.Model):
 class UserAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.TextField()
+    grade = models.FloatField()
 
     def __str__(self):
         return '{}, {}'.format(str(self.user), str(self.answer))
