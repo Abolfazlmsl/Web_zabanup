@@ -16,9 +16,9 @@ def home(request):
 
 def reading(request):
     if request.user.is_authenticated:
-        passages = models.Passage.objects.all()
-        context = {'passages': passages}
-        return render(request, 'Reading/reading.html', context)
+        exams = models.Exam.objects.all()
+        context = {'exams': exams}
+        return render(request, 'filter.html', context)
     else:
         return redirect('Reading:home')
 
@@ -215,7 +215,7 @@ def signup_view(request):
 
 def exam(request):
     if request.POST:
-
+        username = request.user.username
         all_books = []
         for book in models.Exam.BOOK_List:
             all_books.append(request.POST.get(book[0]))
