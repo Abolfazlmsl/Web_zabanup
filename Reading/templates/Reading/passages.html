@@ -86,7 +86,7 @@
                             </p>
                     </div>
                     <div class="row mb-4 justify-content-center">
-                        <img src="{% static 'Images/The_Concept_of_Childhood_in_Western_Countries.jpg' %}"
+                        <img src="{% static passage.image.url %}"
                              width="500" height="521">
                     </div>
                     <div class="row justify-content-center mb-3">
@@ -95,9 +95,10 @@
                         </h3>
                     </div>
                     <div class="row mb-5">
-                        <p class="text-justify">
-                            {{ passage.text }}
-                        </p>
+                    <p>
+                        {{ temp|linebreaks }}
+                    </p>
+
                     </div>
                 </div>
             </div>
@@ -225,11 +226,11 @@
                                     <p class="my-0">{{ rb }}</p>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-check custom-control custom-radio my-1">
+                                    <div class="form-check  my-1">
                                         {% for answer in rb.answer_set.all %}
                                             <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
-                                            <input class="form-check-input custom-control-input" type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-                                            <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                            <input class="form-check-input " type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                         {% endfor %} <br>
                                     </div>
                                 </div>
@@ -264,19 +265,19 @@
                                 <p class="my-0">{{ cb }}</p>
                             </div>
                             <div class="col-12">
-                                <div class="form-check custom-checkbox my-1">
+                                <div class="form-check my-1">
                                     {% for answer in cb.answer_set.all %}
                                         <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
                                         <input type="text" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
-                                        <input class="form-check-input custom-control-input" type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-                                        <label class="form-check-label custom-control-label" for="answer{{ answer.id }}">{{ answer.text }}</label><br />
+                                        <input class="form-check-input " type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                        <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br />
                                      {% endfor %}<br>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
                         {# checkbox question end #}
-                        <input class="btn btn-light btn-sm mx-2 navbarButton" style="color: rgb(40, 70, 100)" type="submit" value="Submit" />
+                        <input class="btn btn-light btn-sm mx-2 navbarButton" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" />
 
 
 

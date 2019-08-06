@@ -1,68 +1,63 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
+from django.template import loader
 from . import models
 # Create your views here.
 
 
 def home(request):
-    if request.user:
+    if request.user.is_authenticated:
         username = request.user.username
         return render(request, 'home.html', context={'user': username})
     else:
-        return render(request, 'home.html')
+        return redirect('Reading:Login')
 
 
 def reading(request):
     if request.user.is_authenticated:
-        passages = models.Passage.objects.all()
-
-        query_g1 = request.GET.get("group1")
-        query_g2 = request.GET.get("group2")
-        if query_g1 and query_g2:
-            # pass
-            return render(request, 'Reading/Detail.html', {'group1': query_g1, 'group2': query_g2})
-
-        context = {'passages': passages}
-        return render(request, 'Reading/reading.html', context)
+        exams = models.Exam.objects.all()
+        context = {'exams': exams}
+        return render(request, 'filter.html', context)
     else:
         return redirect('Reading:home')
 
 
 def passage_body(request, passage_id):
-    passage = get_object_or_404(models.Passage, pk=passage_id)
-    questions = get_list_or_404(models.Question, passage=passage)
-    dropdown = []
-    textbox = []
-    radiobutton = []
-    checkbox = []
-    for question in questions:
-        if question.type == 'dropdown':
-            dropdown.append(question)
-        elif question.type == 'text':
-            textbox.append(question)
-        elif question.type == 'radiobutton':
-            radiobutton.append(question)
-        elif question.type == 'checkbox':
-            checkbox.append(question)
-    print(dropdown)
-    print(textbox)
-    print(radiobutton)
-    print(checkbox)
-    context = {
-        'passage': passage,
-        'dropdown': dropdown,
-        'textbox': textbox,
-        'radiobutton': radiobutton,
-        'checkbox': checkbox,
-        'counter': 0,
-        'plus': 1,
-    }
-    return render(request, 'Reading/passages.html', context=context)
+    if request.user.is_authenticated:
+        passage = get_object_or_404(models.Passage, pk=passage_id)
+        questions = get_list_or_404(models.Question, passage=passage)
+        dropdown = []
+        textbox = []
+        radiobutton = []
+        checkbox = []
+        for question in questions:
+            if question.type == 'dropdown':
+                dropdown.append(question)
+            elif question.type == 'text':
+                textbox.append(question)
+            elif question.type == 'radiobutton':
+                radiobutton.append(question)
+            elif question.type == 'checkbox':
+                checkbox.append(question)
+        ht = str(passage.text)
+        template = loader.get_template(ht).render()
+        context = {
+            'passage': passage,
+            'dropdown': dropdown,
+            'textbox': textbox,
+            'radiobutton': radiobutton,
+            'checkbox': checkbox,
+            'temp': template
+        }
+        return render(request, 'Reading/passages.html', context=context)
+    else:
+        return redirect('Reading:Login')
 
 
 def submit(request, passage_id):
-    if request.method == 'POST':
+    # if request.method == 'POST':
+    if request.POST.get('Submit'):
         passage = get_object_or_404(models.Passage, pk=passage_id)
         questions = get_list_or_404(models.Question, passage=passage)
         dropdown_count = 0
@@ -135,22 +130,29 @@ def submit(request, passage_id):
             for answer in i[1]:
                 if get_object_or_404(models.Answer, id=answer).truth:
                     count_q -= 1
+                else:
+                    count_q += 1
             if count_q == 0:
                 correct_answers.append(int(i[0]))
                 grade += 1
         multi_number = 100 / passage.question_set.all().__len__()
-        context = {
-                    'passage': passage,
-                    'grade': grade*multi_number,
-                    'correct_answers': correct_answers,
-                    }
+        final_grade = grade*multi_number
         save_list = {}
         for question in passage.question_set.all():
             if question.id in correct_answers:
                 save_list[question.id] = 'correct'
             else:
                 save_list[question.id] = 'wrong'
-        models.UserAnswer(user=request.user, answer=save_list).save()
+        models.UserAnswer(user=request.user, passage=passage, grade=final_grade, answer=save_list).save()
+        users_answer = models.UserAnswer.objects.all().order_by('-grade')
+        last_user_answer = models.UserAnswer.objects.last()
+        context = {
+            'passage': passage,
+            'grade': final_grade,
+            'correct_answers': correct_answers,
+            'users_answer': users_answer,
+            'last_user_answer': last_user_answer
+        }
         return render(request, 'Reading/submit.html', context)
     else:
         return redirect('Reading:Reading')
@@ -209,3 +211,62 @@ def signup_view(request):
             return redirect('Reading:Login')
     else:
         return render(request, 'signup.html')
+
+
+def exam(request):
+    if request.POST:
+        username = request.user.username
+        all_books = []
+        for book in models.Exam.BOOK_List:
+            all_books.append(request.POST.get(book[0]))
+        filter_book = []
+        for book in all_books:
+            if book:
+                filter_book.append(book)
+
+        all_categories = []
+        for category in models.Exam.CATEGORY:
+            all_categories.append(request.POST.get(category[0]))
+        filter_category = []
+        for category in all_categories:
+            if category:
+                filter_category.append(category)
+
+        all_difficulties = []
+        for difficulty in models.Exam.DIFFICULTY:
+            all_difficulties.append(request.POST.get(difficulty[0]))
+        filter_difficulty = []
+        for difficulty in all_difficulties:
+            if difficulty:
+                filter_difficulty.append(difficulty)
+
+        print(filter_book)
+        print(filter_category)
+        print(filter_difficulty)
+
+        exams = []
+        if len(filter_book) > 0:
+            exams = models.Exam.objects.filter(book__in=filter_book)
+        if len(filter_category) > 0:
+            exams = models.Exam.objects.filter(category__in=filter_category)
+        if len(filter_difficulty) > 0:
+            exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
+        if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
+            exams = get_list_or_404(models.Exam)
+
+        exam_filter = models.Exam
+        context = {
+            'exam_filter': exam_filter,
+            'exams': exams,
+        }
+        print(exams)
+        return render(request, 'filter.html', context=context)
+    else:
+        exams = get_list_or_404(models.Exam)
+        exam_filter = models.Exam
+        print(exams)
+        context = {
+            'exams': exams,
+            'exam_filter': exam_filter,
+        }
+        return render(request, 'filter.html', context=context)
