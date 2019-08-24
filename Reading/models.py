@@ -86,3 +86,11 @@ class UserAnswer(models.Model):
     def __str__(self):
         return '{}, {}, {}, {}, {}'.format(str(self.user), str(self.passage), str(self.grade), str(self.answer),
                                            str(self.time))
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE)
+    text = models.TextField()
+    time = models.DateTimeField(auto_now=True)
