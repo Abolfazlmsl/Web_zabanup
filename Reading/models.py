@@ -82,6 +82,7 @@ class UserAnswer(models.Model):
     answer = models.TextField()
     grade = models.FloatField()
     time = models.DateTimeField(auto_now=True)
+    counter = models.IntegerField()
 
     def __str__(self):
         return '{}, {}, {}, {}, {}'.format(str(self.user), str(self.passage), str(self.grade), str(self.answer),

@@ -1,7 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
 from django.template import loader
+from django.urls import reverse
+
 from . import models
 # Create your views here.
 
@@ -25,6 +28,7 @@ def reading(request):
 
 def passage_body(request, passage_id):
     if request.user.is_authenticated:
+        user_answer = models.UserAnswer.objects.all().count()
         passage = get_object_or_404(models.Passage, pk=passage_id)
         questions = get_list_or_404(models.Question, passage=passage)
         dropdown = []
@@ -48,7 +52,8 @@ def passage_body(request, passage_id):
             'textbox': textbox,
             'radiobutton': radiobutton,
             'checkbox': checkbox,
-            'temp': template
+            'temp': template,
+            'refresh_checker': user_answer + 1,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
@@ -60,6 +65,7 @@ def submit(request, passage_id):
     if request.POST.get('Submit'):
         passage = get_object_or_404(models.Passage, pk=passage_id)
         questions = get_list_or_404(models.Question, passage=passage)
+        refresh_checker = request.POST.get('refresh_checker')
         dropdown_count = 0
         textbox_count = 0
         radiobutton_count = 0
@@ -143,7 +149,8 @@ def submit(request, passage_id):
                 save_list[question.id] = 'correct'
             else:
                 save_list[question.id] = 'wrong'
-        models.UserAnswer(user=request.user, passage=passage, grade=final_grade, answer=save_list).save()
+        models.UserAnswer.objects.update_or_create(user=request.user, passage=passage, grade=final_grade,
+                                                   answer=save_list, counter=refresh_checker)
         users_answer = models.UserAnswer.objects.all().order_by('-grade')
         last_user_answer = models.UserAnswer.objects.last()
         context = {
@@ -155,7 +162,7 @@ def submit(request, passage_id):
         }
         return render(request, 'Reading/submit.html', context)
     else:
-        return redirect('Reading:Reading')
+        return render(request, 'Reading/submit.html')
 
 
 def login_view(request):
