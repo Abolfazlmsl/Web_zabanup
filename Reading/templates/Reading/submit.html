@@ -1,10 +1,15 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Answer</title>
+     <link rel="stylesheet" href="{% static 'Css/comment-style.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
+
 </head>
 <body>
+{% if comment == 0 %}
 <h4>Dear {{ request.user.first_name }}</h4>
 <h4>Your Answers to the Passage {{ passage.id }} are:</h4>
 {% for question in passage.question_set.all %}
@@ -39,22 +44,236 @@
         <p> {{ grades.user }}:{{ grades.grade }} - {{ grades.time }}</p>
     {% endif %}
 {% endfor %}
+{% endif %}
+
+
+{% if comment == 1%}
+    <h4>Dear {{ request.user.first_name }}</h4>
+    <h4>Your Answers to the Passage {{ passage.id }} are:</h4>
+    {% for answer in my_answer %}
+        {{ forloop.counter }}-
+        {{ answer }}
+        <br>
+        <br>
+    {% endfor %}
+    <p>your grade is: {{ grade }}</p>
+
+    <h3>Compare with yourself</h3>
+    {% for grades in users_answer %}
+        {% if grades.user == request.user %}
+            {% if grades.time == last_user_answer.time %}
+                <p style="color: red">{{ grades.user }} :{{ grades.grade }} - {{ grades.time }}</p>
+            {% else %}
+                <p>{{ grades.user }} {{ grades.grade }} - {{ grades.time }}</p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+
+    <h3>Compare with Others</h3>
+    {% for grades in users_answer %}
+        {% if grades.user == request.user %}
+            {% if grades.time == last_user_answer.time %}
+                <p style="color: red"> You:{{ grades.grade }} - {{ grades.time }}</p>
+            {% endif %}
+        {% endif %}
+        {% if grades.user != request.user %}
+            <p> {{ grades.user }}:{{ grades.grade }} - {{ grades.time }}</p>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
 <div class="comment" style="margin-top: 5%">
     <h2>discuss with others</h2> <hr/>
 </div>
-<form>
+<form action="" method="post">
     {% csrf_token %}
   <div class="form-group">
   <label for="comment">Comment:</label>
-  <textarea class="form-control" rows="5" id="comment"></textarea>
+  <textarea class="form-control" rows="5" id="comment" name="comment_text"></textarea>
 </div>
     <div class="form-group row">
     <div class="col-sm-10">
-      <button type="submit" class="btn btn-primary">submit</button>
+      <button type="submit" class="btn btn-primary" value="comment-submit" name="comment-submit">submit</button>
     </div>
   </div>
 </form>
 
+    {% for comment in all_comments %}
+        <form action="" method="post">
+{% csrf_token %}
+<div class="row container-fluid justify-content-center">
+        <div class="col">
+            <div id="comment" class="border rounded mt-4 ml-4">
+                <div id="commenter" class="container-fluid">
+                    <h6>{{ comment.user }}</h6>
+                </div>
+                <div id="comment-body" class="container-fluid">
+                    <p>
+                       {{ comment.text }}
+                    </p>
+                </div>
+                <div class="container-fluid" id="comment-footer">
+                    <div class="row">
+                        <div class="col-auto">
+                            <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>
+                        </div>
+                        <div class="col-auto">
+                            <small class="text-muted" style="font-size: 12px">14 Likes</small>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-auto ml-auto" id="like">
+                            <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
+                        </div>
+                        <div class="col-auto" id="to-reply">
+                            <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse" ><i class="fa fa-comment mr-1"></i>Reply</a></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row container-fluid mt-2">
+        <div class="col">
+            <div id="comment-collapse{{ comment.id }}" class="collapse">
+                <div class="row border rounded p-3 ml-4" id="reply">
+                    <div class="mt-1" id="reply-body">
+                        <label>
+                            <textarea placeholder="Type reply here..." name="reply-text"></textarea>
+                        </label>
+                    </div>
+                    <div class="d-flex justify-content-center mt-1" id="reply-footer">
+                        <button type="button" class="btn btn-sm btn-secondary mr-1">Cancel</button>
+                        <input type="hidden" name="hidden-reply" value="{{ comment.id }}">
+                        <input type="submit" class="btn btn-sm btn-primary ml-1" name="reply-submit" value="reply-submit">
+                        <p>{{ comment.id }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+    {% endfor %}
+
+
+    <script src="{% static 'JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'JavaScript/popper.min.js' %}"></script>
+    <script src="{% static 'JavaScript/bootstrap.min.js' %}"></script>
+
 </body>
 </html>
+
+
+{#in bayad edit she #}
+
+{##}
+{#{% for comment in all_comments %}#}
+{#        <form action="" method="post">#}
+{#{% csrf_token %}#}
+{#<div class="row container-fluid justify-content-center">#}
+{#        <div class="col">#}
+{#            <div id="comment" class="border rounded mt-4 ml-4 mx-auto media">#}
+{#                <img src="image/avatar.jpg" alt="avatar" id="avatar">#}
+{#                <div class="media-body">#}
+{#                    <div id="commenter" class="container-fluid">#}
+{#                        <h6>{{ comment.user }}</h6>#}
+{#                    </div>#}
+{#                    <div id="comment-body" class="container-fluid">#}
+{#                        <p>#}
+{#                            {{ comment.text }}#}
+{#                        </p>#}
+{#                    </div>#}
+{#                    <div class="container-fluid" id="comment-footer">#}
+{#                        <div class="row mb-2">#}
+{#                            <div class="col-6">#}
+{#                                <div class="row d-flex justify-content-start">#}
+{#                                    <div class="col-auto">#}
+{#                                        <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>#}
+{#                                    </div>#}
+{#                                    <div class="col-auto">#}
+{#                                        <small class="text-muted" style="font-size: 12px">14 Likes</small>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="col-6">#}
+{#                                <div class="row d-flex justify-content-end">#}
+{#                                    <div class="col-auto" id="like">#}
+{#                                        <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>#}
+{#                                    </div>#}
+{#                                    <div class="col-auto" id="to-reply">#}
+{#                                        <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse"><i class="fa fa-comment mr-1"></i>Reply</a></small>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div id="comment-collapse{{ comment.id }}" class="collapse my-2">#}
+{#                        <div class="row container-fluid border rounded p-3 mx-auto" id="reply">#}
+{#                            <div class="col-12 mt-1" id="reply-body">#}
+{#                                <label style="width: 100%">#}
+{#                                    <textarea type="text" placeholder="Type reply here..." id="reply-text"></textarea>#}
+{#                                </label>#}
+{#                            </div>#}
+{#                            <div class="d-flex justify-content-center mt-1" id="reply-footer">#}
+{#                                <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Cancel</button>#}
+{#                                <button type="button" class="btn btn-sm btn-outline-primary ml-1">Submit</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="media border-top">#}
+{#                        <div class="media-body">#}
+{#                            <div id="replied-commenter" class="container-fluid">#}
+{#                                <h6>Anonymous</h6>#}
+{#                            </div>#}
+{#                            <div id="replied-comment-body" class="container-fluid">#}
+{#                                <p>#}
+{#                                    here is your comment! another line this is third line! fourth line! fifth line of comment!#}
+{#                                </p>#}
+{#                            </div>#}
+{#                            <div class="container-fluid" id="replied-comment-footer">#}
+{#                                <div class="row mb-2">#}
+{#                                    <div class="col-6">#}
+{#                                        <div class="row d-flex justify-content-start">#}
+{#                                            <div class="col-auto">#}
+{#                                                <small class="text-muted" style="font-size: 11px">9 month ago</small>#}
+{#                                            </div>#}
+{#                                            <div class="col-auto">#}
+{#                                                <small class="text-muted" style="font-size: 12px">14 Likes</small>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="col-6">#}
+{#                                        <div class="row d-flex justify-content-end">#}
+{#                                            <div class="col-auto" id="replied-like">#}
+{#                                                <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>#}
+{#                                            </div>#}
+{#                                            <div class="col-auto" id="replied-to-reply">#}
+{#                                                <small><a href="#replied-comment-collapse" class="text-muted" data-toggle="collapse"><i class="fa fa-comment mr-1"></i>Reply</a></small>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div id="replied-comment-collapse" class="collapse my-2">#}
+{#                        <div class="row container-fluid border rounded p-3 mx-auto" id="replied-reply">#}
+{#                            <div class="col-12 mt-1" id="replied-reply-body">#}
+{#                                <label style="width: 100%">#}
+{#                                    <textarea type="text" placeholder="Type reply here..." id="replied-reply-text"></textarea>#}
+{#                                </label>#}
+{#                            </div>#}
+{#                            <div class="d-flex justify-content-center mt-1" id="replied-reply-footer">#}
+{#                                <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Cancel</button>#}
+{#                                <button type="button" class="btn btn-sm btn-outline-primary ml-1">Submit</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#        </form>#}
+{#{% endfor %}#}

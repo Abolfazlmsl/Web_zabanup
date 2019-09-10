@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
 
-
+# User profile model
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.IntegerField(primary_key=True)
@@ -13,8 +12,8 @@ class Profile(models.Model):
         return '{}, {}'.format(self.user.first_name, self.user.last_name)
 
 
+# Passage model
 class Passage(models.Model):
-    # pk slang
     title = models.CharField(max_length=200)
     text = models.FileField()
     image = models.FileField()
@@ -23,6 +22,7 @@ class Passage(models.Model):
         return self.title
 
 
+# Exam model
 class Exam(models.Model):
     BOOK_List = [
         ('oxford', 'Oxford'),
@@ -52,6 +52,7 @@ class Exam(models.Model):
         return '{}, {}'.format(self.book, self.reading)
 
 
+# Question model
 class Question(models.Model):
     CHOICES = [
         ('dropdown', 'Dropdown'),
@@ -67,6 +68,7 @@ class Question(models.Model):
         return '%s' % self.text
 
 
+# Correct Answer of Question model
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
     text = models.CharField(max_length=300)
@@ -76,6 +78,7 @@ class Answer(models.Model):
         return '%s' % self.question
 
 
+# Answer that user choose model
 class UserAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
@@ -89,9 +92,13 @@ class UserAnswer(models.Model):
                                            str(self.time))
 
 
+# Comment model
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
-    parent = models.ForeignKey("self", on_delete=models.CASCADE)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
     text = models.TextField()
     time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{}, {}, {}, {}'.format( self.id, self.user, self.text, self.parent_id)

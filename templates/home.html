@@ -7,7 +7,7 @@
 <body>
 {#<button type="button">Listening</button>#}
 {#<hr>#}
-<form action="Reading" method="get">
+<form action="{% url 'Reading:Exam' %}" method="get">
 <button type="submit" name="Exam">Exams</button>
 <hr>
 {#<button type="button">Speaking</button>#}
