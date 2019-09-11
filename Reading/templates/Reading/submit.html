@@ -98,64 +98,67 @@
     </div>
   </div>
 </form>
+{#showing comments#}
 
-    {% for comment in all_comments %}
-        <form action="" method="post">
-{% csrf_token %}
-<div class="row container-fluid justify-content-center">
-        <div class="col">
-            <div id="comment" class="border rounded mt-4 ml-4">
-                <div id="commenter" class="container-fluid">
-                    <h6>{{ comment.user }}</h6>
-                </div>
-                <div id="comment-body" class="container-fluid">
-                    <p>
-                       {{ comment.text }}
-                    </p>
-                </div>
-                <div class="container-fluid" id="comment-footer">
-                    <div class="row">
-                        <div class="col-auto">
-                            <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>
-                        </div>
-                        <div class="col-auto">
-                            <small class="text-muted" style="font-size: 12px">14 Likes</small>
-                        </div>
+{% for comment in all_comments %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {% if comment.parent == null %}
+    <div class="row container-fluid justify-content-center">
+            <div class="col">
+                <div id="comment" class="border rounded mt-4 ml-4">
+                    <div id="commenter" class="container-fluid">
+                        <h6>{{ comment.user }}</h6>
                     </div>
-                    <div class="row my-2">
-                        <div class="col-auto ml-auto" id="like">
-                            <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
+                    <div id="comment-body" class="container-fluid">
+                        <p>
+                           {{ comment.text }}
+                        </p>
+
+                    </div>
+                    <div class="container-fluid" id="comment-footer">
+                        <div class="row">
+                            <div class="col-auto">
+                                <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>
+                            </div>
+                            <div class="col-auto">
+                                <small class="text-muted" style="font-size: 12px">14 Likes</small>
+                            </div>
                         </div>
-                        <div class="col-auto" id="to-reply">
-                            <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse" ><i class="fa fa-comment mr-1"></i>Reply</a></small>
+                        <div class="row my-2">
+                            <div class="col-auto ml-auto" id="like">
+                                <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
+                            </div>
+                            <div class="col-auto" id="to-reply">
+                                <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse" ><i class="fa fa-comment mr-1"></i>Reply</a></small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row container-fluid mt-2">
-        <div class="col">
-            <div id="comment-collapse{{ comment.id }}" class="collapse">
-                <div class="row border rounded p-3 ml-4" id="reply">
-                    <div class="mt-1" id="reply-body">
-                        <label>
-                            <textarea placeholder="Type reply here..." name="reply-text"></textarea>
-                        </label>
-                    </div>
-                    <div class="d-flex justify-content-center mt-1" id="reply-footer">
-                        <button type="button" class="btn btn-sm btn-secondary mr-1">Cancel</button>
-                        <input type="hidden" name="hidden-reply" value="{{ comment.id }}">
-                        <input type="submit" class="btn btn-sm btn-primary ml-1" name="reply-submit" value="reply-submit">
-                        <p>{{ comment.id }}</p>
+        <div class="row container-fluid mt-2">
+            <div class="col">
+                <div id="comment-collapse{{ comment.id }}" class="collapse">
+                    <div class="row border rounded p-3 ml-4" id="reply">
+                        <div class="mt-1" id="reply-body">
+                            <label>
+                                <textarea placeholder="Type reply here..." name="reply-text"></textarea>
+                            </label>
+                        </div>
+                        <div class="d-flex justify-content-center mt-1" id="reply-footer">
+                            <button type="button" class="btn btn-sm btn-secondary mr-1">Cancel</button>
+                            <input type="hidden" name="hidden-reply" value="{{ comment.id }}">
+                            <input type="submit" class="btn btn-sm btn-primary ml-1" name="reply-submit" value="reply-submit">
+                            <p>{{ comment.id }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-</form>
-    {% endfor %}
+    {% endif %}
+    </form>
+{% endfor %}
 
 
     <script src="{% static 'JavaScript/jquery-3.3.1.slim.min.js' %}"></script>

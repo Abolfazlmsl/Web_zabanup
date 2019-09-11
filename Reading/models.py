@@ -68,7 +68,7 @@ class Question(models.Model):
         return '%s' % self.text
 
 
-# Correct Answer of Question model
+# Answers of Question model
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
     text = models.CharField(max_length=300)
@@ -101,4 +101,4 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}, {}, {}, {}'.format( self.id, self.user, self.text, self.parent_id)
+        return '{}, {}, {}, {}'.format(self.id, self.user, self.text, self.parent_id)
