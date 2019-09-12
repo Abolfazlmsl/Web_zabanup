@@ -77,15 +77,16 @@ def passage_body(request, passage_id):
 def submit(request, passage_id):
     # calculate grade
     if request.POST.get('Submit'):
+        # get passage and question
         passage = get_object_or_404(models.Passage, pk=passage_id)
         questions = get_list_or_404(models.Question, passage=passage)
         refresh_checker = request.POST.get('refresh_checker')
-
+        # initial counter for each type of question
         dropdown_count = 0
         textbox_count = 0
         radiobutton_count = 0
         checkbox_count = 0
-
+        # initial list for each type of question
         dropdown_list = []
         textbox_list = []
         radiobutton_list = []
@@ -106,25 +107,27 @@ def submit(request, passage_id):
                 checkbox_count += 1
 
         # get user answers
+        # get  user answer id of questions
         for i in range(dropdown_count):
             plus = str(i+1)
-            q = request.POST.get('q' + plus)
-            dropdown_list.append(q)
+            answer_id = request.POST.get('q' + plus)
+            dropdown_list.append(answer_id)
         for i in range(textbox_count):
-            iplus = str(i+1)
+            # hidden_plus used for get text box question id
+            hidden_plus = str(i+1)
             plus = str(i+1+dropdown_count)
-            q = request.POST.get('q' + plus)
-            h = request.POST.get('hidden' + iplus)
-            textbox_list.append([h, q])
+            answer_text = request.POST.get('q' + plus)
+            question_id = request.POST.get('hidden' + hidden_plus)
+            textbox_list.append([question_id, answer_text])
         for i in range(radiobutton_count):
             plus = str(i+1+dropdown_count+textbox_count)
-            q = request.POST.get('q' + plus)
-            radiobutton_list.append(q)
+            answer_id = request.POST.get('q' + plus)
+            radiobutton_list.append(answer_id)
         for i in range(checkbox_count):
             plus = str(i+1+dropdown_count+textbox_count+radiobutton_count)
-            q = request.POST.getlist('q' + plus)
-            h = request.POST.get('q' + plus + '_id')
-            checkbox_list.append([h, q])
+            answer_id = request.POST.getlist('q' + plus)
+            question_id = request.POST.get('q' + plus + '_id')
+            checkbox_list.append([question_id, answer_id])
 
         # calculate correct answers and grade
         for answer in dropdown_list:
@@ -191,26 +194,25 @@ def submit(request, passage_id):
         return render(request, 'Reading/submit.html', context)
 
     elif request.POST.get('comment-submit'):
-        print(52)
+
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
-        print(users_answer)
+
         comment_text = request.POST.get('comment_text')
+
         my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
         my_answers = []
-        # print(my_answer)
         for i in my_answer:
-            print(i)
             my_answers.append(my_answer[i])
+
         last_user_answer = last_answer
-        print(comment_text)
+
         if comment_text:
-            print(1)
             models.Comment.objects.update_or_create(passage=passage, text=comment_text, user=request.user)
+
         final_grade = last_answer.grade
-        print(final_grade)
 
         all_comments = get_list_or_404(models.Comment, passage=passage)
 
@@ -226,22 +228,28 @@ def submit(request, passage_id):
         return render(request, 'Reading/submit.html', context)
 
     elif request.POST.get('reply-submit'):
-        print(77)
+
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+
         reply_text = request.POST.get('reply-text')
         reply_parent_id = request.POST.get('hidden-reply')
         reply_to = models.Comment.objects.get(id=reply_parent_id)
+
         my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
         my_answers = []
         for i in my_answer:
             my_answers.append(my_answer[i])
+
         last_user_answer = last_answer
+
         models.Comment.objects.update_or_create(passage=passage, text=reply_text, user=request.user, parent=reply_to)
+
         final_grade = last_answer.grade
         all_comments = get_list_or_404(models.Comment, passage=passage)
+
         context = {
             'passage': passage,
             'grade': final_grade,
@@ -251,19 +259,26 @@ def submit(request, passage_id):
             'comment': 1,
             'all_comments': all_comments,
         }
+
         return render(request, 'Reading/submit.html', context)
+
     else:
+
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+
         my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
         my_answers = []
         for i in my_answer:
             my_answers.append(my_answer[i])
+
         last_user_answer = last_answer
         final_grade = last_answer.grade
+
         all_comments = get_list_or_404(models.Comment, passage=passage)
+
         context = {
             'passage': passage,
             'grade': final_grade,
@@ -273,6 +288,7 @@ def submit(request, passage_id):
             'comment': 1,
             'all_comments': all_comments,
         }
+
         return render(request, 'Reading/submit.html', context)
 
 
