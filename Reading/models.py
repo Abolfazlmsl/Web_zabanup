@@ -96,7 +96,7 @@ class UserAnswer(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
-    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField()
     time = models.DateTimeField(auto_now=True)
 

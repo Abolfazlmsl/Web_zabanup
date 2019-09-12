@@ -75,7 +75,6 @@ def passage_body(request, passage_id):
 
 # calculate grade and submit comments
 def submit(request, passage_id):
-    # if request.method == 'POST':
     # calculate grade
     if request.POST.get('Submit'):
         passage = get_object_or_404(models.Passage, pk=passage_id)
@@ -179,42 +178,42 @@ def submit(request, passage_id):
                                                    answer=str(save_list), counter=refresh_checker)
         users_answer = models.UserAnswer.objects.all().order_by('-grade')
         last_user_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).last()
+        all_comments = get_list_or_404(models.Comment, passage=passage)
         context = {
             'passage': passage,
             'grade': final_grade,
             'correct_answers': correct_answers,
             'users_answer': users_answer,
             'last_user_answer': last_user_answer,
+            'all_comments': all_comments,
             'comment': 0,
         }
         return render(request, 'Reading/submit.html', context)
 
-
-
-
-
     elif request.POST.get('comment-submit'):
         print(52)
         passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-time')
+        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
         print(users_answer)
         comment_text = request.POST.get('comment_text')
-        my_answer = users_answer[0].answer
+        my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
         my_answers = []
         # print(my_answer)
         for i in my_answer:
             print(i)
             my_answers.append(my_answer[i])
-        last_user_answer = users_answer[0]
+        last_user_answer = last_answer
         print(comment_text)
         if comment_text:
             print(1)
             models.Comment.objects.update_or_create(passage=passage, text=comment_text, user=request.user)
-        final_grade = users_answer[0].grade
+        final_grade = last_answer.grade
         print(final_grade)
 
         all_comments = get_list_or_404(models.Comment, passage=passage)
+
         context = {
             'passage': passage,
             'grade': final_grade,
@@ -222,34 +221,26 @@ def submit(request, passage_id):
             'my_answer': my_answers,
             'last_user_answer': last_user_answer,
             'comment': 1,
-            'all_comments': all_comments
+            'all_comments': all_comments,
         }
         return render(request, 'Reading/submit.html', context)
-
-
-
 
     elif request.POST.get('reply-submit'):
         print(77)
         passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-time')
+        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
         reply_text = request.POST.get('reply-text')
         reply_parent_id = request.POST.get('hidden-reply')
-        print(reply_text,reply_parent_id)
-        # if request.POST.get('hidden-reply68'):
-        #     print('nanaz')
-        # else :
-        #     print('agueru')
-        # print(reply_parent_id)
         reply_to = models.Comment.objects.get(id=reply_parent_id)
-        my_answer = users_answer[0].answer
+        my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
         my_answers = []
         for i in my_answer:
             my_answers.append(my_answer[i])
-        last_user_answer = users_answer[0]
+        last_user_answer = last_answer
         models.Comment.objects.update_or_create(passage=passage, text=reply_text, user=request.user, parent=reply_to)
-        final_grade = users_answer[0].grade
+        final_grade = last_answer.grade
         all_comments = get_list_or_404(models.Comment, passage=passage)
         context = {
             'passage': passage,
@@ -258,13 +249,31 @@ def submit(request, passage_id):
             'my_answer': my_answers,
             'last_user_answer': last_user_answer,
             'comment': 1,
-            'all_comments': all_comments
+            'all_comments': all_comments,
         }
-
         return render(request, 'Reading/submit.html', context)
-
     else:
-        return render(request, 'Reading/submit.html')
+        passage = models.Passage.objects.get(id=passage_id)
+        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+        my_answer = last_answer.answer
+        my_answer = json.loads(my_answer)
+        my_answers = []
+        for i in my_answer:
+            my_answers.append(my_answer[i])
+        last_user_answer = last_answer
+        final_grade = last_answer.grade
+        all_comments = get_list_or_404(models.Comment, passage=passage)
+        context = {
+            'passage': passage,
+            'grade': final_grade,
+            'users_answer': users_answer,
+            'my_answer': my_answers,
+            'last_user_answer': last_user_answer,
+            'comment': 1,
+            'all_comments': all_comments,
+        }
+        return render(request, 'Reading/submit.html', context)
 
 
 # login to website
