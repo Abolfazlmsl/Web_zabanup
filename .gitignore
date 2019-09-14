@@ -5,7 +5,7 @@
 /venv/
 /__pycache__/
 
-# ignore a file type
+# ignore a file type 
 # *.json
 *.pyc
 *.sqlite3
