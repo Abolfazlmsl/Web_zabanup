@@ -7,6 +7,7 @@ admin.site.register(models.Profile)
 admin.site.register(models.Answer)
 admin.site.register(models.UserAnswer)
 admin.site.register(models.Exam)
+admin.site.register(models.Comment)
 
 
 class QuestionInline(admin.TabularInline):
