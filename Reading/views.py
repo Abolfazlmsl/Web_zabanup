@@ -176,7 +176,7 @@ def submit(request, passage_id):
             else:
                 save_list[str(question.id)] = "wrong"
         save_list = json.dumps(save_list)
-
+        # save user grade
         models.UserAnswer.objects.update_or_create(user=request.user, passage=passage, grade=final_grade,
                                                    answer=str(save_list), counter=refresh_checker)
         users_answer = models.UserAnswer.objects.all().order_by('-grade')
@@ -200,7 +200,7 @@ def submit(request, passage_id):
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
 
         comment_text = request.POST.get('comment_text')
-
+        # change user answer to json
         my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
         my_answers = []
@@ -208,12 +208,12 @@ def submit(request, passage_id):
             my_answers.append(my_answer[i])
 
         last_user_answer = last_answer
-
+        # add user comment to database
         if comment_text:
             models.Comment.objects.update_or_create(passage=passage, text=comment_text, user=request.user)
 
         final_grade = last_answer.grade
-
+        # get all comments of passage from database
         all_comments = get_list_or_404(models.Comment, passage=passage)
 
         context = {
@@ -232,7 +232,7 @@ def submit(request, passage_id):
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
-
+        # get reply text and parent id of that reply
         reply_text = request.POST.get('reply-text')
         reply_parent_id = request.POST.get('hidden-reply')
         reply_to = models.Comment.objects.get(id=reply_parent_id)
@@ -244,7 +244,7 @@ def submit(request, passage_id):
             my_answers.append(my_answer[i])
 
         last_user_answer = last_answer
-
+        # save reply to database
         models.Comment.objects.update_or_create(passage=passage, text=reply_text, user=request.user, parent=reply_to)
 
         final_grade = last_answer.grade
@@ -263,7 +263,7 @@ def submit(request, passage_id):
         return render(request, 'Reading/submit.html', context)
 
     else:
-
+        
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
