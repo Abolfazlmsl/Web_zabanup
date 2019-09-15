@@ -179,9 +179,12 @@ def submit(request, passage_id):
         # save user grade
         models.UserAnswer.objects.update_or_create(user=request.user, passage=passage, grade=final_grade,
                                                    answer=str(save_list), counter=refresh_checker)
-        users_answer = models.UserAnswer.objects.all().order_by('-grade')
+        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
         last_user_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).last()
-        all_comments = get_list_or_404(models.Comment, passage=passage)
+        if models.Comment.objects.filter(passage=passage):
+            all_comments = models.Comment.objects.filter(passage=passage)
+        else:
+            all_comments = []
         context = {
             'passage': passage,
             'grade': final_grade,
@@ -196,7 +199,7 @@ def submit(request, passage_id):
     elif request.POST.get('comment-submit'):
 
         passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
+        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
 
         comment_text = request.POST.get('comment_text')
@@ -214,7 +217,10 @@ def submit(request, passage_id):
 
         final_grade = last_answer.grade
         # get all comments of passage from database
-        all_comments = get_list_or_404(models.Comment, passage=passage)
+        if models.Comment.objects.filter(passage=passage):
+            all_comments = models.Comment.objects.filter(passage=passage)
+        else:
+            all_comments = []
 
         context = {
             'passage': passage,
@@ -230,7 +236,7 @@ def submit(request, passage_id):
     elif request.POST.get('reply-submit'):
 
         passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
+        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
         # get reply text and parent id of that reply
         reply_text = request.POST.get('reply-text')
@@ -248,7 +254,10 @@ def submit(request, passage_id):
         models.Comment.objects.update_or_create(passage=passage, text=reply_text, user=request.user, parent=reply_to)
 
         final_grade = last_answer.grade
-        all_comments = get_list_or_404(models.Comment, passage=passage)
+        if models.Comment.objects.filter(passage=passage):
+            all_comments = models.Comment.objects.filter(passage=passage)
+        else:
+            all_comments = []
 
         context = {
             'passage': passage,
@@ -263,9 +272,9 @@ def submit(request, passage_id):
         return render(request, 'Reading/submit.html', context)
 
     else:
-
+        
         passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
+        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
 
         my_answer = last_answer.answer
@@ -277,7 +286,10 @@ def submit(request, passage_id):
         last_user_answer = last_answer
         final_grade = last_answer.grade
 
-        all_comments = get_list_or_404(models.Comment, passage=passage)
+        if models.Comment.objects.filter(passage=passage):
+            all_comments = models.Comment.objects.filter(passage=passage)
+        else:
+            all_comments = []
 
         context = {
             'passage': passage,

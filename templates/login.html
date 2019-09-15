@@ -1,21 +1,39 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
+
 </head>
-<body>
+<body style="background-color: whitesmoke">
+<div style="margin: 4%">
+
+<h2 style="text-align: center; margin-bottom: 4%">
+    Welcome to zabanUp
+</h2>
+
+<h4 style="text-align: center; margin-bottom: 8%">
+    You want a challenge? <br/>
+    Let's begin!<br/>
+    Login first
+</h4>
+<div style="text-align: center">
     <form method="post">
         {% csrf_token %}
         <label>
-            username:
+            username: <br/>
             <input type="text" name="username">
         </label>
+        <br/>
         <label>
-            password:
+            password: <br/>
             <input type="password" name="password">
         </label>
-        <input type="submit" name="btn" value="submit">
+        <br/>
+        <input class="btn btn-primary" type="submit" name="btn" value="Login">
     </form>
     {% if alert %}
         <p>
@@ -23,6 +41,11 @@
             pls try again
         </p>
     {% endif %}
-
+</div>
+    <div style="text-align: center; margin-top: 4%">
+        <p>Don't have an account?</p>
+    <a class="btn btn-primary" href="/signup" role="button">signup</a>
+        </div>
+</div>
 </body>
 </html>
