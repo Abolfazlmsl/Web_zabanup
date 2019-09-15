@@ -57,7 +57,7 @@ def passage_body(request, passage_id):
         # get text in html form then render it
         ht = str(passage.text)
         template = loader.get_template(ht).render()
-
+        print(passage.text.url)
         # create a context
         context = {
             'passage': passage,
