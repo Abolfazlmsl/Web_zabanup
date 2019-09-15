@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
+</head>
+<body style="background-color: whitesmoke; margin: 4%">
+    <h3 style="text-align: center; margin-bottom: 5%">
+        Let's improve yourself!
+    </h3>
+    <div style="text-align: center">
+    <form method="post">
+        {% csrf_token %}
+        <label>
+            first name: <br/>
+            <input type="text" name="first_name">
+        </label><br>
+        <label>
+            last name: <br/>
+            <input type="text" name="last_name">
+        </label><br>
+        <label>
+            email: <br/>
+            <input type="email" name="email">
+        </label><br>
+        <label>
+            username: <br/>
+            <input type="text" name="username">
+        </label><br>
+        <label>
+            phone number: <br/>
+            <input type="tel" name="phone_number" maxlength="11" minlength="11">
+        </label><br>
+        <label>
+            password: <br/>
+            <input type="password" name="password">
+        </label><br>
+        <label>
+            password again: <br/>
+            <input type="password" name="re_password">
+        </label><br>
+        <label>
+            address: <br/>
+            <textarea name="address"></textarea>
+        </label><br>
+
+        <input class="btn btn-primary" type="submit" name="btn" value="Sign Up">
+    </form>
+    {% if alert %}
+        <p>
+            {{ alert }}
+            pls try again
+        </p>
+    {% endif %}
+    </div>
+<div style="text-align: center; margin-top: 4%">
+    <p>Have an account?</p>
+        <a class="btn btn-primary" href="/login" role="button">login</a>
+</div>
+
+</body>
+</html>
