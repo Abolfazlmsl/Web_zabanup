@@ -263,7 +263,7 @@ def submit(request, passage_id):
         return render(request, 'Reading/submit.html', context)
 
     else:
-        
+
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
