@@ -9,6 +9,7 @@
 
 </head>
 <body>
+<div class="" style="margin: 4%">
 {% if comment == 0 %}
 <h4>Dear {{ request.user.first_name }}</h4>
 <h4>Your Answers to the Passage {{ passage.id }} are:</h4>
@@ -109,7 +110,7 @@
             <div class="col">
                 <div id="comment" class="border rounded mt-4 ml-4">
                     <div id="commenter" class="container-fluid">
-                        <h6>{{ comment.user }}</h6>
+                        <h6>{{ comment.user.first_name }} {{ comment.user.last_name }}</h6>
                     </div>
                     <div id="comment-body" class="container-fluid">
                         <p>
@@ -123,7 +124,7 @@
                                 <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>
                             </div>
                             <div class="col-auto">
-                                <small class="text-muted" style="font-size: 12px">14 Likes</small>
+                                <small class="text-muted" style="font-size: 12px">0 Likes</small>
                             </div>
                         </div>
                         <div class="row my-2">
@@ -151,7 +152,6 @@
                             <button type="button" class="btn btn-sm btn-secondary mr-1">Cancel</button>
                             <input type="hidden" name="hidden-reply" value="{{ comment.id }}">
                             <input type="submit" class="btn btn-sm btn-primary ml-1" name="reply-submit" value="reply-submit">
-                            <p>{{ comment.id }}</p>
                         </div>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
                 <div class="col">
                     <div id="comment" class="border rounded mt-4 ml-4">
                         <div id="commenter" class="container-fluid">
-                            <h6>{{ reply.user }}</h6>
+                            <h6>{{ reply.user.first_name }} {{ reply.user.last_name }}</h6>
                         </div>
                         <div id="comment-body" class="container-fluid">
                             <p>
@@ -184,7 +184,7 @@
     {% endif%}
     </form>
 {% endfor %}
-
+</div>
     <script src="{% static 'JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
     <script src="{% static 'JavaScript/popper.min.js' %}"></script>
     <script src="{% static 'JavaScript/bootstrap.min.js' %}"></script>
