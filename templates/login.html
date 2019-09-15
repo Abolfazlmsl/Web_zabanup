@@ -1,8 +1,12 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
+
 </head>
 <body>
     <form method="post">
@@ -15,7 +19,7 @@
             password:
             <input type="password" name="password">
         </label>
-        <input type="submit" name="btn" value="submit">
+        <input class="btn btn-primary" type="submit" name="btn" value="submit">
     </form>
     {% if alert %}
         <p>
@@ -23,6 +27,6 @@
             pls try again
         </p>
     {% endif %}
-
+    <a class="btn btn-primary" href="/signup" role="button">signup</a>
 </body>
 </html>

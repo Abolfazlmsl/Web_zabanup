@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
 </head>
 <body>
     <form method="post">
@@ -40,7 +42,7 @@
             <textarea name="address"></textarea>
         </label><br>
 
-        <input type="submit" name="btn" value="submit">
+        <input class="btn btn-primary" type="submit" name="btn" value="submit">
     </form>
     {% if alert %}
         <p>
