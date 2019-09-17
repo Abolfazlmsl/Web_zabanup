@@ -91,7 +91,7 @@ $('#test-info-btn').on('click', function () {
 });
 
 /* Submit the exam */
-$('#submit-button').on('click', function () {
+$(document).on('click', "#submit-button, #small-submit-button", function () {
    let submitFakeButton = $('#submit-fake-button');
    submitFakeButton.removeClass('btn-danger').addClass('btn-dark');
    submitFakeButton.click()

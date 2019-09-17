@@ -453,18 +453,18 @@
             </div>
             {# answersheet for questions in medium and small screens #}
             <div class="col-12 d-flex d-lg-none border-top" id="footer-collapse-small">
-                <div class="row mt-2">
+                <div class="row mx-auto">
                     <div class="col-12 mx-auto text-center d-flex" id="answer-sheet-small">
                         {% for qNumber in passage.question_set.all %}
                             <div class="row">
                                 <div class="col-auto questionNumber rounded m-auto">
-                                    <a href="#q{{ forloop.counter }}" class="text-white q-num">{{ forloop.counter }}</a>
+                                    <a href="#q{{ forloop.counter }}" style="font-family: ErasBold;" class="text-white q-num">{{ forloop.counter }}</a>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="col-12" id="footer-buttons-small">
-                        <a class="btn btn-light btn-sm mx-2 text-center">
+                    <div class="col-12 d-flex" id="footer-buttons-small">
+                        <a class="btn btn-light btn-sm mx-2 text-center" id="small-submit-button">
                             <span class="fa fa-paper-plane mr-1"></span> Submit
                         </a>
                         <a class="btn btn-light btn-sm mx-2 text-center" id="footer-button">
