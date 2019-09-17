@@ -16,7 +16,7 @@ def home(request):
     # check user is authenticated
     if request.user.is_authenticated:
         username = request.user.username
-        return render(request, 'home.html', context={'user': username})
+        return render(request, 'Reading/home.html', context={'user': username})
     else:
         return redirect('Reading:Login')
 
@@ -57,7 +57,9 @@ def passage_body(request, passage_id):
         # get text in html form then render it
         ht = str(passage.text)
         template = loader.get_template(ht).render()
-
+        print(passage.text.url)
+        exam = models.Exam.objects.filter(reading=passage)[0]
+        print(exam)
         # create a context
         context = {
             'passage': passage,
@@ -65,6 +67,7 @@ def passage_body(request, passage_id):
             'textbox': textbox,
             'radiobutton': radiobutton,
             'checkbox': checkbox,
+            'exam': exam,
             'temp': template,
             'refresh_checker': user_answer + 1,
         }
@@ -317,9 +320,9 @@ def login_view(request):
             login(request, user)
             return redirect('Reading:home')
         else:
-            return render(request, 'login.html', context={'alert': 'The information is wrong!', })
+            return render(request, 'Reading/login.html', context={'alert': 'The information is wrong!', })
     else:
-        return render(request, 'login.html', context={})
+        return render(request, 'Reading/login.html', context={})
 
 
 # logout from website
@@ -340,7 +343,7 @@ def change_password(request):
         u.save()
         return redirect('Reading:submit')
     else:
-        return render(request, 'change_password.html')
+        return render(request, 'Reading/change_password.html')
 
 
 # signup of user
@@ -360,7 +363,7 @@ def signup_view(request):
             context = {
                 'alert': 'Passwords does not match!',
             }
-            return render(request, 'signup.html', context)
+            return render(request, 'Reading/signup.html', context)
         else:
             us = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username,
                                           password=password)
@@ -368,7 +371,7 @@ def signup_view(request):
             models.Profile(user=us, phone_number=phone_number, address=address).save()
             return redirect('Reading:Login')
     else:
-        return render(request, 'signup.html')
+        return render(request, 'Reading/signup.html')
 
 
 # show and filter exams
@@ -434,7 +437,7 @@ def exam(request):
             'exams': exams,
         }
 
-        return render(request, 'filter.html', context=context)
+        return render(request, 'Reading/filter.html', context=context)
     else:
         exams = get_list_or_404(models.Exam)
         exam_filter = models.Exam
@@ -442,4 +445,4 @@ def exam(request):
             'exams': exams,
             'exam_filter': exam_filter,
         }
-        return render(request, 'filter.html', context=context)
+        return render(request, 'Reading/filter.html', context=context)

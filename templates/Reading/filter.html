@@ -10,8 +10,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- Bootstrap core CSS -->
-     <link rel="stylesheet" href="{% static 'Css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'Css/filter_style.css' %}">
+     <link rel="stylesheet" href="{% static 'Reading/Css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Reading/Css/filter_style.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
 
 
@@ -144,185 +144,10 @@
         </div>
 
 
-{#<!--Modal: Login-->#}
-{#<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
-{#    <div class="modal-dialog cascading-modal" role="document">#}
-{#        <!--Content-->#}
-{#        <div class="modal-content">#}
-{##}
-{#            <!--Modal cascading tabs-->#}
-{#            <div class="modal-c-tabs">#}
-{#                <div class="panel-group " id="accordion2">#}
-{#                    <div class="panel panel-default">#}
-{#                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2">#}
-{##}
-{#                            <div class="panel-heading">#}
-{#                                <h5 class="panel-title z-depth-1" style="font-size: 110%">#}
-{#                                    Book#}
-{#                                </h5>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                        <div id="collapseOne2" class="panel-collapse collapse in">#}
-{#                            <div class="panel-body">#}
-{#                                <label class="control control--checkbox">Oxford#}
-{#                                    <input type="checkbox" name="radio"   />#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Cambridge#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="panel panel-default">#}
-{#                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo2">#}
-{##}
-{#                            <div class="panel-heading">#}
-{#                                <h5 class="panel-title z-depth-1" style="font-size: 110%">#}
-{#                                    Category#}
-{#                                </h5>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                        <div id="collapseTwo2" class="panel-collapse collapse">#}
-{#                            <div class="panel-body">#}
-{#                                <label class="control control--checkbox">Politic#}
-{#                                    <input type="checkbox" name="checkbox"   />#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Scientific#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Sport#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Biography#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Economic#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="panel panel-default">#}
-{#                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThree2">#}
-{##}
-{#                            <div class="panel-heading">#}
-{#                                <h5 class="panel-title z-depth-1" style="font-size: 110%">#}
-{#                                    Level#}
-{#                                </h5>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                        <div id="collapseThree2" class="panel-collapse collapse">#}
-{#                            <div class="panel-body">#}
-{#                                <label class="control control--checkbox">Beginner#}
-{#                                    <input type="checkbox" name="checkbox"   />#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Pre Intermediate#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox"> Intermediate#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox">Upper Intermediate#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                                <label class="control control--checkbox"> Advanced#}
-{#                                    <input type="checkbox" name="checkbox"/>#}
-{#                                    <div class="control__indicator"></div>#}
-{#                                </label>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#<!--#}
-{#                    <a data-toggle="collapse" data-parent="#accordion2" href="#collapseFour2">#}
-{##}
-{#                        <div class="panel-heading">#}
-{#                            <h5 class="panel-title z-depth-1" style="font-size: 120%">#}
-{#                                House type#}
-{#                            </h5>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                    <div id="collapseFour2" class="panel-collapse collapse">#}
-{#                        <div class="panel-body">#}
-{#                            <label class="control control--checkbox">Villa#}
-{#                                <input type="checkbox" name="checkbox" />#}
-{#                                <div class="control__indicator"></div>#}
-{#                            </label>#}
-{#                            <label class="control control--checkbox">Apartment#}
-{#                                <input type="checkbox" name="checkbox"/>#}
-{#                                <div class="control__indicator"></div>#}
-{#                            </label>#}
-{#                        </div>#}
-{#                    </div>#}
-{#-->#}
-{#                </div>#}
-{#<!--#}
-{#                <div class="panel panel-default">#}
-{#                    <a data-toggle="collapse" data-parent="#accordion2" href="#collapseFive2">#}
-{##}
-{#                        <div class="panel-heading">#}
-{#                            <h5 class="panel-title z-depth-1" style="font-size: 110%">#}
-{#                                Price range#}
-{#                            </h5>#}
-{#                        </div>#}
-{#                    </a>#}
-{#                    <div id="collapseFive2" class="panel-collapse collapse">#}
-{#                        <div class="panel-body">#}
-{#                            <label class="control control--checkbox">10 - 20 $#}
-{#                                <input type="checkbox" />#}
-{#                                <div class="control__indicator"></div>#}
-{#                            </label>#}
-{#                            <label class="control control--checkbox">20 - 30 $#}
-{#                                <input type="checkbox"/>#}
-{#                                <div class="control__indicator"></div>#}
-{#                            </label>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#-->#}
-{#                <div class=" panel panel-default">#}
-{#                    <input type="submit" class="btn btn-lg btn-lg btn1 close" data-dismiss="modal" aria-label="Close"#}
-{#                            style="height: 100%;width: 100%;font-size:110%;background-color: #ffaa18;margin: 0;margin-top: 8%;">#}
-{#        <span aria-hidden="true">#}
-{#                        Filter</span>#}
-{#                </div>#}
-{##}
-{##}
-{##}
-{#            </div>#}
-{#        </div>#}
-{#        <!--/.Content-->#}
-{#    </div>#}
-{#</div>#}
-{#<!--Modal: Login-->#}
 
-
-{#<a href=""  data-toggle="modal" data-target="#modalLRForm">#}
-{#<div class="text-center z-depth-3 white mx-0 fixed-bottom pb-3 pt-3 d-sm-block d-lg-none d-md-none" style=" box-shadow:2px 2px 2px 4px  rgba(111,114,91,0.27) ;">#}
-{#    <span  class="black-text">Filter</span>#}
-{#</div>#}
-{#</a>#}
-
-
-<!--footer-->
-
-<!--end of footer-->
-
-
-
-    <script src="{% static 'JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
-    <script src="{% static 'JavaScript/bootstrap.min.js' %}"></script>
-    <script src="{% static 'JavaScript/popper.min.js' %}"></script>
+    <script src="{% static 'Reading/JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'Reading/JavaScript/bootstrap.min.js' %}"></script>
+    <script src="{% static 'Reading/JavaScript/popper.min.js' %}"></script>
 
 
 
