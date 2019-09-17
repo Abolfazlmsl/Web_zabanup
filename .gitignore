@@ -4,6 +4,7 @@
 /Reading/migrations/
 /venv/
 /__pycache__/
+/admin/
 
 # ignore a file type
 # *.json
