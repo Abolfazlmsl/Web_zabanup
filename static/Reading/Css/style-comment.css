@@ -1,28 +1,34 @@
 #comment {
     height: fit-content;
-    width: 60%;
+    width: 70%;
 }
-#avatar, #replied-avatar {
+
+#avatar,
+#replied-avatar {
     width: 60px;
     height: 60px;
     margin: 15px;
     border-radius: 50%;
 }
-#commenter, #replied-commenter {
+
+#commenter,
+#replied-commenter {
     padding-top: 10px;
 }
 
-#comment-body, #replied-comment-body {
+#comment-body,
+#replied-comment-body {
     padding-bottom: 10px;
 }
 
-#comment-footer, #replied-comment-footer {
+#comment-footer,
+#replied-comment-footer {
     width: 100%;
 }
 
-#reply, #replied-reply {
+#reply {
     margin-top: 10px;
-    width: 50%;
+    width: 80%;
     display: block;
 }
 
@@ -30,29 +36,30 @@
     color: black;
 }
 
-#reply-footer button, #replied-reply-footer button {
+#reply-footer button {
     width: 75px !important;
 }
 
-#reply-body, #replied-reply-body{
+#reply-body {
     width: 100%;
 }
-#reply-body textarea, #replied-reply-body textarea {
+
+#reply-body textarea {
     padding: 3px 5px;
     font-size: 14px;
     width: 100%;
     box-sizing: border-box;
     border-radius: 3px;
-    height: 150px;
+    height: 90px;
     resize: none;
 }
 
-#to-reply small a:hover, #replied-to-reply small a:hover  {
+#to-reply small a:hover {
     color: black !important;
     text-decoration: none;
 }
 
-#like small a:hover, #replied-like small a:hover {
+#like small a:hover {
     color: black !important;
     text-decoration: none;
 }

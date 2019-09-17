@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Answer</title>
-     <link rel="stylesheet" href="{% static 'Reading/Css/comment-style.css' %}">
-    <link rel="stylesheet" href="{% static 'Reading/Css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'Reading/Css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'Reading/Css/style-comment.css' %}">
+     <link rel="stylesheet" href="{% static 'Reading/Css/all.css' %}">
 
 </head>
 <body>
@@ -99,95 +100,117 @@
     </div>
   </div>
 </form>
+
+
+
 {#showing comments#}
-
-
 {% for comment in all_comments %}
     <form action="" method="post">
-    {% csrf_token %}
-    {% if comment.parent is None %}
-    <div class="row container-fluid justify-content-center">
-            <div class="col">
-                <div id="comment" class="border rounded mt-4 ml-4">
-                    <div id="commenter" class="container-fluid">
-                        <h6>{{ comment.user.first_name }} {{ comment.user.last_name }}</h6>
-                    </div>
-                    <div id="comment-body" class="container-fluid">
-                        <p>
-                           {{ comment.text }}
-                        </p>
-
-                    </div>
-                    <div class="container-fluid" id="comment-footer">
-                        <div class="row">
-                            <div class="col-auto">
-                                <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>
-                            </div>
-                            <div class="col-auto">
-                                <small class="text-muted" style="font-size: 12px">0 Likes</small>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-auto ml-auto" id="like">
-                                <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
-                            </div>
-                            <div class="col-auto" id="to-reply">
-                                <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse" ><i class="fa fa-comment mr-1"></i>Reply</a></small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row container-fluid mt-2">
-            <div class="col">
-                <div id="comment-collapse{{ comment.id }}" class="collapse">
-                    <div class="row border rounded p-3 ml-4" id="reply">
-                        <div class="mt-1" id="reply-body">
-                            <label>
-                                <textarea placeholder="Type reply here..." name="reply-text"></textarea>
-                            </label>
-                        </div>
-                        <div class="d-flex justify-content-center mt-1" id="reply-footer">
-                            <button type="button" class="btn btn-sm btn-secondary mr-1">Cancel</button>
-                            <input type="hidden" name="hidden-reply" value="{{ comment.id }}">
-                            <input type="submit" class="btn btn-sm btn-primary ml-1" name="reply-submit" value="reply-submit">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {% for reply in comment.comment_set.all %}
-            <div class="row container-fluid justify-content-center" style="margin-left: 2%;width: 95%">
+        {% csrf_token %}
+        {% if comment.parent is None %}
+            <div class="row container-fluid justify-content-center">
                 <div class="col">
-                    <div id="comment" class="border rounded mt-4 ml-4">
-                        <div id="commenter" class="container-fluid">
-                            <h6>{{ reply.user.first_name }} {{ reply.user.last_name }}</h6>
-                        </div>
-                        <div id="comment-body" class="container-fluid">
-                            <p>
-                               {{ reply.text }}
-                            </p>
-                        </div>
-                        <div class="container-fluid" id="comment-footer">
-                            <div class="row">
-                                <div class="col-auto">
-                                    <small class="text-muted" style="font-size: 11px">{{ reply.time }}</small>
+                    <div id="comment" class="border rounded mt-4 ml-4 mx-auto media">
+                        <img src="{% static  'Reading/Images/logo_small.png'%}" alt="avatar" id="avatar">
+                        <div class="media-body">
+                            <div id="commenter" class="container-fluid">
+                                <h6>{{ comment.user.first_name }} {{ comment.user.last_name }}</h6>
+                            </div>
+                            <div id="comment-body" class="container-fluid">
+                                <p>
+                                    {{ comment.text }}
+                                </p>
+                            </div>
+                            <div class="container-fluid" id="comment-footer">
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <div class="row d-flex justify-content-start">
+                                            <div class="col-auto">
+                                                <small class="text-muted" style="font-size: 11px">{{ comment.time }}</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted" style="font-size: 12px">14 Likes</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="row d-flex justify-content-end">
+                                            <div class="col-auto" id="like">
+                                                <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
+                                            </div>
+                                            <div class="col-auto" id="to-reply">
+                                                <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse"><i class="fa fa-comment mr-1"></i>Reply</a></small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div id="comment-collapse{{ comment.id }}" class="collapse my-2">
+                                <div class="row container-fluid border rounded p-3 mx-auto" id="reply">
+                                    <div class="col-12 mt-1" id="reply-body">
+                                        <label style="width: 100%">
+                                            <textarea type="text" placeholder="Type reply here..." id="reply-text" name="reply-text"></textarea>
+                                        </label>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-1" id="reply-footer">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary mr-1">Cancel</button>
+                                        <input type="hidden" name="hidden-reply" value="{{ comment.id }}">
+                                        <input type="submit" class="btn btn-sm btn-outline-primary ml-1" name="reply-submit" value="Submit" style="width: 75px">
+                                    </div>
+                                </div>
+                            </div>
+                            {% for reply in comment.comment_set.all %}
+                                <div class="media border-top">
+                                    <img src="{% static  'Reading/Images/logo.svg'%}" alt="avatar" id="replied-avatar">
+                                    <div class="media-body">
+                                        <div id="replied-commenter" class="container-fluid">
+                                            <h6>{{ reply.user.first_name }} {{ reply.user.last_name }}</h6>
+                                        </div>
+                                        <div id="replied-comment-body" class="container-fluid">
+                                            <p>
+                                                {{ reply.text }}
+                                            </p>
+                                        </div>
+                                        <div class="container-fluid" id="replied-comment-footer">
+                                            <div class="row mb-2">
+                                                <div class="col-6">
+                                                    <div class="row d-flex justify-content-start">
+                                                        <div class="col-auto">
+                                                            <small class="text-muted" style="font-size: 11px">{{ reply.time }}</small>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <small class="text-muted" style="font-size: 12px">14 Likes</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="row d-flex justify-content-end">
+                                                        <div class="col-auto" id="replied-like">
+                                                            <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    {% endif%}
+        {% endif%}
     </form>
 {% endfor %}
+
+
+
+
 </div>
     <script src="{% static 'Reading/JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
     <script src="{% static 'Reading/JavaScript/popper.min.js' %}"></script>
     <script src="{% static 'Reading/JavaScript/bootstrap.min.js' %}"></script>
+    <script src="{% static 'Reading/JavaScript/all.js' %}"></script>
 
 </body>
 </html>

@@ -58,6 +58,8 @@ def passage_body(request, passage_id):
         ht = str(passage.text)
         template = loader.get_template(ht).render()
         print(passage.text.url)
+        exam = models.Exam.objects.filter(reading=passage)[0]
+        print(exam)
         # create a context
         context = {
             'passage': passage,
@@ -65,6 +67,7 @@ def passage_body(request, passage_id):
             'textbox': textbox,
             'radiobutton': radiobutton,
             'checkbox': checkbox,
+            'exam': exam,
             'temp': template,
             'refresh_checker': user_answer + 1,
         }
