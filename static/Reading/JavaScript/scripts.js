@@ -27,10 +27,10 @@ $('#toggler').on('click', function () {
    let toggler = $('#toggler-icon');
    if(nav.css('right') === '0px')
    {
-       nav.css('right', '-240px');
+       nav.css('right', '-60%');
        toggler.removeClass('fa-times').addClass('fa-bars');
    } else {
-       nav.css('right', '0px');
+       nav.css('right', '0');
        toggler.removeClass('fa-bars').addClass('fa-times');
    }
 });
@@ -91,9 +91,14 @@ $('#test-info-btn').on('click', function () {
 });
 
 /* Submit the exam */
-$(document).on('click', "#submit-button, #small-submit-button", function () {
+$(document).on('click', "#submit-button", function () {
    let submitFakeButton = $('#submit-fake-button');
    submitFakeButton.removeClass('btn-danger').addClass('btn-dark');
-   submitFakeButton.click()
+   submitFakeButton.click();
 });
 
+$("#small-submit-button").click(function () {
+    let submitFakeButton = $('#submit-fake-button');
+   submitFakeButton.removeClass('btn-danger').addClass('btn-dark');
+   submitFakeButton.click();
+});

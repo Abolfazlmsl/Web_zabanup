@@ -12,7 +12,7 @@ a:hover{
             display: flex;
             justify-content: right;
             background-color: white;
-            height: 50px;
+            height: 120px;
             position: fixed;
             top: 0;
             right: 0;
@@ -32,15 +32,18 @@ a:hover{
             height: fit-content;
         }
         #normal-logo{
-            width: 91px;
-            height: 35px;
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 250px;
+            height: 110px;
         }
         #toggler{
             margin-top: 6px;
             padding: 0 10px;
             height: fit-content;
             color: black;
-            font-size: 25px;
+            font-size: 95px;
         }
         #toggler-icon{
             cursor: pointer;
@@ -50,15 +53,19 @@ a:hover{
         }
         #options{
             position: fixed;
-            top: 50px;
-            right: -210px;
+            top: 119px;
+            right: -60%;
             bottom: 0;
             background-color: white;
-            width: 210px;
-            line-height: 2.5rem;
+            width: 60%;
+            line-height: 8.5rem;
             padding-top: 20px;
             padding-left: 25px;
             transition-duration: 0.4s;
+        }
+        #options li{
+            font-size: 50px;
+            margin: 0 10px;
         }
     }
 /*Designing the header in large and Extra Large screen sizes*/
