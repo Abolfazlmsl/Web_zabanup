@@ -341,7 +341,7 @@ def change_password(request):
         newpass = request.POST['newpass']
         u.set_password(newpass)
         u.save()
-        return redirect('Reading:submit')
+        return redirect('Reading:home')
     else:
         return render(request, 'Reading/change_password.html')
 
