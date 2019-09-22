@@ -72,42 +72,50 @@ def passage_body(request, passage_id):
 
         # get passage and question of it
         passage = get_object_or_404(models.Passage, pk=passage_id)
-        questions = get_list_or_404(models.Question, passage=passage)
-
+        current_exam = models.Exam.objects.get(id=passage.exam.id)
+        all_passages = models.Passage.objects.filter(exam=current_exam)
+        questions = get_list_or_404(models.Question, passage__in=all_passages)
         # define for add our questions to these list
-        dropdown = []
-        textbox = []
-        radiobutton = []
-        checkbox = []
+        dropdown_list = []
+        textbox_list = []
+        radiobutton_list = []
+        checkbox_list = []
 
         # add same question to 4 different lists
         for question in questions:
             # dropdown questions
             if question.type == 'dropdown':
-                dropdown.append(question)
+                dropdown_list.append([question.passage.id, question])
             # textbox questions
             elif question.type == 'text':
-                textbox.append(question)
+                textbox_list.append([question.passage.id, question])
             # radiobutton questions
             elif question.type == 'radiobutton':
-                radiobutton.append(question)
+                radiobutton_list.append([question.passage.id, question])
             # checkbox questions
             elif question.type == 'checkbox':
-                checkbox.append(question)
-
+                checkbox_list.append([question.passage.id, question])
         # get text in html form then render it
         ht = str(passage.text)
         template = loader.get_template(ht).render()
         # create a context
+        dropdown = []
+        textbox = []
+        radiobutton = []
+        checkbox = []
+        print(dropdown_list[0][1])
         context = {
-            'passage': passage,
             'dropdown': dropdown,
             'textbox': textbox,
             'radiobutton': radiobutton,
             'checkbox': checkbox,
-            'exam': exam,
             'temp': template,
             'refresh_checker': user_answer + 1,
+            'current_exam': current_exam,
+            'dropdown_list': dropdown_list,
+            'textbox_list': textbox_list,
+            'radiobutton_list': radiobutton_list,
+            'checkbox_list': checkbox_list,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
