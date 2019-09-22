@@ -21,3 +21,4 @@
 /LanguageExam/__init__.py
 /Reading/api/__init__.py
 __init__.py
+passenger_wsgi.py

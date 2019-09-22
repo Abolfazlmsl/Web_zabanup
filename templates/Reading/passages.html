@@ -83,8 +83,8 @@
                     </li>
                     {# an item of the list that shows "Exit" #}
                     <li>
-                        <a href="{% url 'Reading:Exam' %}" class="d-lg-none"><i class="fa fa-sign-in-alt mr-3"></i>Exit</a>
-                        <a href="{% url 'Reading:Exam' %}" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Exit"><i class="fa fa-sign-in-alt mr-2"></i></a>
+                        <a href="{% url 'Reading:home' %}" class="d-lg-none"><i class="fa fa-sign-in-alt mr-3"></i>Exit</a>
+                        <a href="{% url 'Reading:home' %}" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Exit"><i class="fa fa-sign-in-alt mr-2"></i></a>
                     </li>
                 </ul>
             </nav>
@@ -396,10 +396,15 @@
                         <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
                     </div>
                     <div class="col-auto align-self-center" style="height: fit-content">
-                        <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px">
-                            Next
-                            <i class="fa fa-arrow-right ml-1 align-middle"></i>
-                        </a>
+{#                        <a href="?page=2" class="btn btn-outline-dark btn-sm" style="width: 75px">#}
+{#                            Next#}
+{#                            <i class="fa fa-arrow-right ml-1 align-middle"></i>#}
+{#                        </a>#}
+                        <form action="" method="post" >
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ passage.id }}" name="current_passage_id">
+                            <input type="submit" name="next" value="next">
+                        </form>
                     </div>
                 </div>
             </div>
