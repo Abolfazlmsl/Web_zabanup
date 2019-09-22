@@ -9,23 +9,64 @@ from . import models
 # Create your views here.
 
 
-# home page that check authentication
-# if ok then render home page
-# else redirect to login page
-def home(request):
-    # check user is authenticated
-    if request.user.is_authenticated:
-        username = request.user.username
-        return render(request, 'Reading/home.html', context={'user': username})
-    else:
-        return redirect('Reading:Login')
-
-
 # get passage details and render passage page if user is authenticated
 def passage_body(request, passage_id):
     # check user is authenticated
     if request.user.is_authenticated:
-
+        # if request.POST.get('next'):
+        #     current_id = int(request.POST.get('current_passage_id'))
+        #     current_passage = models.Passage.objects.get(id=current_id)
+        #     current_exam = models.Exam.objects.get(id=current_passage.exam.id)
+        #     all_passages = current_exam.passage_set.all()
+        #     next_id = ''
+        #     for index in range(len(all_passages)):
+        #         if all_passages[index].id == current_id:
+        #             next_id = all_passages[index+1].id
+        #
+        #     # this is use for refresh of submit page
+        #     user_answer = models.UserAnswer.objects.all().count()
+        #
+        #     # get passage and question of it
+        #     passage = get_object_or_404(models.Passage, pk=next_id)
+        #     questions = get_list_or_404(models.Question, passage=passage)
+        #
+        #     # define for add our questions to these list
+        #     dropdown = []
+        #     textbox = []
+        #     radiobutton = []
+        #     checkbox = []
+        #
+        #     # add same question to 4 different lists
+        #     for question in questions:
+        #         # dropdown questions
+        #         if question.type == 'dropdown':
+        #             dropdown.append(question)
+        #         # textbox questions
+        #         elif question.type == 'text':
+        #             textbox.append(question)
+        #         # radiobutton questions
+        #         elif question.type == 'radiobutton':
+        #             radiobutton.append(question)
+        #         # checkbox questions
+        #         elif question.type == 'checkbox':
+        #             checkbox.append(question)
+        #
+        #     # get text in html form then render it
+        #     ht = str(passage.text)
+        #     template = loader.get_template(ht).render()
+        #     # create a context
+        #     context = {
+        #         'passage': passage,
+        #         'dropdown': dropdown,
+        #         'textbox': textbox,
+        #         'radiobutton': radiobutton,
+        #         'checkbox': checkbox,
+        #         'exam': exam,
+        #         'temp': template,
+        #         'refresh_checker': user_answer + 1,
+        #     }
+        #     return render(request, 'Reading/passages.html', context=context)
+        # else:
         # this is use for refresh of submit page
         user_answer = models.UserAnswer.objects.all().count()
 
@@ -57,9 +98,6 @@ def passage_body(request, passage_id):
         # get text in html form then render it
         ht = str(passage.text)
         template = loader.get_template(ht).render()
-        print(passage.text.url)
-        exam = models.Exam.objects.filter(reading=passage)[0]
-        print(exam)
         # create a context
         context = {
             'passage': passage,
@@ -376,73 +414,76 @@ def signup_view(request):
 
 # show and filter exams
 def exam(request):
-    # check method
-    if request.POST:
-        # get current user
-        username = request.user.username
+    if request.user.is_authenticated:
+        # check method
+        if request.POST:
+            # get current user
+            username = request.user.username
 
-        # get all books
-        # the filters doesn't chose return none
-        all_books = []
-        for book in models.Exam.BOOK_List:
-            all_books.append(request.POST.get(book[0]))
-        # get filter that chose by user
-        filter_book = []
-        for book in all_books:
-            if book:
-                filter_book.append(book)
+            # get all books
+            # the filters doesn't chose return none
+            all_books = []
+            for book in models.Exam.BOOK_List:
+                all_books.append(request.POST.get(book[0]))
+            # get filter that chose by user
+            filter_book = []
+            for book in all_books:
+                if book:
+                    filter_book.append(book)
 
-        # get all categories
-        # the filters doesn't chose return none
-        all_categories = []
-        for category in models.Exam.CATEGORY:
-            all_categories.append(request.POST.get(category[0]))
-        # get filter that chose by user
-        filter_category = []
-        for category in all_categories:
-            if category:
-                filter_category.append(category)
+            # get all categories
+            # the filters doesn't chose return none
+            all_categories = []
+            for category in models.Exam.CATEGORY:
+                all_categories.append(request.POST.get(category[0]))
+            # get filter that chose by user
+            filter_category = []
+            for category in all_categories:
+                if category:
+                    filter_category.append(category)
 
-        # get all difficulties
-        # the filters doesn't chose return none
-        all_difficulties = []
-        for difficulty in models.Exam.DIFFICULTY:
-            all_difficulties.append(request.POST.get(difficulty[0]))
-        # get filter that chose by user
-        filter_difficulty = []
-        for difficulty in all_difficulties:
-            if difficulty:
-                filter_difficulty.append(difficulty)
+            # get all difficulties
+            # the filters doesn't chose return none
+            all_difficulties = []
+            for difficulty in models.Exam.DIFFICULTY:
+                all_difficulties.append(request.POST.get(difficulty[0]))
+            # get filter that chose by user
+            filter_difficulty = []
+            for difficulty in all_difficulties:
+                if difficulty:
+                    filter_difficulty.append(difficulty)
 
-        # filter exams
-        exams = []
-        # check if we have filter by book
-        if len(filter_book) > 0:
-            exams = models.Exam.objects.filter(book__in=filter_book)
-        # check if we have filter by category
-        if len(filter_category) > 0:
-            exams = models.Exam.objects.filter(category__in=filter_category)
-        # check if we have filter by difficulty
-        if len(filter_difficulty) > 0:
-            exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
-        # if don't chose any filter then select all exams
-        if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
+            # filter exams
+            exams = []
+            # check if we have filter by book
+            if len(filter_book) > 0:
+                exams = models.Exam.objects.filter(book__in=filter_book)
+            # check if we have filter by category
+            if len(filter_category) > 0:
+                exams = models.Exam.objects.filter(category__in=filter_category)
+            # check if we have filter by difficulty
+            if len(filter_difficulty) > 0:
+                exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
+            # if don't chose any filter then select all exams
+            if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
+                exams = get_list_or_404(models.Exam)
+
+            exam_filter = models.Exam
+
+            # create context
+            context = {
+                'exam_filter': exam_filter,
+                'exams': exams,
+            }
+
+            return render(request, 'Reading/filter.html', context=context)
+        else:
             exams = get_list_or_404(models.Exam)
-
-        exam_filter = models.Exam
-
-        # create context
-        context = {
-            'exam_filter': exam_filter,
-            'exams': exams,
-        }
-
-        return render(request, 'Reading/filter.html', context=context)
+            exam_filter = models.Exam
+            context = {
+                'exams': exams,
+                'exam_filter': exam_filter,
+            }
+            return render(request, 'Reading/filter.html', context=context)
     else:
-        exams = get_list_or_404(models.Exam)
-        exam_filter = models.Exam
-        context = {
-            'exams': exams,
-            'exam_filter': exam_filter,
-        }
-        return render(request, 'Reading/filter.html', context=context)
+        return redirect('Reading:Login')
