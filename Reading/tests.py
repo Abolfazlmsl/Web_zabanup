@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 
 
 class User(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         us.objects.create_user(email='mr.amirhossein1836@gmail.com', first_name='amirhossein', password='Amir1376', last_name='asadi', username='amirhossein')
         us.objects.create_user(email='mr.amirhossein@gmail.com', first_name='amirhossein', password='Amir1376', last_name='asadi', username='am13ir76')
 
@@ -31,3 +31,5 @@ class User(TestCase):
         self.client.login(username='am13ir76', password='Amir1376')
         response = self.client.post('/change_password/', {'user': 'am13ir76', 'newpass': 'amir1376'})
         self.assertEqual(response.status_code, 302)
+
+

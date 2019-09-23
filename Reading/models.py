@@ -12,16 +12,6 @@ class Profile(models.Model):
         return '{}, {}'.format(self.user.first_name, self.user.last_name)
 
 
-# Passage model
-class Passage(models.Model):
-    title = models.CharField(max_length=200)
-    text = models.FileField()
-    image = models.FileField()
-
-    def __str__(self):
-        return self.title
-
-
 # Exam model
 class Exam(models.Model):
     BOOK_List = [
@@ -29,11 +19,12 @@ class Exam(models.Model):
         ('cambridge', 'Cambridge')
     ]
     CATEGORY = [
-        ('politic', 'Politic'),
-        ('scientific', 'Scientific'),
+        ('education', 'Education'),
+        ('science', 'Science'),
         ('economic', 'Economic'),
         ('sport', 'Sport'),
-        ('biography', 'Biography'),
+        ('nature_and_environment', 'Nature and Environment'),
+        ('technology', 'Technology'),
     ]
     DIFFICULTY = [
         ('beginner', 'Beginner'),
@@ -46,10 +37,20 @@ class Exam(models.Model):
     category = models.CharField(max_length=32, choices=CATEGORY)
     difficulty = models.CharField(max_length=32, choices=DIFFICULTY)
     image = models.FileField(null=True, blank=True)
-    reading = models.OneToOneField('Passage', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return '{}, {}'.format(self.book, self.reading)
+        return '{}'.format(self.book)
+
+
+# Passage model
+class Passage(models.Model):
+    title = models.CharField(max_length=200)
+    text = models.FileField()
+    image = models.FileField()
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
 
 
 # Question model

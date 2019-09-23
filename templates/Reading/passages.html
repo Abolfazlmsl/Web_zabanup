@@ -12,87 +12,87 @@
 </head>
 <body>
 <header>
-    {# header part of the web page #}
+{#     header part of the web page #}
     <div id="header">
         <div class="row mb-3 d-none d-lg-flex" id="header-collapse">
-            {# The image of the test and name of it, on the top left, when "show test info" has pressed #}
+{#             The image of the test and name of it, on the top left, when "show test info" has pressed #}
             <div class="col-4 pt-2 pl-5">
                 <div class="row">
                     <div class="col-auto mr-0 mt-2">
-                        <img src="{% static exam.image.url %}" style="width: 78px; height: 78px" alt="IELTS">
+                        <img src="{% static current_exam.image.url %}" style="width: 78px; height: 78px" alt="IELTS">
                     </div>
                     <div class="col-7">
-                        <span style="font-size: 15px">{{ exam.book }}</span>
+                        <span style="font-size: 15px">{{ current_exam.book }}</span>
                     </div>
                 </div>
             </div>
-            {# some information about test. time of publishment, number of views and test taken number #}
+{#             some information about test. time of publishment, number of views and test taken number #}
             <div class="col-3 pt-3">
                 <span class="text-muted" style="font-size: 15px"><i class="fa fa-calendar-alt mr-2" style="margin-left: 2px"></i>Published on: 15 Nov 2018</span>
                 <br>
-                <span class="text-muted" style="font-size: 15px"><i class="fa fa-signal mr-2" ></i>Difficulty: {{ exam.difficulty }}</span>
+                <span class="text-muted" style="font-size: 15px"><i class="fa fa-signal mr-2" ></i>Difficulty: {{ current_exam.difficulty }}</span>
                 <br>
-                <span class="text-muted" style="font-size: 15px"><i class="fa fa-th mr-2" style="margin-left: 5px"></i>Category: {{ exam.category }}</span>
+                <span class="text-muted" style="font-size: 15px"><i class="fa fa-th mr-2" style="margin-left: 5px"></i>Category: {{ current_exam.category }}</span>
             </div>
-            {# category of test #}
+{#             category of test #}
             <div class="col-2 text-center pt-3">
                 <i class="fa fa-book-open" style="font-size: 45px; color: #6A5ACD"></i>
                 <br>
                 <span>Reading Practice Test 1</span>
             </div>
-            {# Logo of the site on the top right #}
+{#             Logo of the site on the top right #}
             <div class="col-3 text-right pr-5 pt-2">
                 <img src="{% static 'Reading/Images/logo.svg' %}" style="width: 195px; height: 75px" alt="Logo">
             </div>
         </div>
         <div class="row container-fluid justify-content-between border-top" id="header-inner">
-            {# 2 images, both of them are logo and big one uses in large screen at right, and small one uses in medium screens at left #}
+{#             2 images, both of them are logo and big one uses in large screen at right, and small one uses in medium screens at left #}
             <div class="col-1 mr-lg-0" id="header-logo">
                 <a href="#">
                     <img src="{% static 'Reading/Images/logo.svg' %}" class="d-lg-none" id="normal-logo" alt="normal-logo">
                     <img src="{% static 'Reading/Images/logo_small.png' %}" class="d-none d-lg-block ml-auto" id="small-logo" alt="small-logo">
                 </a>
             </div>
-            {# a navbar for menu of the site and show different parts of the site using a list#}
+{#             a navbar for menu of the site and show different parts of the site using a list#}
             <nav class="col-auto" id="options" >
                 <ul class="list-unstyled">
-                    {# an item of the list that shows "Report Mistake" #}
+{#                     an item of the list that shows "Report Mistake" #}
                     <li>
                         <a href="#" class="d-lg-none"><i class="fa fa-exclamation-triangle mr-3"></i>Report Mistake</a>
                         <a href="#" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Report Mistake"><i class="fa fa-exclamation-triangle mr-2"></i></a>
                     </li>
-                    {# an item of the list that shows "Font Size" #}
+{#                     an item of the list that shows "Font Size" #}
                     <li>
                         <a href="#" class="d-lg-none"><i class="fa fa-text-height mr-3"></i>Font Size</a>
                         <a href="#" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Font Size"><i class="fa fa-text-height mr-2"></i></a>
                     </li>
-                    {# an item of the list that shows "Download" #}
+{#                     an item of the list that shows "Download" #}
                     <li>
                         <a href="#" class="d-lg-none"><i class="fa fa-cloud-download-alt mr-3"></i>Download</a>
                         <a href="#" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Download"><i class="fa fa-cloud-download-alt mr-2"></i></a>
                     </li>
-                    {# an item of the list that shows "Instruction" #}
+{#                     an item of the list that shows "Instruction" #}
                     <li>
                         <a href="#" class="d-lg-none"><i class="fa fa-question-circle mr-3"></i>Instruction</a>
                         <a href="#" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Instruction"><i class="fa fa-question-circle mr-2"></i></a>
                     </li>
-                    {# an item of the list that shows "Save Drafts" #}
+{#                     an item of the list that shows "Save Drafts" #}
                     <li>
                         <a href="#" class="d-lg-none"><i class="fa fa-save mr-3"></i>Save Drafts</a>
                         <a href="#" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Save Drafts"><i class="fa fa-save mr-2"></i></a>
                     </li>
-                    {# an item of the list that shows "Exit" #}
+{#                     an item of the list that shows "Exit" #}
                     <li>
-                        <a href="{% url 'Reading:Exam' %}" class="d-lg-none"><i class="fa fa-sign-in-alt mr-3"></i>Exit</a>
-                        <a href="{% url 'Reading:Exam' %}" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Exit"><i class="fa fa-sign-in-alt mr-2"></i></a>
+                        <a href="{% url 'Reading:home' %}" class="d-lg-none"><i class="fa fa-sign-in-alt mr-3"></i>Exit</a>
+                        <a href="{% url 'Reading:home' %}" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Exit"><i class="fa fa-sign-in-alt mr-2"></i></a>
                     </li>
                 </ul>
             </nav>
-            {# toggler icon for menu in medium and small screens #}
+{#             toggler icon for menu in medium and small screens #}
             <div class="col-auto ml-auto" id="toggler" >
                  <i class="fa fa-bars" id="toggler-icon"></i>
             </div>
-            {# a button for showing test informations #}
+{#             a button for showing test informations #}
             <div id="test-info" class="col-auto">
                 <button type="button" class="btn btn-outline-secondary btn-sm d-none d-lg-block" id="test-info-btn">
                     <i class="fa fa-arrow-down mr-1" id="test-info-icon"></i> Show Test Info
@@ -101,311 +101,1003 @@
         </div>
     </div>
 </header>
+
+
+
+
+
+
+
+
+
+
+
+
 <main>
     {# main part of the web page that contains tow horizontal parts#}
-    <div class="leftAndRight">
-        {# left part of main, contains the reading text #}
-        <div class="leftContent">
-            <div class="container-fluid left-inner">
-                {# Reading title #}
-                <div class="row mt-5 mb-3">
-                    <h1 class="testTitle">
-                        READING PASSAGE 1
-                    </h1>
+        <div class="leftAndRight d-flex" id="passage-number-{{ passage1.id }}">
+            {# left part of main, contains the reading text #}
+            <div class="leftContent">
+                <div class="container-fluid left-inner">
+                    {# Reading title #}
+                    <div class="row mt-5 mb-3">
+                        <h1 class="testTitle">
+                            READING PASSAGE 1
+                        </h1>
+                    </div>
+                    {# Reading description #}
+                    <div class="row mb-4">
+                        <p class="testDescription">
+                            <i>You should spend about 20 minutes on <strong>Questions 1-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}</strong>,
+                                which are based on Reading Passage 1 below.
+                            </i>
+                        </p>
+                    </div>
+                    {# Reading image #}
+                    <div class="row mb-4 justify-content-center">
+                        <img src="{% static passage1.image.url %}"
+                             style="width: 500px; height: 521px" alt="MainPic" id="passage{{ passage1.id }}-image">
+                    </div>
+                    {# Passage title #}
+                    <div class="row justify-content-center mb-3">
+                        <h3>
+                            {{ passage1.title }}
+                        </h3>
+                    </div>
+                    <div class="row mb-5">
+                        <p>
+                            {{ template1|linebreaks }}
+                        </p>
+                    </div>
                 </div>
-                {# Reading description #}
-                <div class="row mb-4">
-                    <p class="testDescription">
-                        <i>You should spend about 20 minutes on <strong>Questions 1-{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</strong>,
-                            which are based on Reading Passage 1 below.
-                        </i>
-                    </p>
+            </div>
+            <div class="rightContent">
+                <div class="container-fluid right-inner">
+                    <h6 class="section mt-4 mb-4">
+                        SECTION 1: QUESTIONS 1-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}
+                    </h6>
+                    <form action="{% url 'Reading:submit' passage1.id %}" method="post">
+                        {% csrf_token %}
+                        {% if dropdown_passage1 %}
+                        <div class="row">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions 1-{{ dropdown_passage1|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad1"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse" id="notepad1">
+                                    <label class="w-100">
+                                        <textarea class="input-group pl-2" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# Some descriptions about true flase questions #}
+                        <p><i>Do the following statements agree with the information given in Reading Passage 1?</i></p>
+                        <p class="mb-4"><i>In <b>boxes 1-{{ dropdown_passage1|length }}</b> on your answer sheet, write</i></p>
+                        <table class="table border table-sm table-striped mb-4">
+                            <tbody>
+                                <tr>
+                                    <th class="pl-3">TRUE</th>
+                                    <td>if the statement is true</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">FALSE</th>
+                                    <td>if the statement is false</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">NOT GIVEN</th>
+                                    <td>if the information is not given in the passage</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {# Dropdown questions starts #}
+                        {% for dd in dropdown_passage1 %}
+                            <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
+                                <div class="col-1 mt-2 mt-md-0">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
+                                    <label for="q{{ forloop.counter }}">
+                                        <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">
+                                            <option disabled selected></option>
+                                            {% for answer in dd.answer_set.all %}
+                                                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-8 my-2 my-md-0">
+                                    <p class="my-0">
+                                        {{ dd }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Dropdown questions ends #}
+
+                        {% if textbox_passage1 %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad2"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad2">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about textbox questions #}
+                        <p><i>Answer the questions below.</i></p>
+                        <p><i>Choose <span class="text-danger">NO MORE THAN THREE WORDS</span> from the passage for each answer:</i></p>
+                        <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}</b> on your answer sheet.</i></p>
+
+                        {# Textbox questions starts #}
+                        {% for tb in textbox_passage1 %}
+                            <div class="row container border textboxQuestionRow ml-0 mb-2 align-items-center">
+                                <div class="col-12">
+                                    <p class="my-0">
+                                       {{ tb }}
+                                    </p>
+                                </div>
+                                <div class="col-1 ml-2">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                        <strong class="text-white">{{ dropdown_passage1|length|add:forloop.counter}}</strong>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto mr-3"  id="q{{ dropdown_passage1|length|add:forloop.counter}}">
+                                    <label>
+                                        <input type="text" placeholder="Your answer" name="hidden{{ forloop.counter }}" hidden value="{{ tb.id }}">
+                                    </label>
+                                    <input type="text" class="textboxAnswer" name="q{{ dropdown_passage1|length|add:forloop.counter}}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Textbox questions ends #}
+
+                        {% if radiobutton_passage1 %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown_passage1|add:textbox_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad3"
+                                            aria-expanded="false" aria-controls="notepad3">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad3">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about ridaobutton questions #}
+                        <p><i>Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</i></p>
+                        <p class="mb-5"><i>Write the correct letter in boxes <b>{{ dropdown_passage1|add:textbox_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length }}</b> on your answer sheet.</i></p>
+
+                        {# Radiobutton question starts #}
+                        {% for rb in radiobutton_passage1 %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2"  id="q{{ dropdown_passage1|add:textbox_passage1|length|add:forloop.counter }}">
+                                <div class="col-1 ml-2 mt-1">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dropdown_passage1|add:textbox_passage1|length|add:forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-1">
+                                    <p class="my-0">
+                                        {{ rb }}
+                                    </p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {% for answer in rb.answer_set.all %}
+                                            <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
+                                            <input class="form-check-input " type="radio" name="q{{ dropdown_passage1|add:textbox_passage1|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                        {% endfor %} <br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Radiobutton questions ends #}
+
+                        {% if checkbox_passage1 %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad4"
+                                            aria-expanded="false" aria-controls="notepad4">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad4">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="pl-2 align-text-top w-100" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about checkbox #}
+                        <p><i>Check the items that are true in your idea.</i></p>
+                        <p><i>Check the correct items in boxes <b>{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}</b> on your answer sheet.</i></p>
+
+                        {# Checkbox questions starts #}
+                        {% for cb in checkbox_passage1 %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2">
+                                <div class="col-1 ml-2 mt-1">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-1">
+                                    <p class="my-0">{{ cb }}</p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {% for answer in cb.answer_set.all %}
+                                            <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
+                                            <label id="q{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}">
+                                                <input type="text" name="q{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
+                                            </label>
+                                            <input class="form-check-input " type="checkbox" name="q{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                         {% endfor %}<br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Checkbox questions ends #}
+                        <input type="hidden" name="refresh_checker" value="{{ refresh_checker }}">
+                        <input class="btn btn-danger btn-sm mx-2 navbarButton d-none" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" id="submit-fake-button"/>
+                    </form>
                 </div>
-                {# Reading image #}
-                <div class="row mb-4 justify-content-center">
-                    <img src="{% static passage.image.url %}"
-                         style="width: 500px; height: 521px" alt="MainPic">
-                </div>
-                {# Passage title #}
-                <div class="row justify-content-center mb-3">
-                    <h3>
-                        {{ passage.title }}
-                    </h3>
-                </div>
-                <div class="row mb-5">
-                    <p>
-                        {{ temp|linebreaks }}
-                    </p>
+                {# a navbar to show section and next button #}
+                <div id="section">
+                    <div class="row container-fluid justify-content-between">
+                        <div class="col-auto align-self-center ml-2" style="height: fit-content">
+                            <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
+                        </div>
+                        <div class="col-auto align-self-center" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="next-section">
+                                Next
+                                <i class="fa fa-arrow-right ml-1 align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        {# Right part of main, shows questions #}
-        <div class="rightContent">
-            <div class="container-fluid right-inner">
-                <h6 class="section mt-4 mb-4">
-                    SECTION 1: QUESTIONS 1-{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}
-                </h6>
-                <form action="{% url 'Reading:submit' passage.id %}" method="post">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-auto mr-auto align-middle">
-                            <h5 class="mb-4">
-                                Questions 1-{{ dropdown|length }}
-                            </h5>
-                        </div>
-                        {# notepad to save drafts #}
-                        <div class="col-auto">
-                            <p>
-                                <button type="button" class="btn btn-light btn-sm border align-middle"
-                                        data-toggle="collapse" data-target="#notepad1"
-                                        aria-expanded="false" aria-controls="notepad">
-                                    Show Notepad
-                                </button>
-                            </p>
-                        </div>
-                        <div class="col-12">
-                            <div class="collapse" id="notepad1">
-                                <label class="w-100">
-                                    <textarea class="input-group pl-2" placeholder="Your draft goes here..."></textarea>
-                                </label>
-                            </div>
-                        </div>
+
+
+
+
+
+
+
+
+
+
+        <div class="leftAndRight {% if passage.id == current_exam.passage_set.all.0.id %} d-flex {% else %}d-none{% endif %}" id="passage-number-{{ passage.id }}">
+            {# left part of main, contains the reading text #}
+            <div class="leftContent">
+                <div class="container-fluid left-inner">
+                    {# Reading title #}
+                    <div class="row mt-5 mb-3">
+                        <h1 class="testTitle">
+                            READING PASSAGE 1
+                        </h1>
                     </div>
-                    {# Some descriptions about true flase questions #}
-                    <p><i>Do the following statements agree with the information given in Reading Passage 1?</i></p>
-                    <p class="mb-4"><i>In <b>boxes 1-{{ dropdown|length }}</b> on your answer sheet, write</i></p>
-                    <table class="table border table-sm table-striped mb-4">
-                        <tbody>
-                            <tr>
-                                <th class="pl-3">TRUE</th>
-                                <td>if the statement is true</td>
-                            </tr>
-                            <tr>
-                                <th class="pl-3">FALSE</th>
-                                <td>if the statement is false</td>
-                            </tr>
-                            <tr>
-                                <th class="pl-3">NOT GIVEN</th>
-                                <td>if the information is not given in the passage</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {# Dropdown questions starts #}
-                    {% for dd in dropdown %}
-                        <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
-                            <div class="col-1 mt-2 mt-md-0">
-                                <div class="row">
-                                    <div class="col-auto questionNumber rounded m-auto">
-                                        <strong class="text-white q-num">{{ forloop.counter }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
-                                <label for="q{{ forloop.counter }}">
-                                    <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">
-                                        <option disabled selected></option>
-                                        {% for answer in dd.answer_set.all %}
-                                            <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </label>
-                            </div>
-                            <div class="col-12 col-md-8 my-2 my-md-0">
-                                <p class="my-0">
-                                    {{ dd }}
-                                </p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {# Dropdown questions ends #}
-
-                    <div class="row mt-4">
-                        <div class="col-auto mr-auto align-middle">
-                            <h5 class="mb-4">
-                                Questions {{ dropdown|length|add:1 }}-{{ dropdown|add:textbox|length }}
-                            </h5>
-                        </div>
-                        {# notepad to save drafts #}
-                        <div class="col-auto">
-                            <p>
-                                <button type="button" class="btn btn-light btn-sm border align-middle"
-                                        data-toggle="collapse" data-target="#notepad2"
-                                        aria-expanded="false" aria-controls="notepad">
-                                    Show Notepad
-                                </button>
-                            </p>
-                        </div>
-                        <div class="col-12">
-                            <div class="collapse align-text-top" id="notepad2">
-                                <label class="w-100 d-flex">
-                                    <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
-                                </label>
-                            </div>
-                        </div>
+                    {# Reading description #}
+                    <div class="row mb-4">
+                        <p class="testDescription">
+                            <i>You should spend about 20 minutes on <strong>Questions 1-{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</strong>,
+                                which are based on Reading Passage 1 below.
+                            </i>
+                        </p>
                     </div>
-                    {# some descriptions about textbox questions #}
-                    <p><i>Answer the questions below.</i></p>
-                    <p><i>Choose <span class="text-danger">NO MORE THAN THREE WORDS</span> from the passage for each answer:</i></p>
-                    <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown|length|add:1 }}-{{ dropdown|add:textbox|length }}</b> on your answer sheet.</i></p>
+                    {# Reading image #}
+                    <div class="row mb-4 justify-content-center">
 
-                    {# Textbox questions starts #}
-                    {% for tb in textbox %}
-                        <div class="row container border textboxQuestionRow ml-0 mb-2 align-items-center">
-                            <div class="col-12">
-                                <p class="my-0">
-                                   {{ tb }}
-                                </p>
-                            </div>
-                            <div class="col-1 ml-2">
-                                <div class="row">
-                                    <div class="col-auto questionNumber rounded m-auto">
-                                    <strong class="text-white">{{ dropdown|length|add:forloop.counter}}</strong>
-                                </div>
-                                </div>
-                            </div>
-                            <div class="col-auto mr-3"  id="q{{ dropdown|length|add:forloop.counter}}">
-                                <label>
-                                    <input type="text" placeholder="Your answer" name="hidden{{ forloop.counter }}" hidden value="{{ tb.id }}">
-                                </label>
-                                <input type="text" class="textboxAnswer" name="q{{ dropdown|length|add:forloop.counter}}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {# Textbox questions ends #}
 
-                    <div class="row mt-4">
-                        <div class="col-auto mr-auto align-middle">
-                            <h5 class="mb-4">
-                                Questions {{ dropdown|add:textbox|length|add:1 }}-{{ dropdown|add:textbox|add:radiobutton|length }}
-                            </h5>
-                        </div>
-                        {# notepad to save drafts #}
-                        <div class="col-auto">
-                            <p>
-                                <button type="button" class="btn btn-light btn-sm border align-middle"
-                                        data-toggle="collapse" data-target="#notepad3"
-                                        aria-expanded="false" aria-controls="notepad3">
-                                    Show Notepad
-                                </button>
-                            </p>
-                        </div>
-                        <div class="col-12">
-                            <div class="collapse align-text-top" id="notepad3">
-                                <label class="w-100 d-flex">
-                                    <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
-                                </label>
-                            </div>
-                        </div>
+                        <img src="{% static passage.image.url %}"
+                             style="width: 500px; height: 521px" alt="MainPic" id="passage{{ passage.id }}-image">
                     </div>
-                    {# some descriptions about ridaobutton questions #}
-                    <p><i>Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</i></p>
-                    <p class="mb-5"><i>Write the correct letter in boxes <b>{{ dropdown|add:textbox|length|add:1 }}-{{ dropdown|add:textbox|add:radiobutton|length }}</b> on your answer sheet.</i></p>
-
-                    {# Radiobutton question starts #}
-                    {% for rb in radiobutton %}
-                        <div class="row container border checkboxQuestion ml-0 align-items-center mb-2"  id="q{{ dropdown|add:textbox|length|add:forloop.counter }}">
-                            <div class="col-1 ml-2 mt-1">
-                                <div class="row">
-                                    <div class="col-auto questionNumber rounded m-auto">
-                                        <strong class="text-white q-num">{{ dropdown|add:textbox|length|add:forloop.counter }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-10 mt-1">
-                                <p class="my-0">
-                                    {{ rb }}
-                                </p>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-check my-1">
-                                    {% for answer in rb.answer_set.all %}
-                                        <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
-                                        <input class="form-check-input " type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-                                        <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
-                                    {% endfor %} <br>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {# Radiobutton questions ends #}
-
-                    <div class="row mt-4">
-                        <div class="col-auto mr-auto align-middle">
-                            <h5 class="mb-4">
-                                Questions {{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}
-                            </h5>
-                        </div>
-                        {# notepad to save drafts #}
-                        <div class="col-auto">
-                            <p>
-                                <button type="button" class="btn btn-light btn-sm border align-middle"
-                                        data-toggle="collapse" data-target="#notepad4"
-                                        aria-expanded="false" aria-controls="notepad4">
-                                    Show Notepad
-                                </button>
-                            </p>
-                        </div>
-                        <div class="col-12">
-                            <div class="collapse align-text-top" id="notepad4">
-                                <label class="w-100 d-flex">
-                                    <textarea class="pl-2 align-text-top w-100" placeholder="Your draft goes here..."></textarea>
-                                </label>
-                            </div>
-                        </div>
+                    {# Passage title #}
+                    <div class="row justify-content-center mb-3">
+                        <h3>
+                            {{ passage.title }}
+                        </h3>
                     </div>
-                    {# some descriptions about checkbox #}
-                    <p><i>Check the items that are true in your idea.</i></p>
-                    <p><i>Check the correct items in boxes <b>{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}</b> on your answer sheet.</i></p>
-
-                    {# Checkbox questions starts #}
-                    {% for cb in checkbox %}
-                        <div class="row container border checkboxQuestion ml-0 align-items-center mb-2">
-                            <div class="col-1 ml-2 mt-1">
-                                <div class="row">
-                                    <div class="col-auto questionNumber rounded m-auto">
-                                        <strong class="text-white q-num">{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-10 mt-1">
-                                <p class="my-0">{{ cb }}</p>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-check my-1">
-                                    {% for answer in cb.answer_set.all %}
-                                        <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
-                                        <label id="q{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}">
-                                            <input type="text" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
-                                        </label>
-                                        <input class="form-check-input " type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
-                                        <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
-                                     {% endfor %}<br>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {# Checkbox questions ends #}
-                    <input type="hidden" name="refresh_checker" value="{{ refresh_checker }}">
-                    <input class="btn btn-danger btn-sm mx-2 navbarButton d-none" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" id="submit-fake-button"/>
-                </form>
+                    <div class="row mb-5">
+                        <p>
+                            {{ temp|linebreaks }}
+                        </p>
+                    </div>
+                </div>
             </div>
-            {# a navbar to show section and next button #}
-            <div id="section">
-                <div class="row container-fluid justify-content-between">
-                    <div class="col-auto align-self-center ml-2" style="height: fit-content">
-                        <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
-                    </div>
-                    <div class="col-auto align-self-center" style="height: fit-content">
-                        <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px">
-                            Next
-                            <i class="fa fa-arrow-right ml-1 align-middle"></i>
-                        </a>
+
+            <div class="rightContent">
+                <div class="container-fluid right-inner">
+                    <h6 class="section mt-4 mb-4">
+                        SECTION 1: QUESTIONS 1-{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}
+                    </h6>
+                    <form action="{% url 'Reading:submit' passage.id %}" method="post">
+                        {% csrf_token %}
+                        {% if dropdown %}
+                        <div class="row">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions 1-{{ dropdown|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad1"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse" id="notepad1">
+                                    <label class="w-100">
+                                        <textarea class="input-group pl-2" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# Some descriptions about true flase questions #}
+                        <p><i>Do the following statements agree with the information given in Reading Passage 1?</i></p>
+                        <p class="mb-4"><i>In <b>boxes 1-{{ dropdown|length }}</b> on your answer sheet, write</i></p>
+                        <table class="table border table-sm table-striped mb-4">
+                            <tbody>
+                                <tr>
+                                    <th class="pl-3">TRUE</th>
+                                    <td>if the statement is true</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">FALSE</th>
+                                    <td>if the statement is false</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">NOT GIVEN</th>
+                                    <td>if the information is not given in the passage</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {# Dropdown questions starts #}
+                        <p style="visibility: hidden; height: 0">{{ dropdown.reverse }}</p>
+                        {% for dd in dropdown.pop %}
+                            <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
+                                <div class="col-1 mt-2 mt-md-0">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
+                                    <label for="q{{ forloop.counter }}">
+                                        <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">
+                                            <option disabled selected></option>
+                                            {% for answer in dd.answer_set.all %}
+                                                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-8 my-2 my-md-0">
+                                    <p class="my-0">
+                                        {{ dd }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Dropdown questions ends #}
+
+                        {% if textbox %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown|length|add:1 }}-{{ dropdown|add:textbox|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad2"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad2">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about textbox questions #}
+                        <p><i>Answer the questions below.</i></p>
+                        <p><i>Choose <span class="text-danger">NO MORE THAN THREE WORDS</span> from the passage for each answer:</i></p>
+                        <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown|length|add:1 }}-{{ dropdown|add:textbox|length }}</b> on your answer sheet.</i></p>
+
+                        {# Textbox questions starts #}
+                        {{ textbox.reverse }}
+                        {% for tb in textbox.pop %}
+                            <div class="row container border textboxQuestionRow ml-0 mb-2 align-items-center">
+                                <div class="col-12">
+                                    <p class="my-0">
+                                       {{ tb }}
+                                    </p>
+                                </div>
+                                <div class="col-1 ml-2">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                        <strong class="text-white">{{ dropdown|length|add:forloop.counter}}</strong>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto mr-3"  id="q{{ dropdown|length|add:forloop.counter}}">
+                                    <label>
+                                        <input type="text" placeholder="Your answer" name="hidden{{ forloop.counter }}" hidden value="{{ tb.id }}">
+                                    </label>
+                                    <input type="text" class="textboxAnswer" name="q{{ dropdown|length|add:forloop.counter}}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Textbox questions ends #}
+
+                        {% if radiobutton %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown|add:textbox|length|add:1 }}-{{ dropdown|add:textbox|add:radiobutton|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad3"
+                                            aria-expanded="false" aria-controls="notepad3">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad3">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about ridaobutton questions #}
+                        <p><i>Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</i></p>
+                        <p class="mb-5"><i>Write the correct letter in boxes <b>{{ dropdown|add:textbox|length|add:1 }}-{{ dropdown|add:textbox|add:radiobutton|length }}</b> on your answer sheet.</i></p>
+
+                        {# Radiobutton question starts #}
+                        {{ radiobutton.reverse }}
+                        {% for rb in radiobutton.pop %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2"  id="q{{ dropdown|add:textbox|length|add:forloop.counter }}">
+                                <div class="col-1 ml-2 mt-1">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dropdown|add:textbox|length|add:forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-1">
+                                    <p class="my-0">
+                                        {{ rb }}
+                                    </p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {% for answer in rb.answer_set.all %}
+                                            <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
+                                            <input class="form-check-input " type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                        {% endfor %} <br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Radiobutton questions ends #}
+
+                        {% if checkbox %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad4"
+                                            aria-expanded="false" aria-controls="notepad4">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad4">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="pl-2 align-text-top w-100" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about checkbox #}
+                        <p><i>Check the items that are true in your idea.</i></p>
+                        <p><i>Check the correct items in boxes <b>{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}</b> on your answer sheet.</i></p>
+
+                        {# Checkbox questions starts #}
+                        {{ checkbox.reverse }}
+                        {% for cb in checkbox.pop %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2">
+                                <div class="col-1 ml-2 mt-1">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-1">
+                                    <p class="my-0">{{ cb }}</p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {% for answer in cb.answer_set.all %}
+                                            <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
+                                            <label id="q{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}">
+                                                <input type="text" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
+                                            </label>
+                                            <input class="form-check-input " type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                         {% endfor %}<br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Checkbox questions ends #}
+                        <input type="hidden" name="refresh_checker" value="{{ refresh_checker }}">
+                        <input class="btn btn-danger btn-sm mx-2 navbarButton d-none" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" id="submit-fake-button"/>
+                    </form>
+                </div>
+                {# a navbar to show section and next button #}
+                <div id="section">
+                    <div class="row container-fluid justify-content-between">
+                        <div class="col-auto align-self-center ml-2" style="height: fit-content">
+                            <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
+                        </div>
+                        <div class="col-auto align-self-center" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="next-section">
+                                Next
+                                <i class="fa fa-arrow-right ml-1 align-middle"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+
+
+
+
+
+
+
+
+        <div class="leftAndRight {% if passage.id == current_exam.passage_set.all.0.id %} d-flex {% else %}d-none{% endif %}" id="passage-number-{{ passage.id }}">
+            {# left part of main, contains the reading text #}
+            <div class="leftContent">
+                <div class="container-fluid left-inner">
+                    {# Reading title #}
+                    <div class="row mt-5 mb-3">
+                        <h1 class="testTitle">
+                            READING PASSAGE 1
+                        </h1>
+                    </div>
+                    {# Reading description #}
+                    <div class="row mb-4">
+                        <p class="testDescription">
+                            <i>You should spend about 20 minutes on <strong>Questions 1-{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</strong>,
+                                which are based on Reading Passage 1 below.
+                            </i>
+                        </p>
+                    </div>
+                    {# Reading image #}
+                    <div class="row mb-4 justify-content-center">
+
+
+                        <img src="{% static passage.image.url %}"
+                             style="width: 500px; height: 521px" alt="MainPic" id="passage{{ passage.id }}-image">
+                    </div>
+                    {# Passage title #}
+                    <div class="row justify-content-center mb-3">
+                        <h3>
+                            {{ passage.title }}
+                        </h3>
+                    </div>
+                    <div class="row mb-5">
+                        <p>
+                            {{ temp|linebreaks }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rightContent">
+                <div class="container-fluid right-inner">
+                    <h6 class="section mt-4 mb-4">
+                        SECTION 1: QUESTIONS 1-{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}
+                    </h6>
+                    <form action="{% url 'Reading:submit' passage.id %}" method="post">
+                        {% csrf_token %}
+                        {% if dropdown %}
+                        <div class="row">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions 1-{{ dropdown|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad1"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse" id="notepad1">
+                                    <label class="w-100">
+                                        <textarea class="input-group pl-2" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# Some descriptions about true flase questions #}
+                        <p><i>Do the following statements agree with the information given in Reading Passage 1?</i></p>
+                        <p class="mb-4"><i>In <b>boxes 1-{{ dropdown|length }}</b> on your answer sheet, write</i></p>
+                        <table class="table border table-sm table-striped mb-4">
+                            <tbody>
+                                <tr>
+                                    <th class="pl-3">TRUE</th>
+                                    <td>if the statement is true</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">FALSE</th>
+                                    <td>if the statement is false</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">NOT GIVEN</th>
+                                    <td>if the information is not given in the passage</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {# Dropdown questions starts #}
+                        <p style="visibility: hidden; height: 0">{{ dropdown.reverse }}</p>
+                        {% for dd in dropdown.pop %}
+                            <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
+                                <div class="col-1 mt-2 mt-md-0">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
+                                    <label for="q{{ forloop.counter }}">
+                                        <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">
+                                            <option disabled selected></option>
+                                            {% for answer in dd.answer_set.all %}
+                                                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-8 my-2 my-md-0">
+                                    <p class="my-0">
+                                        {{ dd }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Dropdown questions ends #}
+
+                        {% if textbox %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown|length|add:1 }}-{{ dropdown|add:textbox|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad2"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad2">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about textbox questions #}
+                        <p><i>Answer the questions below.</i></p>
+                        <p><i>Choose <span class="text-danger">NO MORE THAN THREE WORDS</span> from the passage for each answer:</i></p>
+                        <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown|length|add:1 }}-{{ dropdown|add:textbox|length }}</b> on your answer sheet.</i></p>
+
+                        {# Textbox questions starts #}
+                        {{ textbox.reverse }}
+                        {% for tb in textbox.pop %}
+                            <div class="row container border textboxQuestionRow ml-0 mb-2 align-items-center">
+                                <div class="col-12">
+                                    <p class="my-0">
+                                       {{ tb }}
+                                    </p>
+                                </div>
+                                <div class="col-1 ml-2">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                        <strong class="text-white">{{ dropdown|length|add:forloop.counter}}</strong>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto mr-3"  id="q{{ dropdown|length|add:forloop.counter}}">
+                                    <label>
+                                        <input type="text" placeholder="Your answer" name="hidden{{ forloop.counter }}" hidden value="{{ tb.id }}">
+                                    </label>
+                                    <input type="text" class="textboxAnswer" name="q{{ dropdown|length|add:forloop.counter}}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Textbox questions ends #}
+
+                        {% if radiobutton %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown|add:textbox|length|add:1 }}-{{ dropdown|add:textbox|add:radiobutton|length }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad3"
+                                            aria-expanded="false" aria-controls="notepad3">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad3">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="input-group pl-2 align-text-top" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about ridaobutton questions #}
+                        <p><i>Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</i></p>
+                        <p class="mb-5"><i>Write the correct letter in boxes <b>{{ dropdown|add:textbox|length|add:1 }}-{{ dropdown|add:textbox|add:radiobutton|length }}</b> on your answer sheet.</i></p>
+
+                        {# Radiobutton question starts #}
+                        {{ radiobutton.reverse }}
+                        {% for rb in radiobutton.pop %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2"  id="q{{ dropdown|add:textbox|length|add:forloop.counter }}">
+                                <div class="col-1 ml-2 mt-1">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dropdown|add:textbox|length|add:forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-1">
+                                    <p class="my-0">
+                                        {{ rb }}
+                                    </p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {% for answer in rb.answer_set.all %}
+                                            <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
+                                            <input class="form-check-input " type="radio" name="q{{ dropdown|add:textbox|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                        {% endfor %} <br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Radiobutton questions ends #}
+
+                        {% if checkbox %}
+                        <div class="row mt-4">
+                            <div class="col-auto mr-auto align-middle">
+                                <h5 class="mb-4">
+                                    Questions {{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad4"
+                                            aria-expanded="false" aria-controls="notepad4">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse align-text-top" id="notepad4">
+                                    <label class="w-100 d-flex">
+                                        <textarea class="pl-2 align-text-top w-100" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# some descriptions about checkbox #}
+                        <p><i>Check the items that are true in your idea.</i></p>
+                        <p><i>Check the correct items in boxes <b>{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}</b> on your answer sheet.</i></p>
+
+                        {# Checkbox questions starts #}
+                        {{ checkbox.reverse }}
+                        {% for cb in checkbox.pop %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2">
+                                <div class="col-1 ml-2 mt-1">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10 mt-1">
+                                    <p class="my-0">{{ cb }}</p>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check my-1">
+                                        {% for answer in cb.answer_set.all %}
+                                            <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
+                                            <label id="q{{ dropdown|add:textbox|add:radiobutton|add:checkbox|length  }}">
+                                                <input type="text" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
+                                            </label>
+                                            <input class="form-check-input " type="checkbox" name="q{{ dropdown|add:textbox|add:radiobutton|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
+                                         {% endfor %}<br>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+                        {# Checkbox questions ends #}
+                        <input type="hidden" name="refresh_checker" value="{{ refresh_checker }}">
+                        <input class="btn btn-danger btn-sm mx-2 navbarButton d-none" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" id="submit-fake-button"/>
+                    </form>
+                </div>
+                {# a navbar to show section and next button #}
+                <div id="section">
+                    <div class="row container-fluid justify-content-between">
+                        <div class="col-auto align-self-center ml-2" style="height: fit-content">
+                            <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
+                        </div>
+                        <div class="col-auto align-self-center" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="next-section">
+                                Next
+                                <i class="fa fa-arrow-right ml-1 align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <footer>
     {# Footer part of the page #}
     <div class="container-fluid">
@@ -485,5 +1177,17 @@
 <script src="{% static 'Reading/JavaScript/bootstrap.min.js' %}"></script>
 <script src="{% static 'Reading/JavaScript/scripts.js' %}"></script>
 <script src="{%  static 'Reading/JavaScript/all.js' %}"></script>
+{#{% for passage in current_exam.passage_set.all %}#}
+    <script type="text/javascript">
+        $("#next-section").click(function () {
+        let currentPassage = $("#passage-number-{{ current_exam.passage_set.all.0.id }}");
+        let nextPassage = $("#passage-number-{{ current_exam.passage_set.all.1.id }}");
+        currentPassage.removeClass('d-flex').addClass('d-none');
+        nextPassage.removeClass('d-none').addClass('d-flex');
+});
+    </script>
+{#{% endfor %}#}
+
+
 </body>
 </html>
