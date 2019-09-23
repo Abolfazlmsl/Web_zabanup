@@ -13,113 +13,103 @@ from . import models
 def passage_body(request, passage_id):
     # check user is authenticated
     if request.user.is_authenticated:
-        # if request.POST.get('next'):
-        #     current_id = int(request.POST.get('current_passage_id'))
-        #     current_passage = models.Passage.objects.get(id=current_id)
-        #     current_exam = models.Exam.objects.get(id=current_passage.exam.id)
-        #     all_passages = current_exam.passage_set.all()
-        #     next_id = ''
-        #     for index in range(len(all_passages)):
-        #         if all_passages[index].id == current_id:
-        #             next_id = all_passages[index+1].id
-        #
-        #     # this is use for refresh of submit page
-        #     user_answer = models.UserAnswer.objects.all().count()
-        #
-        #     # get passage and question of it
-        #     passage = get_object_or_404(models.Passage, pk=next_id)
-        #     questions = get_list_or_404(models.Question, passage=passage)
-        #
-        #     # define for add our questions to these list
-        #     dropdown = []
-        #     textbox = []
-        #     radiobutton = []
-        #     checkbox = []
-        #
-        #     # add same question to 4 different lists
-        #     for question in questions:
-        #         # dropdown questions
-        #         if question.type == 'dropdown':
-        #             dropdown.append(question)
-        #         # textbox questions
-        #         elif question.type == 'text':
-        #             textbox.append(question)
-        #         # radiobutton questions
-        #         elif question.type == 'radiobutton':
-        #             radiobutton.append(question)
-        #         # checkbox questions
-        #         elif question.type == 'checkbox':
-        #             checkbox.append(question)
-        #
-        #     # get text in html form then render it
-        #     ht = str(passage.text)
-        #     template = loader.get_template(ht).render()
-        #     # create a context
-        #     context = {
-        #         'passage': passage,
-        #         'dropdown': dropdown,
-        #         'textbox': textbox,
-        #         'radiobutton': radiobutton,
-        #         'checkbox': checkbox,
-        #         'exam': exam,
-        #         'temp': template,
-        #         'refresh_checker': user_answer + 1,
-        #     }
-        #     return render(request, 'Reading/passages.html', context=context)
-        # else:
         # this is use for refresh of submit page
         user_answer = models.UserAnswer.objects.all().count()
 
         # get passage and question of it
-        passage = get_object_or_404(models.Passage, pk=passage_id)
-        current_exam = models.Exam.objects.get(id=passage.exam.id)
+        passage1 = get_object_or_404(models.Passage, pk=passage_id)
+        current_exam = models.Exam.objects.get(id=passage1.exam.id)
         all_passages = models.Passage.objects.filter(exam=current_exam)
-        questions = get_list_or_404(models.Question, passage__in=all_passages)
+        passage2 = all_passages[1]
+        passage3 = all_passages[2]
+        # print(passage1)
+        # print(passage2)
+        # print(passage3)
+
         # define for add our questions to these list
-        dropdown_list = []
-        textbox_list = []
-        radiobutton_list = []
-        checkbox_list = []
+        dropdown_passage1 = []
+        textbox_passage1 = []
+        radiobutton_passage1 = []
+        checkbox_passage1 = []
+
+        dropdown_passage2 = []
+        textbox_passage2 = []
+        radiobutton_passage2 = []
+        checkbox_passage2 = []
+
+        dropdown_passage3 = []
+        textbox_passage3 = []
+        radiobutton_passage3 = []
+        checkbox_passage3 = []
 
         # add same question to 4 different lists
-        for question in questions:
-            # dropdown questions
-            if question.type == 'dropdown':
-                dropdown_list.append([question.passage.id, question])
-            # textbox questions
-            elif question.type == 'text':
-                textbox_list.append([question.passage.id, question])
-            # radiobutton questions
-            elif question.type == 'radiobutton':
-                radiobutton_list.append([question.passage.id, question])
-            # checkbox questions
-            elif question.type == 'checkbox':
-                checkbox_list.append([question.passage.id, question])
+        add_question_to_list(passage1, dropdown_passage1, textbox_passage1, radiobutton_passage1, checkbox_passage1)
+        add_question_to_list(passage2, dropdown_passage2, textbox_passage2, radiobutton_passage2, checkbox_passage2)
+        add_question_to_list(passage3, dropdown_passage3, textbox_passage3, radiobutton_passage3, checkbox_passage3)
+
         # get text in html form then render it
-        ht = str(passage.text)
-        template = loader.get_template(ht).render()
+        html_for_passage1 = str(passage1.text)
+        template1 = loader.get_template(html_for_passage1).render()
+        html_for_passage2 = str(passage2.text)
+        template2 = loader.get_template(html_for_passage2).render()
+        html_for_passage3 = str(passage3.text)
+        template3 = loader.get_template(html_for_passage3).render()
         # create a context
-        dropdown = []
-        textbox = []
-        radiobutton = []
-        checkbox = []
-        print(dropdown_list[0][1])
+        # print(dropdown_passage1[0].type)
+        # print(dropdown_passage2)
+        # print(dropdown_passage3)
+        # print(textbox_passage1)
+        # print(textbox_passage2)
+        # print(textbox_passage3)
+        # print(radiobutton_passage1)
+        # print(radiobutton_passage2)
+        # print(radiobutton_passage3)
+        # print(checkbox_passage1)
+        # print(checkbox_passage2)
+        # print(checkbox_passage3)
         context = {
-            'dropdown': dropdown,
-            'textbox': textbox,
-            'radiobutton': radiobutton,
-            'checkbox': checkbox,
-            'temp': template,
+            'dropdown_passage1': dropdown_passage1,
+            'textbox_passage1': textbox_passage1,
+            'radiobutton_passage1': radiobutton_passage1,
+            'checkbox_passage1': checkbox_passage1,
+
+            'dropdown_passage2': dropdown_passage2,
+            'textbox_passage2': textbox_passage2,
+            'radiobutton_passage2': radiobutton_passage2,
+            'checkbox_passage2': checkbox_passage2,
+
+            'dropdown_passage3': dropdown_passage3,
+            'textbox_passage3': textbox_passage3,
+            'radiobutton_passage3': radiobutton_passage3,
+            'checkbox_passage3': checkbox_passage3,
+
+            'template1': template1,
+            'template2': template2,
+            'template3': template3,
+
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
-            'dropdown_list': dropdown_list,
-            'textbox_list': textbox_list,
-            'radiobutton_list': radiobutton_list,
-            'checkbox_list': checkbox_list,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
         return redirect('Reading:Login')
+
+
+def add_question_to_list(passage, dd, tb, rb, cb):
+    questions = get_list_or_404(models.Question, passage=passage)
+    for question in questions:
+        # dropdown questions
+        if question.type == 'dropdown':
+            dd.append(question)
+        # textbox questions
+        elif question.type == 'text':
+            tb.append(question)
+        # radiobutton questions
+        elif question.type == 'radiobutton':
+            rb.append(question)
+        # checkbox questions
+        elif question.type == 'checkbox':
+            cb.append(question)
 
 
 # calculate grade and submit comments
