@@ -6,20 +6,22 @@ from django.contrib.auth.models import User
 from django.template import loader
 
 from . import models
+
+
 # Create your views here.
 
 
 # get passage details and render passage page if user is authenticated
-def passage_body(request, passage_id):
+def passage_body(request, exam_id):
     # check user is authenticated
     if request.user.is_authenticated:
         # this is use for refresh of submit page
         user_answer = models.UserAnswer.objects.all().count()
 
         # get passage and question of it
-        passage1 = get_object_or_404(models.Passage, pk=passage_id)
-        current_exam = models.Exam.objects.get(id=passage1.exam.id)
+        current_exam = models.Exam.objects.get(id=exam_id)
         all_passages = models.Passage.objects.filter(exam=current_exam)
+        passage1 = all_passages[0]
         passage2 = all_passages[1]
         passage3 = all_passages[2]
         # print(passage1)
@@ -67,6 +69,28 @@ def passage_body(request, passage_id):
         # print(checkbox_passage1)
         # print(checkbox_passage2)
         # print(checkbox_passage3)
+
+        number_of_dd_p1 = len(dropdown_passage1)
+        number_of_tb_p1 = len(textbox_passage1)
+        number_of_rb_p1 = len(radiobutton_passage1)
+        number_of_cb_p1 = len(checkbox_passage1)
+
+        number_of_dd_p2 = len(dropdown_passage2)
+        number_of_tb_p2 = len(textbox_passage2)
+        number_of_rb_p2 = len(radiobutton_passage2)
+        number_of_cb_p2 = len(checkbox_passage2)
+
+        number_of_dd_p3 = len(dropdown_passage3)
+        number_of_tb_p3 = len(textbox_passage3)
+        number_of_rb_p3 = len(radiobutton_passage3)
+        number_of_cb_p3 = len(checkbox_passage3)
+
+        number_of_q_p1 = len(dropdown_passage1 + textbox_passage1 + checkbox_passage1 + checkbox_passage1)
+        number_of_q_p2 = len(dropdown_passage2 + textbox_passage2 + checkbox_passage2 + checkbox_passage2)
+        number_of_q_p3 = len(dropdown_passage3 + textbox_passage3 + checkbox_passage3 + checkbox_passage3)
+
+        one = ['1']
+
         context = {
             'dropdown_passage1': dropdown_passage1,
             'textbox_passage1': textbox_passage1,
@@ -89,6 +113,27 @@ def passage_body(request, passage_id):
 
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
+
+            'passage1': passage1,
+            'passage2': passage2,
+            'passage3': passage3,
+
+            'number_of_q_p1': number_of_q_p1,
+            'number_of_q_p2': number_of_q_p2,
+            'number_of_q_p3': number_of_q_p3,
+
+            'number_of_dd_p1': number_of_dd_p1,
+            'number_of_tb_p1': number_of_tb_p1,
+            'number_of_rb_p1': number_of_rb_p1,
+            'number_of_cb_p1': number_of_cb_p1,
+            'number_of_dd_p2': number_of_dd_p2,
+            'number_of_tb_p2': number_of_tb_p2,
+            'number_of_rb_p2': number_of_rb_p2,
+            'number_of_cb_p2': number_of_cb_p2,
+            'number_of_dd_p3': number_of_dd_p3,
+            'number_of_tb_p3': number_of_tb_p3,
+            'number_of_rb_p3': number_of_rb_p3,
+            'number_of_cb_p3': number_of_cb_p3,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
@@ -117,14 +162,14 @@ def submit(request, exam_id):
     # calculate grade
     if request.POST.get('Submit'):
         # get passage and question
-        exam = models.Exam.objects.get(id=exam_id)
-        all_passages = exam.passage_set.all()
+        current_exam = models.Exam.objects.get(id=exam_id)
+        all_passages = current_exam.passage_set.all()
         passage1 = all_passages[0]
         passage2 = all_passages[1]
         passage3 = all_passages[2]
-        questions_passage1 = get_list_or_404(models.Question, passage=passage1)
-        questions_passage2 = get_list_or_404(models.Question, passage=passage2)
-        questions_passage3 = get_list_or_404(models.Question, passage=passage3)
+        passage1_questions = get_list_or_404(models.Question, passage=passage1)
+        passage2_questions = get_list_or_404(models.Question, passage=passage2)
+        passage3_questions = get_list_or_404(models.Question, passage=passage3)
         refresh_checker = request.POST.get('refresh_checker')
         # initial counter for each type of question
         dropdown_count = 0
@@ -141,7 +186,7 @@ def submit(request, exam_id):
         grade = 0
 
         # calculate question of each type
-        for question in questions_passage1:
+        for question in passage1_questions:
             if question.type == 'dropdown':
                 dropdown_count += 1
             elif question.type == 'text':
@@ -151,7 +196,7 @@ def submit(request, exam_id):
             elif question.type == 'checkbox':
                 checkbox_count += 1
 
-        for question in questions_passage2:
+        for question in passage2_questions:
             if question.type == 'dropdown':
                 dropdown_count += 1
             elif question.type == 'text':
@@ -161,7 +206,7 @@ def submit(request, exam_id):
             elif question.type == 'checkbox':
                 checkbox_count += 1
 
-        for question in questions_passage3:
+        for question in passage3_questions:
             if question.type == 'dropdown':
                 dropdown_count += 1
             elif question.type == 'text':
@@ -174,26 +219,31 @@ def submit(request, exam_id):
         # get user answers
         # get  user answer id of questions
         for i in range(dropdown_count):
-            plus = str(i+1)
+            plus = str(i + 1)
             answer_id = request.POST.get('q' + plus)
             dropdown_list.append(answer_id)
         for i in range(textbox_count):
             # hidden_plus used for get text box question id
-            hidden_plus = str(i+1)
-            plus = str(i+1+dropdown_count)
+            hidden_plus = str(i + 1)
+            plus = str(i + 1 + dropdown_count)
             answer_text = request.POST.get('q' + plus)
             question_id = request.POST.get('hidden' + hidden_plus)
             textbox_list.append([question_id, answer_text])
         for i in range(radiobutton_count):
-            plus = str(i+1+dropdown_count+textbox_count)
+            plus = str(i + 1 + dropdown_count + textbox_count)
             answer_id = request.POST.get('q' + plus)
             radiobutton_list.append(answer_id)
         for i in range(checkbox_count):
-            plus = str(i+1+dropdown_count+textbox_count+radiobutton_count)
+            plus = str(i + 1 + dropdown_count + textbox_count + radiobutton_count)
             answer_id = request.POST.getlist('q' + plus)
             question_id = request.POST.get('q' + plus + '_id')
             checkbox_list.append([question_id, answer_id])
 
+
+        print(dropdown_list)
+        print(textbox_list)
+        print(radiobutton_list)
+        print(checkbox_list)
         # calculate correct answers and grade
         for answer in dropdown_list:
             if answer:
@@ -230,33 +280,48 @@ def submit(request, exam_id):
                 correct_answers.append(int(i[0]))
                 grade += 1
 
-        multi_number = 100 / passage.question_set.all().__len__()
-        final_grade = grade*multi_number
+        multi_number = 100 / len(passage1_questions + passage2_questions + passage3_questions)
+        all_questions = passage1_questions + passage2_questions + passage3_questions
+        print(all_questions)
+        final_grade = grade * multi_number
+        final_grade = round(final_grade, 2)
 
         # create a json from answers
         save_list = {}
-        for question in passage.question_set.all():
+        for question in passage1_questions:
+            if question.id in correct_answers:
+                save_list[str(question.id)] = "correct"
+            else:
+                save_list[str(question.id)] = "wrong"
+        for question in passage2_questions:
+            if question.id in correct_answers:
+                save_list[str(question.id)] = "correct"
+            else:
+                save_list[str(question.id)] = "wrong"
+        for question in passage3_questions:
             if question.id in correct_answers:
                 save_list[str(question.id)] = "correct"
             else:
                 save_list[str(question.id)] = "wrong"
         save_list = json.dumps(save_list)
         # save user grade
-        models.UserAnswer.objects.update_or_create(user=request.user, passage=passage, grade=final_grade,
+        models.UserAnswer.objects.update_or_create(user=request.user, exam=current_exam, grade=final_grade,
                                                    answer=str(save_list), counter=refresh_checker)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_user_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).last()
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_user_answer = models.UserAnswer.objects.filter(exam=current_exam, user=request.user).last()
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
         context = {
-            'passage': passage,
+            'all_questions': all_questions,
+            'passage': passage1,
             'grade': final_grade,
             'correct_answers': correct_answers,
             'users_answer': users_answer,
             'last_user_answer': last_user_answer,
             'all_comments': all_comments,
+            'exam': current_exam,
             'comment': 0,
         }
         return render(request, 'Reading/submit.html', context)
@@ -337,7 +402,7 @@ def submit(request, exam_id):
         return render(request, 'Reading/submit.html', context)
 
     else:
-        
+
         passage = models.Passage.objects.get(id=passage_id)
         users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
         last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
@@ -441,9 +506,6 @@ def exam(request):
     if request.user.is_authenticated:
         # check method
         if request.POST:
-            # get current user
-            username = request.user.username
-
             # get all books
             # the filters doesn't chose return none
             all_books = []

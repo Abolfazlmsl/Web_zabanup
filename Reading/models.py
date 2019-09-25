@@ -82,21 +82,21 @@ class Answer(models.Model):
 # Answer that user choose model
 class UserAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     answer = models.TextField()
     grade = models.FloatField()
     time = models.DateTimeField(auto_now=True)
     counter = models.IntegerField()
 
     def __str__(self):
-        return '{}, {}, {}, {}, {}'.format(str(self.user), str(self.passage), str(self.grade), str(self.answer),
+        return '{}, {}, {}, {}, {}'.format(str(self.user), str(self.exam), str(self.grade), str(self.answer),
                                            str(self.time))
 
 
 # Comment model
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField()
     time = models.DateTimeField(auto_now=True)
