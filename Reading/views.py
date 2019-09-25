@@ -163,19 +163,35 @@ def submit(request, exam_id):
     if request.POST.get('Submit'):
         # get passage and question
         current_exam = models.Exam.objects.get(id=exam_id)
+
         all_passages = current_exam.passage_set.all()
+
         passage1 = all_passages[0]
         passage2 = all_passages[1]
         passage3 = all_passages[2]
+
         passage1_questions = get_list_or_404(models.Question, passage=passage1)
         passage2_questions = get_list_or_404(models.Question, passage=passage2)
         passage3_questions = get_list_or_404(models.Question, passage=passage3)
+
         refresh_checker = request.POST.get('refresh_checker')
+
         # initial counter for each type of question
-        dropdown_count = 0
-        textbox_count = 0
-        radiobutton_count = 0
-        checkbox_count = 0
+        dropdown1_count = 0
+        textbox1_count = 0
+        radiobutton1_count = 0
+        checkbox1_count = 0
+
+        dropdown2_count = 0
+        textbox2_count = 0
+        radiobutton2_count = 0
+        checkbox2_count = 0
+
+        dropdown3_count = 0
+        textbox3_count = 0
+        radiobutton3_count = 0
+        checkbox3_count = 0
+
         # initial list for each type of question
         dropdown_list = []
         textbox_list = []
@@ -188,57 +204,107 @@ def submit(request, exam_id):
         # calculate question of each type
         for question in passage1_questions:
             if question.type == 'dropdown':
-                dropdown_count += 1
+                dropdown1_count += 1
             elif question.type == 'text':
-                textbox_count += 1
+                textbox1_count += 1
             elif question.type == 'radiobutton':
-                radiobutton_count += 1
+                radiobutton1_count += 1
             elif question.type == 'checkbox':
-                checkbox_count += 1
+                checkbox1_count += 1
 
         for question in passage2_questions:
             if question.type == 'dropdown':
-                dropdown_count += 1
+                dropdown2_count += 1
             elif question.type == 'text':
-                textbox_count += 1
+                textbox2_count += 1
             elif question.type == 'radiobutton':
-                radiobutton_count += 1
+                radiobutton2_count += 1
             elif question.type == 'checkbox':
-                checkbox_count += 1
+                checkbox2_count += 1
 
         for question in passage3_questions:
             if question.type == 'dropdown':
-                dropdown_count += 1
+                dropdown3_count += 1
             elif question.type == 'text':
-                textbox_count += 1
+                textbox3_count += 1
             elif question.type == 'radiobutton':
-                radiobutton_count += 1
+                radiobutton3_count += 1
             elif question.type == 'checkbox':
-                checkbox_count += 1
+                checkbox3_count += 1
 
         # get user answers
         # get  user answer id of questions
-        for i in range(dropdown_count):
+        for i in range(dropdown1_count):
             plus = str(i + 1)
             answer_id = request.POST.get('q' + plus)
             dropdown_list.append(answer_id)
-        for i in range(textbox_count):
+
+        for i in range(dropdown2_count):
+            plus = str(i + 1 +len(passage1_questions))
+            answer_id = request.POST.get('q' + plus)
+            dropdown_list.append(answer_id)
+
+        for i in range(dropdown3_count):
+            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions))
+            answer_id = request.POST.get('q' + plus)
+            dropdown_list.append(answer_id)
+
+        for i in range(textbox1_count):
             # hidden_plus used for get text box question id
             hidden_plus = str(i + 1)
-            plus = str(i + 1 + dropdown_count)
+            plus = str(i + 1 + dropdown1_count)
             answer_text = request.POST.get('q' + plus)
             question_id = request.POST.get('hidden' + hidden_plus)
             textbox_list.append([question_id, answer_text])
-        for i in range(radiobutton_count):
-            plus = str(i + 1 + dropdown_count + textbox_count)
+
+        for i in range(textbox2_count):
+            # hidden_plus used for get text box question id
+            hidden_plus = str(i + 1 + textbox1_count)
+            plus = str(i + 1 + len(passage1_questions) + dropdown2_count)
+            answer_text = request.POST.get('q' + plus)
+            question_id = request.POST.get('hidden' + hidden_plus)
+            textbox_list.append([question_id, answer_text])
+
+        for i in range(textbox3_count):
+            # hidden_plus used for get text box question id
+            hidden_plus = str(i + 1 + textbox1_count + textbox2_count)
+            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions) + dropdown3_count)
+            answer_text = request.POST.get('q' + plus)
+            question_id = request.POST.get('hidden' + hidden_plus)
+            textbox_list.append([question_id, answer_text])
+
+        for i in range(radiobutton1_count):
+            plus = str(i + 1 + dropdown1_count + textbox1_count)
             answer_id = request.POST.get('q' + plus)
             radiobutton_list.append(answer_id)
-        for i in range(checkbox_count):
-            plus = str(i + 1 + dropdown_count + textbox_count + radiobutton_count)
+
+        for i in range(radiobutton2_count):
+            plus = str(i + 1 + len(passage1_questions) + dropdown2_count + textbox2_count)
+            answer_id = request.POST.get('q' + plus)
+            radiobutton_list.append(answer_id)
+
+        for i in range(radiobutton3_count):
+            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions) + dropdown3_count + textbox3_count)
+            answer_id = request.POST.get('q' + plus)
+            radiobutton_list.append(answer_id)
+
+        for i in range(checkbox1_count):
+            plus = str(i + 1 + dropdown1_count + textbox1_count + radiobutton1_count)
             answer_id = request.POST.getlist('q' + plus)
             question_id = request.POST.get('q' + plus + '_id')
             checkbox_list.append([question_id, answer_id])
 
+        for i in range(checkbox2_count):
+            plus = str(i + 1 + len(passage1_questions) + dropdown2_count + textbox2_count + radiobutton2_count)
+            answer_id = request.POST.getlist('q' + plus)
+            question_id = request.POST.get('q' + plus + '_id')
+            checkbox_list.append([question_id, answer_id])
+
+        for i in range(checkbox3_count):
+            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions) + dropdown3_count + textbox3_count + radiobutton3_count)
+            answer_id = request.POST.getlist('q' + plus)
+            question_id = request.POST.get('q' + plus + '_id')
+            checkbox_list.append([question_id, answer_id])
 
         print(dropdown_list)
         print(textbox_list)
