@@ -410,11 +410,12 @@
                 {# a navbar to show section and next button #}
                 <div id="section">
                     <div class="row container-fluid justify-content-between">
-                        <div class="col-auto align-self-center ml-2" style="height: fit-content">
+                        <div class="col-3"></div>
+                        <div class="col-3 align-self-center ml-2 text-center" style="height: fit-content">
                             <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
                         </div>
-                        <div class="col-auto align-self-center" style="height: fit-content">
-                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="next-section-1">
+                        <div class="col-3 align-self-center text-right" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="next-section-1">
                                 Next
                                 <i class="fa fa-arrow-right ml-1 align-middle"></i>
                             </a>
@@ -717,18 +718,18 @@
 {#                 a navbar to show section and next button#}
                 <div id="section">
                     <div class="row container-fluid justify-content-between">
+                        <div class="col-auto align-self-center" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="previous-section-2">
+                                <i class="fa fa-arrow-left mr-1 align-middle"></i>
+                                Previous
+                            </a>
+                        </div>
                         <div class="col-auto align-self-center ml-2" style="height: fit-content">
                             <span class="p-1" style="font-style: italic; font-size: 20px;">Section 2</span>
                         </div>
                         <div class="col-auto align-self-center" style="height: fit-content">
-                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="next-section-2">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="next-section-2">
                                 Next
-                                <i class="fa fa-arrow-right ml-1 align-middle"></i>
-                            </a>
-                        </div>
-                        <div class="col-auto align-self-center" style="height: fit-content">
-                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="previous-section-2">
-                                Previous
                                 <i class="fa fa-arrow-right ml-1 align-middle"></i>
                             </a>
                         </div>
@@ -1034,15 +1035,16 @@
 {#                 a navbar to show section and next button#}
                 <div id="section">
                     <div class="row container-fluid justify-content-between">
-                        <div class="col-auto align-self-center ml-2" style="height: fit-content">
-                            <span class="p-1" style="font-style: italic; font-size: 20px;">Section 3</span>
-                        </div>
-                        <div class="col-auto align-self-center" style="height: fit-content">
-                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 75px" id="previous-section-3">
+                        <div class="col-3 align-self-center" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="previous-section-3">
+                                <i class="fa fa-arrow-left mr-1 align-middle"></i>
                                 Previous
-                                <i class="fa fa-arrow-right ml-1 align-middle"></i>
                             </a>
                         </div>
+                        <div class="col-3 align-self-center text-center ml-2" style="height: fit-content">
+                            <span class="p-1" style="font-style: italic; font-size: 20px;">Section 3</span>
+                        </div>
+                        <div class="col-3 align-self-center"></div>
                     </div>
                 </div>
             </div>
@@ -1150,41 +1152,11 @@
 <script src="{% static 'Reading/JavaScript/scripts.js' %}"></script>
 <script src="{%  static 'Reading/JavaScript/all.js' %}"></script>
 
-    <script type="text/javascript">
-        $("#next-section-1").click(function () {
-        let currentPassage = $("#passage-number-1");
-        let nextPassage = $("#passage-number-2");
-        currentPassage.removeClass('d-flex').addClass('d-none');
-        nextPassage.removeClass('d-none').addClass('d-flex');
-});
-    </script>
 
-    <script type="text/javascript">
-        $("#previous-section-2").click(function () {
-        let currentPassage = $("#passage-number-2");
-        let prevPassage = $("#passage-number-1");
-        currentPassage.removeClass('d-flex').addClass('d-none');
-        prevPassage.removeClass('d-none').addClass('d-flex');
-});
-    </script>
 
-    <script type="text/javascript">
-        $("#next-section-2").click(function () {
-        let currentPassage = $("#passage-number-2");
-        let nextPassage = $("#passage-number-3");
-        currentPassage.removeClass('d-flex').addClass('d-none');
-        nextPassage.removeClass('d-none').addClass('d-flex');
-});
-    </script>
 
-    <script type="text/javascript">
-        $("#previous-section-3").click(function () {
-        let currentPassage = $("#passage-number-3");
-        let prevPassage = $("#passage-number-2");
-        currentPassage.removeClass('d-flex').addClass('d-none');
-        prevPassage.removeClass('d-none').addClass('d-flex');
-});
-    </script>
+
+
 
 </body>
 </html>

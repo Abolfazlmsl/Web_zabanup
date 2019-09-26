@@ -6,19 +6,16 @@ setTimeout(() => {
     let width = window.matchMedia("(max-width: 992px)");
     let footer = $('#footer');
     let arrow = $('#arrow-self');
-    let section = $('#section');
     if(width.matches){
         if(footer.css('height') === '256px'){
             footer.css('bottom', '-200px');
             arrow.removeClass('fa-arrow-down').addClass('fa-arrow-up');
-            section.css('bottom', '56px');
         }
     }
     else {
         if(footer.css('height') === '156px'){
             footer.css('bottom', '-100px');
             arrow.removeClass('fa-arrow-down').addClass('fa-arrow-up');
-            section.css('bottom', '56px');
         }
     }
 }, 2000);
@@ -39,18 +36,15 @@ $(document).on('click', "#question-palette h5, #arrow-self", function () {
 
     let footer = $('#footer');
     let arrow = $('#arrow-self');
-    let section = $('#section');
     if(width.matches) {
         switch (footer.css('bottom')) {
             case '0px':
             footer.css('bottom', '-200px');
             arrow.removeClass('fa-arrow-down').addClass('fa-arrow-up');
-            section.css('bottom', '56px');
             break;
             case '-200px':
                 footer.css('bottom', '0px');
                 arrow.removeClass('fa-arrow-up').addClass('fa-arrow-down');
-                section.css('bottom', '256px');
                 break;
             }
     }
@@ -102,3 +96,33 @@ $("#small-submit-button").click(function () {
    submitFakeButton.removeClass('btn-danger').addClass('btn-dark');
    submitFakeButton.click();
 });
+
+$("#next-section-1").click(function () {
+    let currentPassage = $("#passage-number-1");
+    let nextPassage = $("#passage-number-2");
+    currentPassage.removeClass('d-flex').addClass('d-none');
+    nextPassage.removeClass('d-none').addClass('d-flex');
+});
+
+$("#previous-section-2").click(function () {
+    let currentPassage = $("#passage-number-2");
+    let prevPassage = $("#passage-number-1");
+    currentPassage.removeClass('d-flex').addClass('d-none');
+    prevPassage.removeClass('d-none').addClass('d-flex');
+});
+
+$("#next-section-2").click(function () {
+    let currentPassage = $("#passage-number-2");
+    let nextPassage = $("#passage-number-3");
+    currentPassage.removeClass('d-flex').addClass('d-none');
+    nextPassage.removeClass('d-none').addClass('d-flex');
+});
+
+$("#previous-section-3").click(function () {
+    let currentPassage = $("#passage-number-3");
+    let prevPassage = $("#passage-number-2");
+    currentPassage.removeClass('d-flex').addClass('d-none');
+    prevPassage.removeClass('d-none').addClass('d-flex');
+});
+
+
