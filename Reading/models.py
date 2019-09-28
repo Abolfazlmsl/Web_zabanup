@@ -47,7 +47,7 @@ class Passage(models.Model):
     title = models.CharField(max_length=200)
     text = models.FileField()
     image = models.FileField()
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, blank=True, null=True)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

@@ -394,9 +394,9 @@ def submit(request, exam_id):
 
     elif request.POST.get('comment-submit'):
 
-        passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+        current_exam = models.Exam.objects.get(id=exam_id)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, exam=current_exam, user=request.user).pop()
 
         comment_text = request.POST.get('comment_text')
         # change user answer to json
@@ -409,17 +409,17 @@ def submit(request, exam_id):
         last_user_answer = last_answer
         # add user comment to database
         if comment_text:
-            models.Comment.objects.update_or_create(passage=passage, text=comment_text, user=request.user)
+            models.Comment.objects.update_or_create(exam=current_exam, text=comment_text, user=request.user)
 
         final_grade = last_answer.grade
         # get all comments of passage from database
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
 
         context = {
-            'passage': passage,
+            'exam': current_exam,
             'grade': final_grade,
             'users_answer': users_answer,
             'my_answer': my_answers,
@@ -431,9 +431,9 @@ def submit(request, exam_id):
 
     elif request.POST.get('reply-submit'):
 
-        passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+        current_exam = models.Exam.objects.get(id=exam_id)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, exam=current_exam, user=request.user).pop()
         # get reply text and parent id of that reply
         reply_text = request.POST.get('reply-text')
         reply_parent_id = request.POST.get('hidden-reply')
@@ -447,16 +447,16 @@ def submit(request, exam_id):
 
         last_user_answer = last_answer
         # save reply to database
-        models.Comment.objects.update_or_create(passage=passage, text=reply_text, user=request.user, parent=reply_to)
+        models.Comment.objects.update_or_create(exam=current_exam, text=reply_text, user=request.user, parent=reply_to)
 
         final_grade = last_answer.grade
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
 
         context = {
-            'passage': passage,
+            'exam': current_exam,
             'grade': final_grade,
             'users_answer': users_answer,
             'my_answer': my_answers,
@@ -469,9 +469,9 @@ def submit(request, exam_id):
 
     else:
 
-        passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+        current_exam = models.Exam.objects.get(id=exam_id)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, exam=current_exam, user=request.user).pop()
 
         my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
@@ -482,13 +482,13 @@ def submit(request, exam_id):
         last_user_answer = last_answer
         final_grade = last_answer.grade
 
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
 
         context = {
-            'passage': passage,
+            'exam': current_exam,
             'grade': final_grade,
             'users_answer': users_answer,
             'my_answer': my_answers,
