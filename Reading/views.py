@@ -89,8 +89,6 @@ def passage_body(request, exam_id):
         number_of_q_p2 = len(dropdown_passage2 + textbox_passage2 + checkbox_passage2 + checkbox_passage2)
         number_of_q_p3 = len(dropdown_passage3 + textbox_passage3 + checkbox_passage3 + checkbox_passage3)
 
-        one = ['1']
-
         context = {
             'dropdown_passage1': dropdown_passage1,
             'textbox_passage1': textbox_passage1,
