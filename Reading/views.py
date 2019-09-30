@@ -29,25 +29,43 @@ def passage_body(request, exam_id):
         # print(passage3)
 
         # define for add our questions to these list
-        dropdown_passage1 = []
+        true_false_passage1 = []
+        yes_no_passage1 = []
+        matching_heading_passage1 = []
+        matching_paragraph_passage1 = []
+        summary_completion_passage1 = []
         textbox_passage1 = []
         radiobutton_passage1 = []
         checkbox_passage1 = []
 
-        dropdown_passage2 = []
+        true_false_passage2 = []
+        yes_no_passage2 = []
+        matching_heading_passage2 = []
+        matching_paragraph_passage2 = []
+        summary_completion_passage2 = []
         textbox_passage2 = []
         radiobutton_passage2 = []
         checkbox_passage2 = []
 
-        dropdown_passage3 = []
+        true_false_passage3 = []
+        yes_no_passage3 = []
+        matching_heading_passage3 = []
+        matching_paragraph_passage3 = []
+        summary_completion_passage3 = []
         textbox_passage3 = []
         radiobutton_passage3 = []
         checkbox_passage3 = []
 
         # add same question to 4 different lists
-        add_question_to_list(passage1, dropdown_passage1, textbox_passage1, radiobutton_passage1, checkbox_passage1)
-        add_question_to_list(passage2, dropdown_passage2, textbox_passage2, radiobutton_passage2, checkbox_passage2)
-        add_question_to_list(passage3, dropdown_passage3, textbox_passage3, radiobutton_passage3, checkbox_passage3)
+        add_question_to_list(passage1, true_false_passage1, yes_no_passage1, matching_heading_passage1,
+                             matching_paragraph_passage1, summary_completion_passage1, textbox_passage1,
+                             radiobutton_passage1, checkbox_passage1)
+        add_question_to_list(passage2, true_false_passage2, yes_no_passage2, matching_heading_passage2,
+                             matching_paragraph_passage2, summary_completion_passage2, textbox_passage2,
+                             radiobutton_passage2, checkbox_passage2)
+        add_question_to_list(passage3, true_false_passage3, yes_no_passage3, matching_heading_passage3,
+                             matching_paragraph_passage3, summary_completion_passage3, textbox_passage3,
+                             radiobutton_passage3, checkbox_passage3)
 
         # get text in html form then render it
         html_for_passage1 = str(passage1.text)
@@ -56,53 +74,31 @@ def passage_body(request, exam_id):
         template2 = loader.get_template(html_for_passage2).render()
         html_for_passage3 = str(passage3.text)
         template3 = loader.get_template(html_for_passage3).render()
-        # create a context
-        # print(dropdown_passage1[0].type)
-        # print(dropdown_passage2)
-        # print(dropdown_passage3)
-        # print(textbox_passage1)
-        # print(textbox_passage2)
-        # print(textbox_passage3)
-        # print(radiobutton_passage1)
-        # print(radiobutton_passage2)
-        # print(radiobutton_passage3)
-        # print(checkbox_passage1)
-        # print(checkbox_passage2)
-        # print(checkbox_passage3)
-
-        number_of_dd_p1 = len(dropdown_passage1)
-        number_of_tb_p1 = len(textbox_passage1)
-        number_of_rb_p1 = len(radiobutton_passage1)
-        number_of_cb_p1 = len(checkbox_passage1)
-
-        number_of_dd_p2 = len(dropdown_passage2)
-        number_of_tb_p2 = len(textbox_passage2)
-        number_of_rb_p2 = len(radiobutton_passage2)
-        number_of_cb_p2 = len(checkbox_passage2)
-
-        number_of_dd_p3 = len(dropdown_passage3)
-        number_of_tb_p3 = len(textbox_passage3)
-        number_of_rb_p3 = len(radiobutton_passage3)
-        number_of_cb_p3 = len(checkbox_passage3)
-
-        number_of_q_p1 = len(dropdown_passage1 + textbox_passage1 + checkbox_passage1 + checkbox_passage1)
-        number_of_q_p2 = len(dropdown_passage2 + textbox_passage2 + checkbox_passage2 + checkbox_passage2)
-        number_of_q_p3 = len(dropdown_passage3 + textbox_passage3 + checkbox_passage3 + checkbox_passage3)
-
-        one = ['1']
 
         context = {
-            'dropdown_passage1': dropdown_passage1,
+            'true_false_passage1': true_false_passage1,
+            'yes_no_passage1': yes_no_passage1,
+            'matching_heading_passage1': matching_heading_passage1,
+            'matching_paragraph_passage1': matching_paragraph_passage1,
+            'summary_completion_passage1': summary_completion_passage1,
             'textbox_passage1': textbox_passage1,
             'radiobutton_passage1': radiobutton_passage1,
             'checkbox_passage1': checkbox_passage1,
 
-            'dropdown_passage2': dropdown_passage2,
+            'true_false_passage2': true_false_passage2,
+            'yes_no_passage2': yes_no_passage2,
+            'matching_heading_passage2': matching_heading_passage2,
+            'matching_paragraph_passage2': matching_paragraph_passage2,
+            'summary_completion_passage2': summary_completion_passage2,
             'textbox_passage2': textbox_passage2,
             'radiobutton_passage2': radiobutton_passage2,
             'checkbox_passage2': checkbox_passage2,
 
-            'dropdown_passage3': dropdown_passage3,
+            'true_false_passage3': true_false_passage3,
+            'yes_no_passage3': yes_no_passage3,
+            'matching_heading_passage3': matching_heading_passage3,
+            'matching_paragraph_passage3': matching_paragraph_passage3,
+            'summary_completion_passage3': summary_completion_passage3,
             'textbox_passage3': textbox_passage3,
             'radiobutton_passage3': radiobutton_passage3,
             'checkbox_passage3': checkbox_passage3,
@@ -118,43 +114,79 @@ def passage_body(request, exam_id):
             'passage2': passage2,
             'passage3': passage3,
 
-            'number_of_q_p1': number_of_q_p1,
-            'number_of_q_p2': number_of_q_p2,
-            'number_of_q_p3': number_of_q_p3,
+            'number_of_q_p1': len(true_false_passage1 + yes_no_passage1 + matching_heading_passage1 +
+                                  matching_paragraph_passage1 + summary_completion_passage1 + textbox_passage1 +
+                                  checkbox_passage1 + checkbox_passage1),
 
-            'number_of_dd_p1': number_of_dd_p1,
-            'number_of_tb_p1': number_of_tb_p1,
-            'number_of_rb_p1': number_of_rb_p1,
-            'number_of_cb_p1': number_of_cb_p1,
-            'number_of_dd_p2': number_of_dd_p2,
-            'number_of_tb_p2': number_of_tb_p2,
-            'number_of_rb_p2': number_of_rb_p2,
-            'number_of_cb_p2': number_of_cb_p2,
-            'number_of_dd_p3': number_of_dd_p3,
-            'number_of_tb_p3': number_of_tb_p3,
-            'number_of_rb_p3': number_of_rb_p3,
-            'number_of_cb_p3': number_of_cb_p3,
+            'number_of_q_p2': len(true_false_passage2 + yes_no_passage2 + matching_heading_passage2 +
+                                  matching_paragraph_passage2 + summary_completion_passage2 + textbox_passage2 +
+                                  checkbox_passage2 + checkbox_passage2),
+
+            'number_of_q_p3': len(true_false_passage3 + yes_no_passage3 + matching_heading_passage3 +
+                                  matching_paragraph_passage3 + summary_completion_passage3 + textbox_passage3 +
+                                  checkbox_passage3 + checkbox_passage3),
+
+            'number_of_true_false_p1': len(true_false_passage1),
+            'number_of_yes_no_p1': len(yes_no_passage1),
+            'number_of_matching_heading_p1': len(matching_heading_passage1),
+            'number_of_matching_paragraph_p1': len(matching_paragraph_passage1),
+            'number_of_summary_completion_p1': len(summary_completion_passage1),
+            'number_of_tb_p1': len(textbox_passage1),
+            'number_of_rb_p1': len(radiobutton_passage1),
+            'number_of_cb_p1': len(checkbox_passage1),
+
+            'number_of_true_false_p2': len(true_false_passage2),
+            'number_of_yes_no_p2': len(yes_no_passage2),
+            'number_of_matching_heading_p2': len(matching_heading_passage2),
+            'number_of_matching_paragraph_p2': len(matching_paragraph_passage2),
+            'number_of_summary_completion_p2': len(summary_completion_passage2),
+            'number_of_tb_p2': len(textbox_passage2),
+            'number_of_rb_p2': len(radiobutton_passage2),
+            'number_of_cb_p2': len(checkbox_passage2),
+
+            'number_of_true_false_p3': len(true_false_passage3),
+            'number_of_yes_no_p3': len(yes_no_passage3),
+            'number_of_matching_heading_p3': len(matching_heading_passage3),
+            'number_of_matching_paragraph_p3': len(matching_paragraph_passage3),
+            'number_of_summary_completion_p3': len(summary_completion_passage3),
+            'number_of_tb_p3': len(textbox_passage3),
+            'number_of_rb_p3': len(radiobutton_passage3),
+            'number_of_cb_p3': len(checkbox_passage3),
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
         return redirect('Reading:Login')
 
 
-def add_question_to_list(passage, dd, tb, rb, cb):
+def add_question_to_list(passage, true_false, yes_no, textbox, matching_heading, matching_paragraph, summary_completion,
+                         radiobutton, checkbox):
+
     questions = get_list_or_404(models.Question, passage=passage)
+
     for question in questions:
-        # dropdown questions
-        if question.type == 'dropdown':
-            dd.append(question)
-        # textbox questions
+        if question.type == 'truefalse':
+            true_false.append(question)
+
+        elif question.type == 'yesno':
+            yes_no.append(question)
+
         elif question.type == 'text':
-            tb.append(question)
-        # radiobutton questions
+            textbox.append(question)
+
+        elif question.type == 'matching_heading':
+            matching_heading.append(question)
+
+        elif question.type == 'summary_completion':
+            summary_completion.append(question)
+
+        elif question.type == 'matching_paragraph':
+            matching_paragraph.append(question)
+
         elif question.type == 'radiobutton':
-            rb.append(question)
-        # checkbox questions
+            radiobutton.append(question)
+
         elif question.type == 'checkbox':
-            cb.append(question)
+            checkbox.append(question)
 
 
 # calculate grade and submit comments

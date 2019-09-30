@@ -56,14 +56,18 @@ class Passage(models.Model):
 # Question model
 class Question(models.Model):
     CHOICES = [
-        ('dropdown', 'Dropdown'),
+        ('dropdown', (('truefalse', 'TrueFalse'), ('yesno', 'YesNo'))),
         ('text', 'Text'),
+        ('matching_heading', 'Matching Heading'),
+        ('matching_paragraph', 'Matching Paragraph'),
+        ('summary_completion', 'Summary Completion'),
         ('radiobutton', 'Radiobutton'),
         ('checkbox', 'Checkbox'),
     ]
     passage = models.ForeignKey(Passage, on_delete=models.CASCADE)
     text = models.CharField(max_length=700)
     type = models.CharField(max_length=32, choices=CHOICES)
+    priority = models.PositiveIntegerField()
 
     def __str__(self):
         return '%s' % self.text
