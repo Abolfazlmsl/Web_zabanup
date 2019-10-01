@@ -37,9 +37,9 @@ def passage_body(request, exam_id):
             checkbox_list = []
             for question in questions:
                 if question.type == 'yesno':
-                    yes_no_list.append((question.priority, question))
+                    yes_no_list.append((question.priority, question, 'yesno'))
                 elif question.type == 'truefalse':
-                    true_false_list.append((question.priority, question))
+                    true_false_list.append((question.priority, question, 'truefalse'))
                 elif question.type == 'text':
                     textbox_list.append((question.priority, question))
                 elif question.type == 'matching_heading':
@@ -62,20 +62,24 @@ def passage_body(request, exam_id):
             for z in range(len(all_questions[j])):
                 if empty in all_questions[j]:
                     all_questions[j].remove(empty)
+        print(all_questions)
 
         # get text in html form then render it
-        templates = []
-        for passage in all_passages:
-            html_for_passage = str(passage.text)
-            template = loader.get_template(html_for_passage).render()
-            templates.append(template)
+
+        html_for_passage = str(all_passages[0].text)
+        template = loader.get_template(html_for_passage).render()
+
+        passage_with_template = zip(template, all_passages)
+        passage_with_questions = zip(all_passages, all_questions)
 
         context = {
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
-            'templates': templates,
+            'template': template,
             'all_questions': all_questions,
             'all_passages': all_passages,
+            'passage_with_template': passage_with_template,
+            'passage_with_questions': passage_with_questions,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
