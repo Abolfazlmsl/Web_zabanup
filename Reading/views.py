@@ -23,7 +23,7 @@ def passage_body(request, exam_id):
         all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
 
         all_questions = []
-
+        question_type = []
         i: int = 0
         for passage in all_passages:
             questions = models.Question.objects.filter(passage=passage).order_by('priority')
@@ -35,25 +35,43 @@ def passage_body(request, exam_id):
             summary_completion_list = []
             radiobutton_list = []
             checkbox_list = []
+            temp_type = []
             for question in questions:
                 if question.type == 'yesno':
-                    yes_no_list.append((question.priority, question, 'yesno'))
+                    yes_no_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'truefalse':
-                    true_false_list.append((question.priority, question, 'truefalse'))
+                    true_false_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'text':
                     textbox_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'matching_heading':
                     matching_heading_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'matching_paragraph':
                     matching_paragraph_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'summary_completion':
                     summary_completion_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'radiobutton':
                     radiobutton_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
                 elif question.type == 'checkbox':
                     checkbox_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
             all_questions.append([true_false_list, yes_no_list, textbox_list, matching_heading_list,
                                   matching_paragraph_list, summary_completion_list, radiobutton_list, checkbox_list])
+            question_type.append(temp_type)
             all_questions[i].sort()
             i += 1
 
@@ -62,24 +80,24 @@ def passage_body(request, exam_id):
             for z in range(len(all_questions[j])):
                 if empty in all_questions[j]:
                     all_questions[j].remove(empty)
-        print(all_questions)
+        # print(question_type)
+        # print(all_questions)
 
         # get text in html form then render it
-
+        passage_question_type = zip(all_passages, all_questions, question_type)
+        # for a,b ,c in passage_question_type:
+        #     print(a)
+        #     print(b)
+        #     print(c)
+        # print(passage_question_type)
         html_for_passage = str(all_passages[0].text)
         template = loader.get_template(html_for_passage).render()
-
-        passage_with_template = zip(template, all_passages)
-        passage_with_questions = zip(all_passages, all_questions)
 
         context = {
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
             'template': template,
-            'all_questions': all_questions,
-            'all_passages': all_passages,
-            'passage_with_template': passage_with_template,
-            'passage_with_questions': passage_with_questions,
+            'passage_question_type': passage_question_type,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:

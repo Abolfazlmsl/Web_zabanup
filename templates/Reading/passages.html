@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -116,7 +117,7 @@
 <main>
     <form action="{% url 'Reading:submit' current_exam.id %}" method="post">
         {% csrf_token %}
-        {% for passage,question in passage_with_questions %}
+        {% for passage, questions, types in passage_question_type %}
     {# main part of the web page that contains tow horizontal parts#}
         <div class="leftAndRight d-flex" id="passage-number-{{ forloop.counter }}">
             {# left part of main, contains the reading text #}
@@ -125,15 +126,17 @@
                     {# Reading title #}
                     <div class="row mt-5 mb-3">
                         <h1 class="testTitle">
+                            <p>{{ passage }}</p>
+                            <p>{{ questions }}</p>
                             READING PASSAGE {{ forloop.counter }}
                         </h1>
                     </div>
                     {# Reading description #}
                     <div class="row mb-4">
                         <p class="testDescription">
-                            <i>You should spend about 20 minutes on <strong>Questions 1-{{ all_questions.forloop.counter0 |length }}</strong>,
-                                which are based on Reading Passage {{ forloop.counter }} below.
-                            </i>
+{#                            <i>You should spend about 20 minutes on <strong>Questions 1-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}</strong>,#}
+{#                                which are based on Reading Passage {{ forloop.counter }} below.#}
+{#                            </i>#}
                         </p>
                     </div>
                     {# Reading image #}
@@ -155,17 +158,20 @@
                 </div>
             </div>
             <div class="rightContent">
-                {% for q in question %}
                 <div class="container-fluid right-inner">
                     <h6 class="section mt-4 mb-4">
 {#                        SECTION 1: QUESTIONS 1-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}#}
                     </h6>
-                        {% if q.2 == 'yesno' %}
+                        {% for question in questions;  %}
+                            <p>hey {{ questions.0 }}
+                            </p>
+
+                            <p>ty{{ g }}</p>
                         <div class="row">
                             <div class="col-auto mr-auto align-middle">
-                                <h5 class="mb-4">
+{#                                <h5 class="mb-4">#}
 {#                                    Questions 1-{{ dropdown_passage1|length }}#}
-                                </h5>
+{#                                </h5>#}
                             </div>
                             {# notepad to save drafts #}
                             <div class="col-auto">
@@ -205,41 +211,39 @@
                             </tbody>
                         </table>
                         {# Dropdown questions starts #}
-{#                        {% for dd in dropdown_passage1 %}#}
-{#                            <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">#}
-{#                                <div class="col-1 mt-2 mt-md-0">#}
-{#                                    <div class="row">#}
-{#                                        <div class="col-auto questionNumber rounded m-auto">#}
-{#                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                                <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">#}
-{#                                    <label for="q{{ forloop.counter }}">#}
-{#                                        <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">#}
-{#                                            <option disabled selected></option>#}
-{#                                            {% for answer in dd.answer_set.all %}#}
-{#                                                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>#}
-{#                                            {% endfor %}#}
-{#                                        </select>#}
-{#                                    </label>#}
-{#                                </div>#}
-{#                                <div class="col-12 col-md-8 my-2 my-md-0">#}
-{#                                    <p class="my-0">#}
-{#                                        {{ dd }}#}
-{#                                    </p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        {% endfor %}#}
-                        {% endif %}
+                        {% for dd in questions.1 %}
+                            <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
+                                <div class="col-1 mt-2 mt-md-0">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
+                                    <label for="q{{ forloop.counter }}">
+                                        <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">
+                                            <option disabled selected></option>
+                                            {% for answer in dd.1.answer_set.all %}
+                                                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-8 my-2 my-md-0">
+                                    <p class="my-0">
+                                        {{ dd.1 }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
                         {# Dropdown questions ends #}
 
-                        {% if textbox_passage1 %}
                         <div class="row mt-4">
                             <div class="col-auto mr-auto align-middle">
-                                <h5 class="mb-4">
-                                    Questions {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}
-                                </h5>
+{#                                <h5 class="mb-4">#}
+{#                                    Questions {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}#}
+{#                                </h5>#}
                             </div>
                             {# notepad to save drafts #}
                             <div class="col-auto">
@@ -262,14 +266,14 @@
                         {# some descriptions about textbox questions #}
                         <p><i>Answer the questions below.</i></p>
                         <p><i>Choose <span class="text-danger">NO MORE THAN THREE WORDS</span> from the passage for each answer:</i></p>
-                        <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}</b> on your answer sheet.</i></p>
+{#                        <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}</b> on your answer sheet.</i></p>#}
 
                         {# Textbox questions starts #}
-                        {% for tb in textbox_passage1 %}
+                        {% for tb in questions.2 %}
                             <div class="row container border textboxQuestionRow ml-0 mb-2 align-items-center">
                                 <div class="col-12">
                                     <p class="my-0">
-                                       {{ tb }}
+                                       {{ tb.1 }}
                                     </p>
                                 </div>
                                 <div class="col-1 ml-2">
@@ -287,7 +291,6 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        {% endif %}
                         {# Textbox questions ends #}
 
                         {% if radiobutton_passage1 %}
@@ -406,10 +409,10 @@
                         {% endfor %}
                         {% endif %}
                         {# Checkbox questions ends #}
+                            {% endfor %}
                         <input type="hidden" name="refresh_checker" value="{{ refresh_checker }}">
                         <input class="btn btn-danger btn-sm mx-2 navbarButton d-none" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" id="submit-fake-button"/>
                 </div>
-                {% endfor %}
                 {# a navbar to show section and next button #}
                 <div id="section">
                     <div class="row container-fluid justify-content-between">
