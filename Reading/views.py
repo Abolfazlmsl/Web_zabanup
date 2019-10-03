@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
 from django.template import loader
-
+import itertools
 from . import models
 
 
@@ -83,12 +83,20 @@ def passage_body(request, exam_id):
         # print(question_type)
         # print(all_questions)
 
+        questions_types = []
+        question_type_zip = zip(all_questions, question_type)
+        for questions, types in question_type_zip:
+            question_type_dict = {}
+            for i in range(len(questions)):
+                question_type_dict[types[i]] = questions[i]
+            questions_types.append(question_type_dict)
+        print(questions_types)
         # get text in html form then render it
-        passage_question_type = zip(all_passages, all_questions, question_type)
-        # for a,b ,c in passage_question_type:
-        #     print(a)
+        passage_question_type = zip(all_passages, questions_types)
+
+        # for a,b in passage_question_type:
         #     print(b)
-        #     print(c)
+        #     print(a)
         # print(passage_question_type)
         html_for_passage = str(all_passages[0].text)
         template = loader.get_template(html_for_passage).render()
