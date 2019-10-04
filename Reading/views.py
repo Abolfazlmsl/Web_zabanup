@@ -82,11 +82,12 @@ def passage_body(request, exam_id):
                     all_questions[j].remove(empty)
         # print(question_type)
         # print(all_questions)
-
+        len_passages = 0
         questions_types = []
         question_type_zip = zip(all_questions, question_type)
         for questions, types in question_type_zip:
             question_type_dict = {}
+            len_passages += 1
             for i in range(len(questions)):
                 question_type_dict[types[i]] = questions[i]
             questions_types.append(question_type_dict)
@@ -106,6 +107,7 @@ def passage_body(request, exam_id):
             'current_exam': current_exam,
             'template': template,
             'passage_question_type': passage_question_type,
+            'len_passages': len_passages,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:

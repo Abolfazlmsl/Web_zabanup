@@ -118,15 +118,13 @@
         {% csrf_token %}
         {% for passage, questions_types in passage_question_type %}
     {# main part of the web page that contains tow horizontal parts#}
-        <div class="leftAndRight d-flex" id="passage-number-{{ forloop.counter }}">
+        <div class="leftAndRight {% if forloop.counter == 1 %} d-flex {% else %} d-none {% endif %}" id="passage-number-{{ forloop.counter }}">
             {# left part of main, contains the reading text #}
             <div class="leftContent">
                 <div class="container-fluid left-inner">
                     {# Reading title #}
                     <div class="row mt-5 mb-3">
                         <h1 class="testTitle">
-                            <p>{{ passage }}</p>
-                            <p>{{ questions_types }}</p>
                             READING PASSAGE {{ forloop.counter }}
                         </h1>
                     </div>
@@ -161,10 +159,11 @@
                     <h6 class="section mt-4 mb-4">
 {#                        SECTION 1: QUESTIONS 1-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}#}
                     </h6>
-                            <p>hey {{ questions_types.truefalse.1.1 }}
-                            </p>
+                        {% for question_type in questions_types %}
+                            {% if questions_types.truefalse and questions_types.truefalse.0.0 == forloop.counter  %}
                             <div class="row">
                             <div class="col-auto mr-auto align-middle">
+
 {#                                <h5 class="mb-4">#}
 {#                                    Questions 1-{{ dropdown_passage1|length }}#}
 {#                                </h5>#}
@@ -207,7 +206,7 @@
                             </tbody>
                         </table>
                         {# Dropdown questions starts #}
-                        {% for dd in questions.1 %}
+                        {% for dd in questions_types.truefalse %}
                             <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
                                 <div class="col-1 mt-2 mt-md-0">
                                     <div class="row">
@@ -234,7 +233,9 @@
                             </div>
                         {% endfor %}
                         {# Dropdown questions ends #}
+                            {% endif %}
 
+                            {% if questions_types.text and questions_types.text.0.0 == forloop.counter  %}
                         <div class="row mt-4">
                             <div class="col-auto mr-auto align-middle">
 {#                                <h5 class="mb-4">#}
@@ -265,7 +266,7 @@
 {#                        <p class="pb-2"><i>Write your answers in <b>boxes {{ dropdown_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|length }}</b> on your answer sheet.</i></p>#}
 
                         {# Textbox questions starts #}
-                        {% for tb in questions.2 %}
+                        {% for tb in questions_types.text %}
                             <div class="row container border textboxQuestionRow ml-0 mb-2 align-items-center">
                                 <div class="col-12">
                                     <p class="my-0">
@@ -275,7 +276,7 @@
                                 <div class="col-1 ml-2">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                        <strong class="text-white">{{ dropdown_passage1|length|add:forloop.counter}}</strong>
+                                        <strong class="text-white">{{ forloop.counter}}</strong>
                                     </div>
                                     </div>
                                 </div>
@@ -287,14 +288,15 @@
                                 </div>
                             </div>
                         {% endfor %}
+                            {% endif %}
                         {# Textbox questions ends #}
 
-                        {% if radiobutton_passage1 %}
+                        {% if questions_types.radiobutton and questions_types.radiobutton.0.0 == forloop.counter%}
                         <div class="row mt-4">
                             <div class="col-auto mr-auto align-middle">
-                                <h5 class="mb-4">
-                                    Questions {{ dropdown_passage1|add:textbox_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length }}
-                                </h5>
+{#                                <h5 class="mb-4">#}
+{#                                    Questions {{ dropdown_passage1|add:textbox_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length }}#}
+{#                                </h5>#}
                             </div>
                             {# notepad to save drafts #}
                             <div class="col-auto">
@@ -316,28 +318,28 @@
                         </div>
                         {# some descriptions about ridaobutton questions #}
                         <p><i>Choose the correct letter, <b>A</b>, <b>B</b>, <b>C</b> or <b>D</b>.</i></p>
-                        <p class="mb-5"><i>Write the correct letter in boxes <b>{{ dropdown_passage1|add:textbox_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length }}</b> on your answer sheet.</i></p>
+{#                        <p class="mb-5"><i>Write the correct letter in boxes <b>{{ dropdown_passage1|add:textbox_passage1|length|add:1 }}-{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length }}</b> on your answer sheet.</i></p>#}
 
                         {# Radiobutton question starts #}
-                        {% for rb in radiobutton_passage1 %}
-                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2"  id="q{{ dropdown_passage1|add:textbox_passage1|length|add:forloop.counter }}">
+                        {% for rb in questions_types.radiobutton %}
+                            <div class="row container border checkboxQuestion ml-0 align-items-center mb-2"  id="q">
                                 <div class="col-1 ml-2 mt-1">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ dropdown_passage1|add:textbox_passage1|length|add:forloop.counter }}</strong>
+                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-10 mt-1">
                                     <p class="my-0">
-                                        {{ rb }}
+                                        {{ rb.1 }}
                                     </p>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check my-1">
-                                        {% for answer in rb.answer_set.all %}
+                                        {% for answer in rb.1.answer_set.all %}
                                             <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
-                                            <input class="form-check-input " type="radio" name="q{{ dropdown_passage1|add:textbox_passage1|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <input class="form-check-input " type="radio" name="q{{ forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.text }}" />
                                             <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                         {% endfor %} <br>
                                     </div>
@@ -347,12 +349,12 @@
                         {% endif %}
                         {# Radiobutton questions ends #}
 
-                        {% if checkbox_passage1 %}
+                        {% if questions_types.checkbox and questions_types.checkbox.0.0 == forloop.counter%}
                         <div class="row mt-4">
                             <div class="col-auto mr-auto align-middle">
-                                <h5 class="mb-4">
-                                    Questions {{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}
-                                </h5>
+{#                                <h5 class="mb-4">#}
+{#                                    Questions {{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}#}
+{#                                </h5>#}
                             </div>
                             {# notepad to save drafts #}
                             <div class="col-auto">
@@ -374,29 +376,29 @@
                         </div>
                         {# some descriptions about checkbox #}
                         <p><i>Check the items that are true in your idea.</i></p>
-                        <p><i>Check the correct items in boxes <b>{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}</b> on your answer sheet.</i></p>
+{#                        <p><i>Check the correct items in boxes <b>{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}</b> on your answer sheet.</i></p>#}
 
                         {# Checkbox questions starts #}
-                        {% for cb in checkbox_passage1 %}
+                        {% for cb in questions_types.checkbox %}
                             <div class="row container border checkboxQuestion ml-0 align-items-center mb-2">
                                 <div class="col-1 ml-2 mt-1">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length }}</strong>
+                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-10 mt-1">
-                                    <p class="my-0">{{ cb }}</p>
+                                    <p class="my-0">{{ cb.1 }}</p>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check my-1">
-                                        {% for answer in cb.answer_set.all %}
+                                        {% for answer in cb.1.answer_set.all %}
                                             <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
-                                            <label id="q{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|add:checkbox_passage1|length  }}">
-                                                <input type="text" name="q{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length|add:forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
+                                            <label id="q">
+                                                <input type="text" name="q{{ forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
                                             </label>
-                                            <input class="form-check-input " type="checkbox" name="q{{ dropdown_passage1|add:textbox_passage1|add:radiobutton_passage1|length|add:forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <input class="form-check-input " type="checkbox" name="q{{ forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
                                             <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                          {% endfor %}<br>
                                     </div>
@@ -404,6 +406,7 @@
                             </div>
                         {% endfor %}
                         {% endif %}
+                            {% endfor %}
                         {# Checkbox questions ends #}
                         <input type="hidden" name="refresh_checker" value="{{ refresh_checker }}">
                         <input class="btn btn-danger btn-sm mx-2 navbarButton d-none" style="color: rgb(40, 70, 100)" type="submit" value="Submit" name="Submit" id="submit-fake-button"/>
@@ -411,16 +414,25 @@
                 {# a navbar to show section and next button #}
                 <div id="section">
                     <div class="row container-fluid justify-content-between">
-                        <div class="col-3"></div>
+                        {% if forloop.counter != 1 %}
+                        <div class="col-3 align-self-center text-left" style="height: fit-content">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="previous-section-{{ forloop.counter }}">
+                                <i class="fa fa-arrow-left ml-1 align-middle"></i>
+                                Previous
+                            </a>
+                        </div>
+                        {% endif %}
                         <div class="col-3 align-self-center ml-2 text-center" style="height: fit-content">
                             <span class="p-1" style="font-style: italic; font-size: 20px;">Section 1</span>
                         </div>
+                        {% if forloop.counter != len_passages %}
                         <div class="col-3 align-self-center text-right" style="height: fit-content">
-                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="next-section-1">
+                            <a href="#" class="btn btn-outline-dark btn-sm" style="width: 100px" id="next-section-{{ forloop.counter }}">
                                 Next
                                 <i class="fa fa-arrow-right ml-1 align-middle"></i>
                             </a>
                         </div>
+                    {% endif %}
                     </div>
                 </div>
             </div>
@@ -429,20 +441,6 @@
         {% endfor %}
     </form>
 </main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
