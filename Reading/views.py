@@ -129,190 +129,83 @@ def submit(request, exam_id):
         # get passage and question
         current_exam = models.Exam.objects.get(id=exam_id)
 
-        all_passages = current_exam.passage_set.all()
-
-        passage1 = all_passages[0]
-        passage2 = all_passages[1]
-        passage3 = all_passages[2]
-
-        passage1_questions = get_list_or_404(models.Question, passage=passage1)
-        passage2_questions = get_list_or_404(models.Question, passage=passage2)
-        passage3_questions = get_list_or_404(models.Question, passage=passage3)
+        all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
+        print(all_passages)
+        all_questions = []
+        for passage in all_passages:
+            all_questions.extend(models.Question.objects.filter(passage=passage).order_by('priority'))
+        print(all_questions)
 
         refresh_checker = request.POST.get('refresh_checker')
 
-        # initial counter for each type of question
-        dropdown1_count = 0
-        textbox1_count = 0
-        radiobutton1_count = 0
-        checkbox1_count = 0
-
-        dropdown2_count = 0
-        textbox2_count = 0
-        radiobutton2_count = 0
-        checkbox2_count = 0
-
-        dropdown3_count = 0
-        textbox3_count = 0
-        radiobutton3_count = 0
-        checkbox3_count = 0
-
-        # initial list for each type of question
-        dropdown_list = []
-        textbox_list = []
-        radiobutton_list = []
-        checkbox_list = []
+        all_answers = []
         correct_answers = []
 
         grade = 0
 
-        # calculate question of each type
-        for question in passage1_questions:
-            if question.type == 'dropdown':
-                dropdown1_count += 1
-            elif question.type == 'text':
-                textbox1_count += 1
-            elif question.type == 'radiobutton':
-                radiobutton1_count += 1
-            elif question.type == 'checkbox':
-                checkbox1_count += 1
-
-        for question in passage2_questions:
-            if question.type == 'dropdown':
-                dropdown2_count += 1
-            elif question.type == 'text':
-                textbox2_count += 1
-            elif question.type == 'radiobutton':
-                radiobutton2_count += 1
-            elif question.type == 'checkbox':
-                checkbox2_count += 1
-
-        for question in passage3_questions:
-            if question.type == 'dropdown':
-                dropdown3_count += 1
-            elif question.type == 'text':
-                textbox3_count += 1
-            elif question.type == 'radiobutton':
-                radiobutton3_count += 1
-            elif question.type == 'checkbox':
-                checkbox3_count += 1
-
         # get user answers
         # get  user answer id of questions
-        for i in range(dropdown1_count):
-            plus = str(i + 1)
-            answer_id = request.POST.get('q' + plus)
-            dropdown_list.append(answer_id)
+        for question in all_questions:
+            if question.type == 'truefalse':
+                # print('q' + str(question.id))
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
 
-        for i in range(dropdown2_count):
-            plus = str(i + 1 + len(passage1_questions))
-            answer_id = request.POST.get('q' + plus)
-            dropdown_list.append(answer_id)
+            elif question.type == 'text':
+                # print('q' + str(question.id))
+                answer_text = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_text)
 
-        for i in range(dropdown3_count):
-            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions))
-            answer_id = request.POST.get('q' + plus)
-            dropdown_list.append(answer_id)
+            elif question.type == 'radiobutton':
+                # print('q' + str(question.id))
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
 
-        for i in range(textbox1_count):
-            # hidden_plus used for get text box question id
-            hidden_plus = str(i + 1)
-            plus = str(i + 1 + dropdown1_count)
-            answer_text = request.POST.get('q' + plus)
-            question_id = request.POST.get('hidden' + hidden_plus)
-            textbox_list.append([question_id, answer_text])
+            elif question.type == 'checkbox':
+                # print('q' + str(question.id))
+                answer_id = request.POST.getlist('q' + str(question.id))
+                all_answers.append(answer_id)
 
-        for i in range(textbox2_count):
-            # hidden_plus used for get text box question id
-            hidden_plus = str(i + 1 + textbox1_count)
-            plus = str(i + 1 + len(passage1_questions) + dropdown2_count)
-            answer_text = request.POST.get('q' + plus)
-            question_id = request.POST.get('hidden' + hidden_plus)
-            textbox_list.append([question_id, answer_text])
-
-        for i in range(textbox3_count):
-            # hidden_plus used for get text box question id
-            hidden_plus = str(i + 1 + textbox1_count + textbox2_count)
-            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions) + dropdown3_count)
-            answer_text = request.POST.get('q' + plus)
-            question_id = request.POST.get('hidden' + hidden_plus)
-            textbox_list.append([question_id, answer_text])
-
-        for i in range(radiobutton1_count):
-            plus = str(i + 1 + dropdown1_count + textbox1_count)
-            answer_id = request.POST.get('q' + plus)
-            radiobutton_list.append(answer_id)
-
-        for i in range(radiobutton2_count):
-            plus = str(i + 1 + len(passage1_questions) + dropdown2_count + textbox2_count)
-            answer_id = request.POST.get('q' + plus)
-            radiobutton_list.append(answer_id)
-
-        for i in range(radiobutton3_count):
-            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions) + dropdown3_count + textbox3_count)
-            answer_id = request.POST.get('q' + plus)
-            radiobutton_list.append(answer_id)
-
-        for i in range(checkbox1_count):
-            plus = str(i + 1 + dropdown1_count + textbox1_count + radiobutton1_count)
-            answer_id = request.POST.getlist('q' + plus)
-            question_id = request.POST.get('q' + plus + '_id')
-            checkbox_list.append([question_id, answer_id])
-
-        for i in range(checkbox2_count):
-            plus = str(i + 1 + len(passage1_questions) + dropdown2_count + textbox2_count + radiobutton2_count)
-            answer_id = request.POST.getlist('q' + plus)
-            question_id = request.POST.get('q' + plus + '_id')
-            checkbox_list.append([question_id, answer_id])
-
-        for i in range(checkbox3_count):
-            plus = str(i + 1 + len(passage1_questions) + len(
-                passage2_questions) + dropdown3_count + textbox3_count + radiobutton3_count)
-            answer_id = request.POST.getlist('q' + plus)
-            question_id = request.POST.get('q' + plus + '_id')
-            checkbox_list.append([question_id, answer_id])
+        print(all_answers)
 
         # calculate correct answers and grade
-        for answer in dropdown_list:
-            if answer:
-                my_answer = get_object_or_404(models.Answer, id=answer).truth
-                if my_answer:
-                    correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
+        for question, answer in zip(all_questions, all_answers):
+            if question.type == 'truefalse':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'text':
+                if answer == get_object_or_404(models.Answer, question=question.id).text:
+                    correct_answers.append(question.id)
+                    grade += 1
+            elif question.type == 'radiobutton':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'checkbox':
+                count_q = 0
+                answers_q = get_list_or_404(models.Answer, question=question)
+                for ans in answers_q:
+                    if ans.truth:
+                        count_q += 1
+                for ans in answer:
+                    if get_object_or_404(models.Answer, id=ans).truth:
+                        count_q -= 1
+                    else:
+                        count_q += 1
+                if count_q == 0:
+                    correct_answers.append(question.id)
                     grade += 1
 
-        for answer in textbox_list:
-            if answer[1] == get_object_or_404(models.Answer, question=answer[0]).text:
-                correct_answers.append(int(answer[0]))
-                grade += 1
-
-        for answer in radiobutton_list:
-            if answer:
-                my_answer = get_object_or_404(models.Answer, id=answer).truth
-                if my_answer:
-                    correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
-                    grade += 1
-
-        for i in checkbox_list:
-            count_q = 0
-            question = get_object_or_404(models.Question, id=i[0])
-            answers_q = get_list_or_404(models.Answer, question=question)
-            for answer in answers_q:
-                if answer.truth:
-                    count_q += 1
-            for answer in i[1]:
-                if get_object_or_404(models.Answer, id=answer).truth:
-                    count_q -= 1
-                else:
-                    count_q += 1
-            if count_q == 0:
-                correct_answers.append(int(i[0]))
-                grade += 1
-
-        multi_number = 100 / len(passage1_questions + passage2_questions + passage3_questions)
-        all_questions = passage1_questions + passage2_questions + passage3_questions
+        multi_number = 100 / len(all_questions)
         final_grade = grade * multi_number
         final_grade = round(final_grade, 2)
-
+        print(final_grade)
+        print(correct_answers)
         # create a json from answers
         save_list = {}
         for question in passage1_questions:
