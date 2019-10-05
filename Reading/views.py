@@ -85,11 +85,9 @@ def passage_body(request, exam_id):
         number_of_rb_p3 = len(radiobutton_passage3)
         number_of_cb_p3 = len(checkbox_passage3)
 
-        number_of_q_p1 = len(dropdown_passage1 + textbox_passage1 + checkbox_passage1 + checkbox_passage1)
-        number_of_q_p2 = len(dropdown_passage2 + textbox_passage2 + checkbox_passage2 + checkbox_passage2)
-        number_of_q_p3 = len(dropdown_passage3 + textbox_passage3 + checkbox_passage3 + checkbox_passage3)
-
-        one = ['1']
+        number_of_q_p1 = number_of_dd_p1 + number_of_tb_p1 + number_of_rb_p1 + number_of_cb_p1
+        number_of_q_p2 = number_of_dd_p2 + number_of_tb_p2 + number_of_rb_p2 + number_of_cb_p2
+        number_of_q_p3 = number_of_dd_p3 + number_of_tb_p3 + number_of_rb_p3 + number_of_cb_p3
 
         context = {
             'dropdown_passage1': dropdown_passage1,
