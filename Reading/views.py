@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
 from django.template import loader
-
+import itertools
 from . import models
 
 
@@ -20,139 +20,98 @@ def passage_body(request, exam_id):
 
         # get passage and question of it
         current_exam = models.Exam.objects.get(id=exam_id)
-        all_passages = models.Passage.objects.filter(exam=current_exam)
-        passage1 = all_passages[0]
-        passage2 = all_passages[1]
-        passage3 = all_passages[2]
-        # print(passage1)
-        # print(passage2)
-        # print(passage3)
+        all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
 
-        # define for add our questions to these list
-        dropdown_passage1 = []
-        textbox_passage1 = []
-        radiobutton_passage1 = []
-        checkbox_passage1 = []
+        all_questions = []
+        question_type = []
+        i: int = 0
+        for passage in all_passages:
+            questions = models.Question.objects.filter(passage=passage).order_by('priority')
+            yes_no_list = []
+            true_false_list = []
+            textbox_list = []
+            matching_heading_list = []
+            matching_paragraph_list = []
+            summary_completion_list = []
+            radiobutton_list = []
+            checkbox_list = []
+            temp_type = []
+            for question in questions:
+                if question.type == 'yesno':
+                    yes_no_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'truefalse':
+                    true_false_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'text':
+                    textbox_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'matching_heading':
+                    matching_heading_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'matching_paragraph':
+                    matching_paragraph_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'summary_completion':
+                    summary_completion_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'radiobutton':
+                    radiobutton_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+                elif question.type == 'checkbox':
+                    checkbox_list.append((question.priority, question))
+                    if question.type not in temp_type:
+                        temp_type.append(question.type)
+            all_questions.append([true_false_list, yes_no_list, textbox_list, matching_heading_list,
+                                  matching_paragraph_list, summary_completion_list, radiobutton_list, checkbox_list])
+            question_type.append(temp_type)
+            all_questions[i].sort()
+            i += 1
 
-        dropdown_passage2 = []
-        textbox_passage2 = []
-        radiobutton_passage2 = []
-        checkbox_passage2 = []
-
-        dropdown_passage3 = []
-        textbox_passage3 = []
-        radiobutton_passage3 = []
-        checkbox_passage3 = []
-
-        # add same question to 4 different lists
-        add_question_to_list(passage1, dropdown_passage1, textbox_passage1, radiobutton_passage1, checkbox_passage1)
-        add_question_to_list(passage2, dropdown_passage2, textbox_passage2, radiobutton_passage2, checkbox_passage2)
-        add_question_to_list(passage3, dropdown_passage3, textbox_passage3, radiobutton_passage3, checkbox_passage3)
-
+        empty = []
+        for j in range(len(all_questions)):
+            for z in range(len(all_questions[j])):
+                if empty in all_questions[j]:
+                    all_questions[j].remove(empty)
+        # print(question_type)
+        # print(all_questions)
+        len_passages = 0
+        questions_types = []
+        question_type_zip = zip(all_questions, question_type)
+        for questions, types in question_type_zip:
+            question_type_dict = {}
+            len_passages += 1
+            for i in range(len(questions)):
+                question_type_dict[types[i]] = questions[i]
+            questions_types.append(question_type_dict)
+        print(questions_types)
         # get text in html form then render it
-        html_for_passage1 = str(passage1.text)
-        template1 = loader.get_template(html_for_passage1).render()
-        html_for_passage2 = str(passage2.text)
-        template2 = loader.get_template(html_for_passage2).render()
-        html_for_passage3 = str(passage3.text)
-        template3 = loader.get_template(html_for_passage3).render()
-        # create a context
-        # print(dropdown_passage1[0].type)
-        # print(dropdown_passage2)
-        # print(dropdown_passage3)
-        # print(textbox_passage1)
-        # print(textbox_passage2)
-        # print(textbox_passage3)
-        # print(radiobutton_passage1)
-        # print(radiobutton_passage2)
-        # print(radiobutton_passage3)
-        # print(checkbox_passage1)
-        # print(checkbox_passage2)
-        # print(checkbox_passage3)
+        passage_question_type = zip(all_passages, questions_types)
 
-        number_of_dd_p1 = len(dropdown_passage1)
-        number_of_tb_p1 = len(textbox_passage1)
-        number_of_rb_p1 = len(radiobutton_passage1)
-        number_of_cb_p1 = len(checkbox_passage1)
-
-        number_of_dd_p2 = len(dropdown_passage2)
-        number_of_tb_p2 = len(textbox_passage2)
-        number_of_rb_p2 = len(radiobutton_passage2)
-        number_of_cb_p2 = len(checkbox_passage2)
-
-        number_of_dd_p3 = len(dropdown_passage3)
-        number_of_tb_p3 = len(textbox_passage3)
-        number_of_rb_p3 = len(radiobutton_passage3)
-        number_of_cb_p3 = len(checkbox_passage3)
-
-        number_of_q_p1 = number_of_dd_p1 + number_of_tb_p1 + number_of_rb_p1 + number_of_cb_p1
-        number_of_q_p2 = number_of_dd_p2 + number_of_tb_p2 + number_of_rb_p2 + number_of_cb_p2
-        number_of_q_p3 = number_of_dd_p3 + number_of_tb_p3 + number_of_rb_p3 + number_of_cb_p3
+        # for a,b in passage_question_type:
+        #     print(b)
+        #     print(a)
+        # print(passage_question_type)
+        html_for_passage = str(all_passages[0].text)
+        template = loader.get_template(html_for_passage).render()
 
         context = {
-            'dropdown_passage1': dropdown_passage1,
-            'textbox_passage1': textbox_passage1,
-            'radiobutton_passage1': radiobutton_passage1,
-            'checkbox_passage1': checkbox_passage1,
-
-            'dropdown_passage2': dropdown_passage2,
-            'textbox_passage2': textbox_passage2,
-            'radiobutton_passage2': radiobutton_passage2,
-            'checkbox_passage2': checkbox_passage2,
-
-            'dropdown_passage3': dropdown_passage3,
-            'textbox_passage3': textbox_passage3,
-            'radiobutton_passage3': radiobutton_passage3,
-            'checkbox_passage3': checkbox_passage3,
-
-            'template1': template1,
-            'template2': template2,
-            'template3': template3,
-
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
-
-            'passage1': passage1,
-            'passage2': passage2,
-            'passage3': passage3,
-
-            'number_of_q_p1': number_of_q_p1,
-            'number_of_q_p2': number_of_q_p2,
-            'number_of_q_p3': number_of_q_p3,
-
-            'number_of_dd_p1': number_of_dd_p1,
-            'number_of_tb_p1': number_of_tb_p1,
-            'number_of_rb_p1': number_of_rb_p1,
-            'number_of_cb_p1': number_of_cb_p1,
-            'number_of_dd_p2': number_of_dd_p2,
-            'number_of_tb_p2': number_of_tb_p2,
-            'number_of_rb_p2': number_of_rb_p2,
-            'number_of_cb_p2': number_of_cb_p2,
-            'number_of_dd_p3': number_of_dd_p3,
-            'number_of_tb_p3': number_of_tb_p3,
-            'number_of_rb_p3': number_of_rb_p3,
-            'number_of_cb_p3': number_of_cb_p3,
+            'template': template,
+            'passage_question_type': passage_question_type,
+            'len_passages': len_passages,
         }
         return render(request, 'Reading/passages.html', context=context)
     else:
         return redirect('Reading:Login')
-
-
-def add_question_to_list(passage, dd, tb, rb, cb):
-    questions = get_list_or_404(models.Question, passage=passage)
-    for question in questions:
-        # dropdown questions
-        if question.type == 'dropdown':
-            dd.append(question)
-        # textbox questions
-        elif question.type == 'text':
-            tb.append(question)
-        # radiobutton questions
-        elif question.type == 'radiobutton':
-            rb.append(question)
-        # checkbox questions
-        elif question.type == 'checkbox':
-            cb.append(question)
 
 
 # calculate grade and submit comments
@@ -238,7 +197,7 @@ def submit(request, exam_id):
             dropdown_list.append(answer_id)
 
         for i in range(dropdown2_count):
-            plus = str(i + 1 +len(passage1_questions))
+            plus = str(i + 1 + len(passage1_questions))
             answer_id = request.POST.get('q' + plus)
             dropdown_list.append(answer_id)
 
@@ -299,15 +258,12 @@ def submit(request, exam_id):
             checkbox_list.append([question_id, answer_id])
 
         for i in range(checkbox3_count):
-            plus = str(i + 1 + len(passage1_questions) + len(passage2_questions) + dropdown3_count + textbox3_count + radiobutton3_count)
+            plus = str(i + 1 + len(passage1_questions) + len(
+                passage2_questions) + dropdown3_count + textbox3_count + radiobutton3_count)
             answer_id = request.POST.getlist('q' + plus)
             question_id = request.POST.get('q' + plus + '_id')
             checkbox_list.append([question_id, answer_id])
 
-        print(dropdown_list)
-        print(textbox_list)
-        print(radiobutton_list)
-        print(checkbox_list)
         # calculate correct answers and grade
         for answer in dropdown_list:
             if answer:
@@ -346,7 +302,6 @@ def submit(request, exam_id):
 
         multi_number = 100 / len(passage1_questions + passage2_questions + passage3_questions)
         all_questions = passage1_questions + passage2_questions + passage3_questions
-        print(all_questions)
         final_grade = grade * multi_number
         final_grade = round(final_grade, 2)
 
