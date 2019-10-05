@@ -116,7 +116,7 @@
 <main>
     <form action="{% url 'Reading:submit' current_exam.id %}" method="post">
         {% csrf_token %}
-        {% for passage, questions_types in passage_question_type %}
+        {% for passage, questions_types, questions_count in passage_question_type_count %}
     {# main part of the web page that contains tow horizontal parts#}
         <div class="leftAndRight {% if forloop.counter == 1 %} d-flex {% else %} d-none {% endif %}" id="passage-number-{{ forloop.counter }}">
             {# left part of main, contains the reading text #}
@@ -211,31 +211,32 @@
                                 <div class="col-1 mt-2 mt-md-0">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                            <strong class="text-white q-num">{{ forloop.parentloop.counter|add:questions_count }}</strong>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
                                     <label for="q{{ forloop.counter }}">
-                                        <select class="border btn-sm" name="q{{ forloop.counter }}" id="q{{ forloop.counter }}">
+                                        <select class="border btn-sm" name="q{{ dd.1.id }}" id="q{{ forloop.counter }}">
                                             <option disabled selected></option>
                                             {% for answer in dd.1.answer_set.all %}
-                                                <option name="answer[{{ question }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                                                <option name="answer[{{ answer.id }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
                                             {% endfor %}
                                         </select>
                                     </label>
                                 </div>
                                 <div class="col-12 col-md-8 my-2 my-md-0">
                                     <p class="my-0">
-                                        {{ dd.1 }}
+                                        {{ dd.1.text }}
+                                        <p>q{{ dd.1.id }}</p>
                                     </p>
                                 </div>
                             </div>
                         {% endfor %}
                         {# Dropdown questions ends #}
-                            {% endif %}
+                        {% endif %}
 
-                            {% if questions_types.text and questions_types.text.0.0 == forloop.counter  %}
+                        {% if questions_types.text and questions_types.text.0.0 == forloop.counter  %}
                         <div class="row mt-4">
                             <div class="col-auto mr-auto align-middle">
 {#                                <h5 class="mb-4">#}
@@ -271,20 +272,21 @@
                                 <div class="col-12">
                                     <p class="my-0">
                                        {{ tb.1 }}
+                                        <p>q{{ tb.1.id }}</p>
                                     </p>
                                 </div>
                                 <div class="col-1 ml-2">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                        <strong class="text-white">{{ forloop.counter}}</strong>
+                                        <strong class="text-white">{{ forloop.parentloop.counter|add:questions_count }}</strong>
                                     </div>
                                     </div>
                                 </div>
-                                <div class="col-auto mr-3"  id="q{{ dropdown_passage1|length|add:forloop.counter}}">
+                                <div class="col-auto mr-3"  id="q{{ tb.1.id|add:forloop.counter}}">
                                     <label>
-                                        <input type="text" placeholder="Your answer" name="hidden{{ forloop.counter }}" hidden value="{{ tb.id }}">
+                                        <input type="text" placeholder="Your answer" name="hidden{{ tb.1.id }}" hidden value="{{ tb.id }}">
                                     </label>
-                                    <input type="text" class="textboxAnswer" name="q{{ dropdown_passage1|length|add:forloop.counter}}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
+                                    <input type="text" class="textboxAnswer" name="q{{ tb.1.id }}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
                                 </div>
                             </div>
                         {% endfor %}
@@ -326,20 +328,21 @@
                                 <div class="col-1 ml-2 mt-1">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                            <strong class="text-white q-num">{{forloop.parentloop.counter|add:questions_count }}</strong>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-10 mt-1">
                                     <p class="my-0">
                                         {{ rb.1 }}
+                                        <p>q{{ rb.1.id }}</p>
                                     </p>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check my-1">
                                         {% for answer in rb.1.answer_set.all %}
                                             <span class="checkboxAnsIcon ">{{ forloop.counter }}</span>
-                                            <input class="form-check-input " type="radio" name="q{{ forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.text }}" />
+                                            <input class="form-check-input " type="radio" name="q{{ rb.1.id }}" id="answer{{ answer.id }}" value="{{ answer.text }}" />
                                             <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                         {% endfor %} <br>
                                     </div>
@@ -384,21 +387,22 @@
                                 <div class="col-1 ml-2 mt-1">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ forloop.counter }}</strong>
+                                            <strong class="text-white q-num">{{ forloop.parentloop.counter|add:questions_count }}</strong>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-10 mt-1">
                                     <p class="my-0">{{ cb.1 }}</p>
+                                    <p>q{{ cb.1.id }}</p>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check my-1">
                                         {% for answer in cb.1.answer_set.all %}
                                             <span class="checkboxAnsIcon">{{ forloop.counter }}</span>
                                             <label id="q">
-                                                <input type="text" name="q{{ forloop.parentloop.counter }}_id" value="{{ cb.id }}" hidden>
+                                                <input type="text" name="q{{ cb.1.id }}_id" value="{{ cb.id }}" hidden>
                                             </label>
-                                            <input class="form-check-input " type="checkbox" name="q{{ forloop.parentloop.counter }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
+                                            <input class="form-check-input " type="checkbox" name="q{{ cb.1.id }}" id="answer{{ answer.id }}" value="{{ answer.id }}" />
                                             <label class="form-check-label " for="answer{{ answer.id }}">{{ answer.text }}</label><br/>
                                          {% endfor %}<br>
                                     </div>

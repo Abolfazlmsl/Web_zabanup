@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
 from django.template import loader
-import itertools
 from . import models
 
 
@@ -75,6 +74,15 @@ def passage_body(request, exam_id):
             all_questions[i].sort()
             i += 1
 
+        questions_count = [0]
+        for passage in all_passages:
+            temp = 0
+            for i in range(len(questions_count)):
+                temp += questions_count[i]
+            temp += models.Question.objects.filter(passage=passage).count()
+            questions_count.append(temp)
+        questions_count.pop()
+
         empty = []
         for j in range(len(all_questions)):
             for z in range(len(all_questions[j])):
@@ -91,9 +99,9 @@ def passage_body(request, exam_id):
             for i in range(len(questions)):
                 question_type_dict[types[i]] = questions[i]
             questions_types.append(question_type_dict)
-        print(questions_types)
+        # print(questions_types)
         # get text in html form then render it
-        passage_question_type = zip(all_passages, questions_types)
+        passage_question_type_count = zip(all_passages, questions_types, questions_count)
 
         # for a,b in passage_question_type:
         #     print(b)
@@ -106,7 +114,7 @@ def passage_body(request, exam_id):
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
             'template': template,
-            'passage_question_type': passage_question_type,
+            'passage_question_type_count': passage_question_type_count,
             'len_passages': len_passages,
         }
         return render(request, 'Reading/passages.html', context=context)
