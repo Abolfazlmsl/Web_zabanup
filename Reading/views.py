@@ -166,7 +166,7 @@ def submit(request, exam_id):
                 answer_id = request.POST.getlist('q' + str(question.id))
                 all_answers.append(answer_id)
 
-        print(all_answers)
+        # print(all_answers)
 
         # calculate correct answers and grade
         for question, answer in zip(all_questions, all_answers):
@@ -204,25 +204,18 @@ def submit(request, exam_id):
         multi_number = 100 / len(all_questions)
         final_grade = grade * multi_number
         final_grade = round(final_grade, 2)
-        print(final_grade)
-        print(correct_answers)
+        # print(final_grade)
+        # print(correct_answers)
         # create a json from answers
+        len_all_questions = len(all_questions)
         save_list = {}
-        for question in passage1_questions:
+        for question, i in zip(all_questions, range(len_all_questions)):
             if question.id in correct_answers:
-                save_list[str(question.id)] = "correct"
+                save_list[str(i+1)] = "correct"
             else:
-                save_list[str(question.id)] = "wrong"
-        for question in passage2_questions:
-            if question.id in correct_answers:
-                save_list[str(question.id)] = "correct"
-            else:
-                save_list[str(question.id)] = "wrong"
-        for question in passage3_questions:
-            if question.id in correct_answers:
-                save_list[str(question.id)] = "correct"
-            else:
-                save_list[str(question.id)] = "wrong"
+                save_list[str(i+1)] = "wrong"
+
+        print(save_list)
         save_list = json.dumps(save_list)
         # save user grade
         models.UserAnswer.objects.update_or_create(user=request.user, exam=current_exam, grade=final_grade,
@@ -233,9 +226,10 @@ def submit(request, exam_id):
             all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
+
         context = {
             'all_questions': all_questions,
-            'passage': passage1,
+            'all_passages': all_passages,
             'grade': final_grade,
             'correct_answers': correct_answers,
             'users_answer': users_answer,
