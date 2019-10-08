@@ -116,7 +116,7 @@
 <main>
     <form action="{% url 'Reading:submit' current_exam.id %}" method="post">
         {% csrf_token %}
-        {% for passage, questions_types, questions_count in passage_question_type_count %}
+        {% for passage, questions_types in passage_question_type_count %}
     {# main part of the web page that contains tow horizontal parts#}
         <div class="leftAndRight {% if forloop.counter == 1 %} d-flex {% else %} d-none {% endif %}" id="passage-number-{{ forloop.counter }}">
             {# left part of main, contains the reading text #}
@@ -211,7 +211,7 @@
                                 <div class="col-1 mt-2 mt-md-0">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ forloop.parentloop.counter|add:questions_count }}</strong>
+                                            <strong class="text-white q-num">{{ dd.2 }}</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -278,7 +278,7 @@
                                 <div class="col-1 ml-2">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                        <strong class="text-white">{{ forloop.parentloop.counter|add:questions_count }}</strong>
+                                        <strong class="text-white">{{ tb.2 }}</strong>
                                     </div>
                                     </div>
                                 </div>
@@ -328,7 +328,7 @@
                                 <div class="col-1 ml-2 mt-1">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{forloop.parentloop.counter|add:questions_count }}</strong>
+                                            <strong class="text-white q-num">{{ rb.2 }}</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -387,7 +387,7 @@
                                 <div class="col-1 ml-2 mt-1">
                                     <div class="row">
                                         <div class="col-auto questionNumber rounded m-auto">
-                                            <strong class="text-white q-num">{{ forloop.parentloop.counter|add:questions_count }}</strong>
+                                            <strong class="text-white q-num">{{ cb.2 }}</strong>
                                         </div>
                                     </div>
                                 </div>

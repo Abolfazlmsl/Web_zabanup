@@ -24,6 +24,7 @@ def passage_body(request, exam_id):
         all_questions = []
         question_type = []
         i: int = 0
+        j: int = 0
         for passage in all_passages:
             questions = models.Question.objects.filter(passage=passage).order_by('priority')
             yes_no_list = []
@@ -36,36 +37,37 @@ def passage_body(request, exam_id):
             checkbox_list = []
             temp_type = []
             for question in questions:
+                j += 1
                 if question.type == 'yesno':
-                    yes_no_list.append((question.priority, question))
+                    yes_no_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'truefalse':
-                    true_false_list.append((question.priority, question))
+                    true_false_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'text':
-                    textbox_list.append((question.priority, question))
+                    textbox_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'matching_heading':
-                    matching_heading_list.append((question.priority, question))
+                    matching_heading_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'matching_paragraph':
-                    matching_paragraph_list.append((question.priority, question))
+                    matching_paragraph_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'summary_completion':
-                    summary_completion_list.append((question.priority, question))
+                    summary_completion_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'radiobutton':
-                    radiobutton_list.append((question.priority, question))
+                    radiobutton_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
                 elif question.type == 'checkbox':
-                    checkbox_list.append((question.priority, question))
+                    checkbox_list.append((question.priority, question, j))
                     if question.type not in temp_type:
                         temp_type.append(question.type)
             all_questions.append([true_false_list, yes_no_list, textbox_list, matching_heading_list,
@@ -73,15 +75,6 @@ def passage_body(request, exam_id):
             question_type.append(temp_type)
             all_questions[i].sort()
             i += 1
-
-        questions_count = [0]
-        for passage in all_passages:
-            temp = 0
-            for i in range(len(questions_count)):
-                temp += questions_count[i]
-            temp += models.Question.objects.filter(passage=passage).count()
-            questions_count.append(temp)
-        questions_count.pop()
 
         empty = []
         for j in range(len(all_questions)):
@@ -99,9 +92,10 @@ def passage_body(request, exam_id):
             for i in range(len(questions)):
                 question_type_dict[types[i]] = questions[i]
             questions_types.append(question_type_dict)
+        print(questions_types)
         # print(questions_types)
         # get text in html form then render it
-        passage_question_type_count = zip(all_passages, questions_types, questions_count)
+        passage_question_type_count = zip(all_passages, questions_types)
 
         # for a,b in passage_question_type:
         #     print(b)
