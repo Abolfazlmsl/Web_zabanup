@@ -25,8 +25,12 @@ def passage_body(request, exam_id):
         question_type = []
         i: int = 0
         j: int = 0
+        questions_bound = []
+        bound_temp = 1
         for passage in all_passages:
             questions = models.Question.objects.filter(passage=passage).order_by('priority')
+            questions_bound.append(str(bound_temp) + '-' + str(len(questions) + bound_temp - 1))
+            bound_temp += len(questions)
             yes_no_list = []
             true_false_list = []
             textbox_list = []
@@ -75,6 +79,7 @@ def passage_body(request, exam_id):
             question_type.append(temp_type)
             all_questions[i].sort()
             i += 1
+        print(questions_bound)
 
         empty = []
         for j in range(len(all_questions)):
@@ -83,6 +88,9 @@ def passage_body(request, exam_id):
                     all_questions[j].remove(empty)
         # print(question_type)
         # print(all_questions)
+        # for een in all_questions[1]:
+        #     print(len(een))
+
         len_passages = 0
         questions_types = []
         question_type_zip = zip(all_questions, question_type)
@@ -92,22 +100,35 @@ def passage_body(request, exam_id):
             for i in range(len(questions)):
                 question_type_dict[types[i]] = questions[i]
             questions_types.append(question_type_dict)
-        print(questions_types)
+
+        prev_len = 0
+        number_of_questions = []
+        start_point = 1
+        for question in questions_types:
+            number_of_questions_dic = {}
+            for key in question:
+                if start_point == len(question[key]) + prev_len:
+                    number_of_questions_dic[key] = str(start_point)
+                else:
+                    number_of_questions_dic[key] = str(start_point) + '-' + str(len(question[key]) + prev_len)
+                prev_len += len(question[key])
+                start_point += len(question[key])
+            number_of_questions.append(number_of_questions_dic)
+            print(number_of_questions_dic)
         # print(questions_types)
         # get text in html form then render it
-        passage_question_type_count = zip(all_passages, questions_types)
 
-        # for a,b in passage_question_type:
-        #     print(b)
-        #     print(a)
-        # print(passage_question_type)
-        html_for_passage = str(all_passages[0].text)
-        template = loader.get_template(html_for_passage).render()
+        templates = []
+        for passage in all_passages:
+            html_for_passage = str(passage.text)
+            template = loader.get_template(html_for_passage).render()
+            templates.append(template)
+
+        passage_question_type_count = zip(all_passages, questions_types, questions_bound, number_of_questions, templates)
 
         context = {
             'refresh_checker': user_answer + 1,
             'current_exam': current_exam,
-            'template': template,
             'passage_question_type_count': passage_question_type_count,
             'len_passages': len_passages,
         }
