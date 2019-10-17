@@ -1,16 +1,15 @@
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import get_list_or_404
 from rest_framework import generics
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from Reading import models
 from . import serializers
 
 
+class ExamList(generics.ListCreateAPIView):
+    permission_classes = (IsAdminUser, IsAuthenticatedOrReadOnly)
 
-class ExamList(generics.ListAPIView):
     serializer_class = serializers.ExamSerializers
 
     def get_queryset(self):
@@ -38,7 +37,12 @@ class ExamList(generics.ListAPIView):
         return query
 
 
-class PassageList(generics.ListAPIView):
+class ExamDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Exam.objects.all()
+    serializer_class = serializers.ExamSerializers
+
+
+class PassageList(generics.ListCreateAPIView):
     serializer_class = serializers.PassageSerializer
 
     def get_queryset(self):
@@ -51,7 +55,12 @@ class PassageList(generics.ListAPIView):
         return query
 
 
-class QuestionList(generics.ListAPIView):
+class PassageDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Passage.objects.all()
+    serializer_class = serializers.PassageSerializer
+
+
+class QuestionList(generics.ListCreateAPIView):
     serializer_class = serializers.QuestionSerializer
 
     def get_queryset(self):
@@ -63,7 +72,12 @@ class QuestionList(generics.ListAPIView):
         return query
 
 
-class AnswerList(generics.ListAPIView):
+class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Question.objects.all()
+    serializer_class = serializers.QuestionSerializer
+
+
+class AnswerList(generics.ListCreateAPIView):
     serializer_class = serializers.AnswerSerializer
 
     def get_queryset(self):
@@ -75,39 +89,52 @@ class AnswerList(generics.ListAPIView):
         return query
 
 
+class AnswerDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.AnswerSerializer
+    queryset = models.Answer.objects.all()
+
+
+class UserAnswerList(generics.ListCreateAPIView):
+    serializer_class = serializers.UserAnswerSerializer
+
+    def get_queryset(self):
+        query = models.UserAnswer.objects.all()
+
+        exam = self.request.GET.get('exam')
+        user = self.request.GET.get('user')
+
+        if exam is not None:
+            query = query.filter(exam=exam)
+        if user is not None:
+            query = query.filter(user=user)
+
+        return query
+
+
+class UserAnswerDetail(generics.RetrieveAPIView):
+    queryset = models.UserAnswer.objects.all()
+    serializer_class = serializers.UserAnswerSerializer
+
+
 class UserList(generics.ListCreateAPIView):
     serializer_class = serializers.UserSerializer
     queryset = User.objects.filter(is_superuser=False)
 
-    def post(self, request, *args, **kwargs):
-        username = self.request.POST.get('username')
-        email = self.request.POST.get('email')
-        first_name = self.request.POST.get('first_name')
-        last_name = self.request.POST.get('last_name')
-        password = self.request.POST.get('password')
-
-        if User.objects.filter(username=username) or User.objects.filter(email=email):
-            return HttpResponse('username/email is already taken!')
-
-        User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
-        return Response('Your account is successfully created')
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.UserSerializer
     queryset = User.objects.filter(is_superuser=False)
 
-    def put(self, request, *args, **kwargs):
-        username = self.request.POST.get('username')
-        email = self.request.POST.get('email')
-        first_name = self.request.POST.get('first_name')
-        last_name = self.request.POST.get('last_name')
-        password = self.request.POST.get('password')
 
-        if User.objects.filter(username=username) or User.objects.filter(email=email):
-            return HttpResponse('username/email is already taken!')
+class CommentList(generics.ListCreateAPIView):
+    serializer_class = serializers.CommentSerializer
+    queryset = models.Comment.objects.all()
 
-        User.objects.update_user(username=username, email=email, first_name=first_name, last_name=last_name,
-                                 password=password)
-        return Response('Your account is successfully edited')
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.CommentSerializer
+    queryset = models.Comment.objects.all()
+
+
 
 
