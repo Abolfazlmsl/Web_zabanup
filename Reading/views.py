@@ -490,31 +490,8 @@ def exam(request):
                 'exam_filter': exam_filter,
                 'exams': exams,
             }
-
             return render(request, 'Reading/filter.html', context=context)
         else:
-            passage_question_answer = []
-            temp_dict = []
-            passages = models.Passage.objects.filter(exam=1).values('id', 'title', 'text', 'image', 'priority')
-            print(passages[0]['id'])
-            for passage in passages:
-                temp_dict.clear()
-                temp_dict = passage
-                questions = models.Question.objects.filter(passage=passage['id']).values('id', 'text', 'type', 'priority')
-                for question in questions:
-                    if 'question' in temp_dict:
-                        temp_dict['question'].append(question)
-                    else:
-                        temp_dict['question'] = question
-                    answers = models.Answer.objects.filter(question=question['id']).values('id', 'text')
-                    for answer in answers:
-                        if 'answer' in temp_dict:
-                            temp_dict['question']['answer'].append(answer)
-                        else:
-                            temp_dict['question']['answer'] = answer
-                # print(temp_dict)
-                passage_question_answer.append(temp_dict)
-            print(passage_question_answer)
             exams = get_list_or_404(models.Exam)
             exam_filter = models.Exam
             context = {

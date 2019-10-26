@@ -48,21 +48,30 @@ class Exam(models.Model):
     def __str__(self):
         return '{}'.format(self.book)
 
-    # def get_api_passage(self):
-    #     passage_question_answer = []
-    #     temp_dict = {}
-    #     passages = Passage.objects.filter(exam=self.id).values('id', 'title', 'text', 'image', 'priority')
-    #     for passage in passages:
-    #         temp_dict.clear()
-    #         temp_dict['passage'] = passage
-    #         questions = Question.objects.filter(passage=passage).values('id', 'text', 'type', 'priority')
-    #         for question in questions:
-    #             temp_dict['passage']['question'] = question
-    #             answers = Answer.objects.filter(question=question).values('id', 'text')
-    #             temp_dict['passage']['question']['answer'] = answers
-    #         passage_question_answer.append(temp_dict)
-    #     print(passage_question_answer)
-    #     return serializers.serialize('json', passage_question_answer)
+    def get_api_passage(self):
+        passage_question_answer = []
+        passages = Passage.objects.filter(exam=self.id).values('id', 'title', 'text', 'image', 'priority')
+        for passage in passages:
+            temp_dict = passage
+            questions = Question.objects.filter(passage=passage['id']).values('id', 'text', 'type', 'priority')
+            temp_dict['question'] = []
+            i = 0
+            for question in questions:
+                temp_dict['question'].append(question)
+                answers = Answer.objects.filter(question=question['id']).values('id', 'text')
+                temp_dict['question'][i]['answer'] = []
+                for answer in answers:
+                    if question['type'] == 'text':
+                        temp_dict['question'][i]['answer'].append({
+                                                                    'id': answer['id'],
+                                                                    'text': '',
+                                                                  })
+                        # temp_dict['question'][i]['answer'].append(answer.id)
+                    else:
+                        temp_dict['question'][i]['answer'].append(answer)
+                i += 1
+            passage_question_answer.append(temp_dict)
+        return passage_question_answer
 
 
 # Passage model

@@ -37,7 +37,7 @@ class ExamList(generics.ListCreateAPIView):
         return query
 
 
-class ExamDetail(generics.RetrieveUpdateDestroyAPIView):
+class ExamDetail(generics.RetrieveAPIView):
     queryset = models.Exam.objects.all()
     serializer_class = serializers.ExamSerializers
 

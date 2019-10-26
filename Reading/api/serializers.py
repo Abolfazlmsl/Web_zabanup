@@ -11,30 +11,22 @@ class PassageSerializer(serializers.ModelSerializer):
 
 
 class ExamSerializers(serializers.ModelSerializer):
-    # passage = serializers.SerializerMethodField(read_only=True)
-    # question = serializers.SerializerMethodField(read_only=True)
-    # answer = serializers.SerializerMethodField(read_only=True)
+    passage = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = models.Exam
         fields = [
             'id',
-            'category',
-            # 'passage',
-            # 'question',
-            # 'answer',
             'book',
+            'category',
+            'difficulty',
+            'image',
+            'passage',
         ]
         depth = 4
 
-    # def get_passage(self, obj):
-    #     return obj.get_api_passage()
-
-    # def get_question(self, obj):
-    #     return obj.get_api_question()
-    #
-    # def get_answer(self, obj):
-    #     return obj.get_api_answer()
+    def get_passage(self, obj):
+        return obj.get_api_passage()
 
 
 class QuestionSerializer(serializers.ModelSerializer):
