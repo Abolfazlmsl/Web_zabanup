@@ -8,7 +8,7 @@ from . import serializers
 
 
 class ExamList(generics.ListCreateAPIView):
-    permission_classes = (IsAdminUser, IsAuthenticatedOrReadOnly)
+    # permission_classes = (IsAdminUser, IsAuthenticatedOrReadOnly)
 
     serializer_class = serializers.ExamSerializers
 
@@ -42,7 +42,7 @@ class ExamDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ExamSerializers
 
 
-class PassageList(generics.ListCreateAPIView):
+class PassageList(generics.ListAPIView):
     serializer_class = serializers.PassageSerializer
 
     def get_queryset(self):
@@ -77,7 +77,7 @@ class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.QuestionSerializer
 
 
-class AnswerList(generics.ListCreateAPIView):
+class AnswerList(generics.ListAPIView):
     serializer_class = serializers.AnswerSerializer
 
     def get_queryset(self):
@@ -94,7 +94,7 @@ class AnswerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Answer.objects.all()
 
 
-class UserAnswerList(generics.ListCreateAPIView):
+class UserAnswerList(generics.ListAPIView):
     serializer_class = serializers.UserAnswerSerializer
 
     def get_queryset(self):
@@ -109,6 +109,14 @@ class UserAnswerList(generics.ListCreateAPIView):
             query = query.filter(user=user)
 
         return query
+
+#
+# class UserAnswerCreate(generics.CreateAPIView):
+#     serializer_class = serializers.UserAnswerSerializer
+#
+#     def get_queryset(self):
+
+
 
 
 class UserAnswerDetail(generics.RetrieveAPIView):

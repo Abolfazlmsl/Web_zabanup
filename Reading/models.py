@@ -1,8 +1,15 @@
+import json
+
 from django.contrib.auth.models import User
+from django.core import serializers
 from django.db import models
 
 
 # User profile model
+from django.forms import model_to_dict
+from django.http import JsonResponse
+
+
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(primary_key=True, max_length=11)
@@ -40,6 +47,22 @@ class Exam(models.Model):
 
     def __str__(self):
         return '{}'.format(self.book)
+
+    # def get_api_passage(self):
+    #     passage_question_answer = []
+    #     temp_dict = {}
+    #     passages = Passage.objects.filter(exam=self.id).values('id', 'title', 'text', 'image', 'priority')
+    #     for passage in passages:
+    #         temp_dict.clear()
+    #         temp_dict['passage'] = passage
+    #         questions = Question.objects.filter(passage=passage).values('id', 'text', 'type', 'priority')
+    #         for question in questions:
+    #             temp_dict['passage']['question'] = question
+    #             answers = Answer.objects.filter(question=question).values('id', 'text')
+    #             temp_dict['passage']['question']['answer'] = answers
+    #         passage_question_answer.append(temp_dict)
+    #     print(passage_question_answer)
+    #     return serializers.serialize('json', passage_question_answer)
 
 
 # Passage model
