@@ -3,14 +3,7 @@ from rest_framework import serializers
 from Reading import models
 
 
-class PassageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Answer
-        fields = '__all__'
-
-
-class ExamSerializers(serializers.ModelSerializer):
+class ExamDetailSerializers(serializers.ModelSerializer):
     passage = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -23,45 +16,29 @@ class ExamSerializers(serializers.ModelSerializer):
             'image',
             'passage',
         ]
-        depth = 4
+        depth = 3
 
     def get_passage(self, obj):
         return obj.get_api_passage()
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class ExamSerializers(serializers.ModelSerializer):
 
     class Meta:
-        model = models.Question
-        fields = '__all__'
+        model = models.Exam
+        fields = [
+            'id',
+            'book',
+            'category',
+            'difficulty',
+            'image',
+        ]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = '__all__'
-
-
-
-class AnswerSerializer(serializers.ModelSerializer):
-    # question = serializers.SerializerMethodField(read_only=True)
-    passage = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = models.Answer
-        fields = [
-            'passage',
-            'question',
-            'id',
-            'text',
-        ]
-        depth = 3
-    #
-    # def get_question(self, obj):
-    #     return obj.get_api_question()
-
-    def get_passage(self, obj):
-        return obj.get_api_passage()
 
 
 class UserAnswerSerializer(serializers.ModelSerializer):

@@ -1,11 +1,13 @@
-import json
-
+import os
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.db import models
+from sorl.thumbnail import ImageField
 
 
 # User profile model
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import model_to_dict
 from django.http import JsonResponse
 
@@ -43,7 +45,7 @@ class Exam(models.Model):
     book = models.CharField(max_length=32, choices=BOOK_List)
     category = models.CharField(max_length=32, choices=CATEGORY)
     difficulty = models.CharField(max_length=32, choices=DIFFICULTY)
-    image = models.FileField(null=True, blank=True)
+    image = ImageField(upload_to='../media/', null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.book)
@@ -66,7 +68,6 @@ class Exam(models.Model):
                                                                     'id': answer['id'],
                                                                     'text': '',
                                                                   })
-                        # temp_dict['question'][i]['answer'].append(answer.id)
                     else:
                         temp_dict['question'][i]['answer'].append(answer)
                 i += 1
@@ -78,12 +79,41 @@ class Exam(models.Model):
 class Passage(models.Model):
     title = models.CharField(max_length=200)
     text = models.FileField()
-    image = models.FileField()
+    image = ImageField(upload_to='../media/')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     priority = models.PositiveIntegerField()
 
     def __str__(self):
         return self.title
+
+
+@receiver(models.signals.post_delete, sender=Passage)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+
+    if instance.text:
+        if os.path.isfile(instance.text.path):
+            os.remove(instance.text.path)
+
+    # if instance.image:
+    #     if os.path.isfile(instance.image.path):
+    #         os.remove(instance.image.path)
+
+
+@receiver(models.signals.pre_save, sender=Passage)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = Passage.objects.get(pk=instance.pk).text
+    except Passage.DoesNotExist:
+        return False
+
+    new_file = instance.text
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 
 
 # Question model

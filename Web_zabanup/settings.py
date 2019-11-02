@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Reading.apps.ReadingConfig',
-    'rest_framework'
+    'rest_framework',
+    'django_cleanup.apps.CleanupConfig',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
