@@ -1,5 +1,10 @@
-oauth2_provider
-djangorestframework
 Django==2.2.5
+django-cleanup==4.0.0
+djangorestframework==3.10.3
+djangorestframework-simplejwt==4.3.0
+oauth2-provider==0.0
+Pillow==6.2.1
+PyJWT==1.7.1
 pytz==2019.2
+sorl-thumbnail==12.5.0
 sqlparse==0.3.0
