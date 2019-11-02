@@ -33,6 +33,9 @@
             <input type="password" name="password">
         </label>
         <br/>
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
         <input class="btn btn-primary" type="submit" name="btn" value="Login">
     </form>
     {% if alert %}

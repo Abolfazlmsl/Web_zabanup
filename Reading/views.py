@@ -1,143 +1,137 @@
 import json
-
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.template import loader
 from . import models
 
 
 # Create your views here.
 
-
 # get passage details and render passage page if user is authenticated
+# @login_required(login_url="/login")
 def passage_body(request, exam_id):
     # check user is authenticated
-    if request.user.is_authenticated:
-        # this is use for refresh of submit page
-        user_answer = models.UserAnswer.objects.all().count()
+    # this is use for refresh of submit page
+    user_answer = models.UserAnswer.objects.all().count()
 
-        # get passage and question of it
-        current_exam = models.Exam.objects.get(id=exam_id)
-        all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
+    # get passage and question of it
+    current_exam = models.Exam.objects.get(id=exam_id)
+    all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
 
-        all_questions = []
-        question_type = []
-        i: int = 0
-        j: int = 0
-        questions_bound = []
-        bound_temp = 1
-        for passage in all_passages:
-            questions = models.Question.objects.filter(passage=passage).order_by('priority')
-            questions_bound.append(str(bound_temp) + '-' + str(len(questions) + bound_temp - 1))
-            bound_temp += len(questions)
-            yes_no_list = []
-            true_false_list = []
-            textbox_list = []
-            matching_heading_list = []
-            matching_paragraph_list = []
-            summary_completion_list = []
-            radiobutton_list = []
-            checkbox_list = []
-            temp_type = []
-            for question in questions:
-                j += 1
-                if question.type == 'yesno':
-                    yes_no_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'truefalse':
-                    true_false_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'text':
-                    textbox_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'matching_heading':
-                    matching_heading_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'matching_paragraph':
-                    matching_paragraph_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'summary_completion':
-                    summary_completion_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'radiobutton':
-                    radiobutton_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-                elif question.type == 'checkbox':
-                    checkbox_list.append((question.priority, question, j))
-                    if question.type not in temp_type:
-                        temp_type.append(question.type)
-            all_questions.append([true_false_list, yes_no_list, textbox_list, matching_heading_list,
-                                  matching_paragraph_list, summary_completion_list, radiobutton_list, checkbox_list])
-            question_type.append(temp_type)
-            all_questions[i].sort()
-            i += 1
-        print(questions_bound)
+    all_questions = []
+    question_type = []
+    i: int = 0
+    j: int = 0
+    questions_bound = []
+    bound_temp = 1
+    for passage in all_passages:
+        questions = models.Question.objects.filter(passage=passage).order_by('priority')
+        questions_bound.append(str(bound_temp) + '-' + str(len(questions) + bound_temp - 1))
+        bound_temp += len(questions)
+        yes_no_list = []
+        true_false_list = []
+        textbox_list = []
+        matching_heading_list = []
+        matching_paragraph_list = []
+        summary_completion_list = []
+        radiobutton_list = []
+        checkbox_list = []
+        temp_type = []
+        for question in questions:
+            j += 1
+            if question.type == 'yesno':
+                yes_no_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'truefalse':
+                true_false_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'text':
+                textbox_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'matching_heading':
+                matching_heading_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'matching_paragraph':
+                matching_paragraph_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'summary_completion':
+                summary_completion_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'radiobutton':
+                radiobutton_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'checkbox':
+                checkbox_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+        all_questions.append([true_false_list, yes_no_list, textbox_list, matching_heading_list,
+                              matching_paragraph_list, summary_completion_list, radiobutton_list, checkbox_list])
+        question_type.append(temp_type)
+        all_questions[i].sort()
+        i += 1
+    print(questions_bound)
 
-        empty = []
-        for j in range(len(all_questions)):
-            for z in range(len(all_questions[j])):
-                if empty in all_questions[j]:
-                    all_questions[j].remove(empty)
-        # print(question_type)
-        # print(all_questions)
-        # for een in all_questions[1]:
-        #     print(len(een))
+    empty = []
+    for j in range(len(all_questions)):
+        for z in range(len(all_questions[j])):
+            if empty in all_questions[j]:
+                all_questions[j].remove(empty)
 
-        len_passages = 0
-        questions_types = []
-        question_type_zip = zip(all_questions, question_type)
-        for questions, types in question_type_zip:
-            question_type_dict = {}
-            len_passages += 1
-            for i in range(len(questions)):
-                question_type_dict[types[i]] = questions[i]
-            questions_types.append(question_type_dict)
+    len_passages = 0
+    questions_types = []
+    question_type_zip = zip(all_questions, question_type)
+    for questions, types in question_type_zip:
+        question_type_dict = {}
+        len_passages += 1
+        for i in range(len(questions)):
+            question_type_dict[types[i]] = questions[i]
+        questions_types.append(question_type_dict)
 
-        prev_len = 0
-        number_of_questions = []
-        start_point = 1
-        for question in questions_types:
-            number_of_questions_dic = {}
-            for key in question:
-                if start_point == len(question[key]) + prev_len:
-                    number_of_questions_dic[key] = str(start_point)
-                else:
-                    number_of_questions_dic[key] = str(start_point) + '-' + str(len(question[key]) + prev_len)
-                prev_len += len(question[key])
-                start_point += len(question[key])
-            number_of_questions.append(number_of_questions_dic)
-            print(number_of_questions_dic)
-        # print(questions_types)
-        # get text in html form then render it
+    prev_len = 0
+    number_of_questions = []
+    start_point = 1
+    for question in questions_types:
+        number_of_questions_dic = {}
+        for key in question:
+            if start_point == len(question[key]) + prev_len:
+                number_of_questions_dic[key] = str(start_point)
+            else:
+                number_of_questions_dic[key] = str(start_point) + '-' + str(len(question[key]) + prev_len)
+            prev_len += len(question[key])
+            start_point += len(question[key])
+        number_of_questions.append(number_of_questions_dic)
+        print(number_of_questions_dic)
+    # print(questions_types)
+    # get text in html form then render it
 
-        templates = []
-        for passage in all_passages:
-            html_for_passage = str(passage.text)
-            template = loader.get_template(html_for_passage).render()
-            templates.append(template)
+    templates = []
+    for passage in all_passages:
+        html_for_passage = str(passage.text)
+        template = loader.get_template(html_for_passage).render()
+        templates.append(template)
 
-        passage_question_type_count = zip(all_passages, questions_types, questions_bound, number_of_questions, templates)
+    passage_question_type_count = zip(all_passages, questions_types, questions_bound, number_of_questions, templates)
 
-        context = {
-            'refresh_checker': user_answer + 1,
-            'current_exam': current_exam,
-            'passage_question_type_count': passage_question_type_count,
-            'len_passages': len_passages,
-        }
-        return render(request, 'Reading/passages.html', context=context)
-    else:
-        return redirect('Reading:Login')
+    context = {
+        'refresh_checker': user_answer + 1,
+        'current_exam': current_exam,
+        'passage_question_type_count': passage_question_type_count,
+        'len_passages': len_passages,
+    }
+    return render(request, 'Reading/passages.html', context=context)
 
 
 # calculate grade and submit comments
+@login_required(login_url="/login")
 def submit(request, exam_id):
     # calculate grade
     if request.POST.get('Submit'):
@@ -374,7 +368,10 @@ def login_view(request):
         # check has this user or not
         if user:
             login(request, user)
-            return redirect('Reading:home')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('Reading:home')
         else:
             return render(request, 'Reading/login.html', context={'alert': 'The information is wrong!', })
     else:
@@ -425,79 +422,81 @@ def signup_view(request):
                                           password=password)
             us.save()
             models.Profile(user=us, phone_number=phone_number, address=address).save()
-            return redirect('Reading:Login')
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('Reading:home')
     else:
         return render(request, 'Reading/signup.html')
 
 
 # show and filter exams
 def exam(request):
-    if request.user.is_authenticated:
-        # check method
-        if request.POST:
-            # get all books
-            # the filters doesn't chose return none
-            all_books = []
-            for book in models.Exam.BOOK_List:
-                all_books.append(request.POST.get(book[0]))
-            # get filter that chose by user
-            filter_book = []
-            for book in all_books:
-                if book:
-                    filter_book.append(book)
+    # check method
+    if request.POST:
+        # get all books
+        # the filters doesn't chose return none
+        all_books = []
+        for book in models.Exam.BOOK_List:
+            all_books.append(request.POST.get(book[0]))
+        # get filter that chose by user
+        filter_book = []
+        for book in all_books:
+            if book:
+                filter_book.append(book)
 
-            # get all categories
-            # the filters doesn't chose return none
-            all_categories = []
-            for category in models.Exam.CATEGORY:
-                all_categories.append(request.POST.get(category[0]))
-            # get filter that chose by user
-            filter_category = []
-            for category in all_categories:
-                if category:
-                    filter_category.append(category)
+        # get all categories
+        # the filters doesn't chose return none
+        all_categories = []
+        for category in models.Exam.CATEGORY:
+            all_categories.append(request.POST.get(category[0]))
+        # get filter that chose by user
+        filter_category = []
+        for category in all_categories:
+            if category:
+                filter_category.append(category)
 
-            # get all difficulties
-            # the filters doesn't chose return none
-            all_difficulties = []
-            for difficulty in models.Exam.DIFFICULTY:
-                all_difficulties.append(request.POST.get(difficulty[0]))
-            # get filter that chose by user
-            filter_difficulty = []
-            for difficulty in all_difficulties:
-                if difficulty:
-                    filter_difficulty.append(difficulty)
+        # get all difficulties
+        # the filters doesn't chose return none
+        all_difficulties = []
+        for difficulty in models.Exam.DIFFICULTY:
+            all_difficulties.append(request.POST.get(difficulty[0]))
+        # get filter that chose by user
+        filter_difficulty = []
+        for difficulty in all_difficulties:
+            if difficulty:
+                filter_difficulty.append(difficulty)
 
-            # filter exams
-            exams = []
-            # check if we have filter by book
-            if len(filter_book) > 0:
-                exams = models.Exam.objects.filter(book__in=filter_book)
-            # check if we have filter by category
-            if len(filter_category) > 0:
-                exams = models.Exam.objects.filter(category__in=filter_category)
-            # check if we have filter by difficulty
-            if len(filter_difficulty) > 0:
-                exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
-            # if don't chose any filter then select all exams
-            if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
-                exams = get_list_or_404(models.Exam)
-
-            exam_filter = models.Exam
-
-            # create context
-            context = {
-                'exam_filter': exam_filter,
-                'exams': exams,
-            }
-            return render(request, 'Reading/filter.html', context=context)
-        else:
+        # filter exams
+        exams = []
+        # check if we have filter by book
+        if len(filter_book) > 0:
+            exams = models.Exam.objects.filter(book__in=filter_book)
+        # check if we have filter by category
+        if len(filter_category) > 0:
+            exams = models.Exam.objects.filter(category__in=filter_category)
+        # check if we have filter by difficulty
+        if len(filter_difficulty) > 0:
+            exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
+        # if don't chose any filter then select all exams
+        if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
             exams = get_list_or_404(models.Exam)
-            exam_filter = models.Exam
-            context = {
-                'exams': exams,
-                'exam_filter': exam_filter,
-            }
-            return render(request, 'Reading/filter.html', context=context)
+
+        exam_filter = models.Exam
+
+        # create context
+        context = {
+            'exam_filter': exam_filter,
+            'exams': exams,
+        }
+        return render(request, 'Reading/filter.html', context=context)
     else:
-        return redirect('Reading:Login')
+        exams = get_list_or_404(models.Exam)
+        exam_filter = models.Exam
+        context = {
+            'exams': exams,
+            'exam_filter': exam_filter,
+        }
+        return render(request, 'Reading/filter.html', context=context)
