@@ -19,7 +19,14 @@
 
 <body>
 <!-- Nav tabs -->
+{% if request.user.is_authenticated %}
+        <button class="btn-primary"><a href="{% url 'Reading:LogOut' %}">LogOut</a> </button>
 
+{% else %}
+<div>
+    <button class="btn-primary"><a href="{% url 'Reading:Login' %}">Login</a> </button>
+</div>
+{% endif %}
 <form method="post">
     {% csrf_token %}
 <div class="container-fluid pt-2 pb-5">

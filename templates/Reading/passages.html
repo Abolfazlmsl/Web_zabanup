@@ -16,6 +16,7 @@
     <div id="header">
         <div class="row mb-3 d-none d-lg-flex" id="header-collapse">
 {#             The image of the test and name of it, on the top left, when "show test info" has pressed #}
+
             <div class="col-4 pt-2 pl-5">
                 <div class="row">
                     <div class="col-auto mr-0 mt-2">
@@ -25,6 +26,14 @@
                         <span style="font-size: 15px">{{ current_exam.book }}</span>
                     </div>
                 </div>
+                {% if request.user.is_authenticated %}
+                    <button class="btn-primary"><a href="{% url 'Reading:LogOut' %}">LogOut</a> </button>
+
+            {% else %}
+            <div>
+                <button class="btn-primary"><a href="{% url 'Reading:Login' %}">Login</a> </button>
+            </div>
+            {% endif %}
             </div>
 {#             some information about test. time of publishment, number of views and test taken number #}
             <div class="col-3 pt-3">
