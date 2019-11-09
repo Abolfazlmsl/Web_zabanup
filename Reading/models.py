@@ -55,6 +55,8 @@ class Exam(models.Model):
         passages = Passage.objects.filter(exam=self.id).values('id', 'title', 'text', 'image', 'priority')
         for passage in passages:
             temp_dict = passage
+            passage['image'] = 'http://127.0.0.1:8000/' + passage['image']
+            passage['text'] = 'http://127.0.0.1:8000/media/' + passage['text']
             questions = Question.objects.filter(passage=passage['id']).values('id', 'text', 'type', 'priority')
             temp_dict['question'] = []
             i = 0

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <label>Exam :
+            <input type="number" name="exam_id">
+        </label>
+        <label>Student :
+            <input type="text" name="student">
+        </label>
+        <input type="submit" name="filter_exam_btn" value="Filter">
+    </form>
+    {% if alert %}
+        {{ alert|linebreaks }}
+        {% else %}
+        <h2>number of exams : {{ all_user_answers.count }}</h2>
+        {% for user_answer in all_user_answers %}
+            <p> student : {{ user_answer.user.username }}</p>
+            <p> exam : {{ user_answer.exam.id }}</p>
+            <p> grade : {{ user_answer.grade }}</p>
+            <p> time : {{ user_answer.time.date }}</p>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

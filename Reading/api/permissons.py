@@ -3,12 +3,27 @@ from rest_framework import permissions
 from Reading import models
 
 
-class UserPermission(permissions.BasePermission):
-    """
-    Permission check for blacklisted IPs.
-    """
+class CurrentUserPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        # ip_addr = request.GET.get('user_id')
-        # current_user = User.objects.get(id=request.META.get('pk')).exists()
         return obj.username == request.user.username
+
+
+class CurrentProfilePermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return obj.user.username == request.user.username
+
+
+class CurrentUserAnswerPermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return request.data['user'] == request.user.id
+        elif request.method == 'GET':
+            return self.has_object_permission
+
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'GET':
+            return obj.user.username == request.user.username
+

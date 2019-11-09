@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<form action="{% url 'manager:LogOutView' %}">
+    <input type="submit" name="logout_btn" value="log out">
+</form>
+<hr>
+<hr>
+<a href="{% url 'manager:ExamList' %}">
+    Exams
+</a>
+</body>
+</html>

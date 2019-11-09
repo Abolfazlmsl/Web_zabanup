@@ -1,3 +1,4 @@
+Crypto
 Django==2.2.5
 django-cleanup==4.0.0
 djangorestframework==3.10.3

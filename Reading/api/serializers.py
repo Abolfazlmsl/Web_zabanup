@@ -41,6 +41,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserAnswerListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserAnswer
+        fields = [
+            'id',
+            'grade',
+            'user',
+            'exam',
+            'time',
+        ]
+
+
 class UserAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAnswer
@@ -58,3 +70,4 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'password', 'username', 'first_name', 'last_name', 'email')
 
+#
