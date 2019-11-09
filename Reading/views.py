@@ -78,7 +78,6 @@ def passage_body(request, exam_id):
         question_type.append(temp_type)
         all_questions[i].sort()
         i += 1
-    print(questions_bound)
 
     empty = []
     for j in range(len(all_questions)):
@@ -109,7 +108,6 @@ def passage_body(request, exam_id):
             prev_len += len(question[key])
             start_point += len(question[key])
         number_of_questions.append(number_of_questions_dic)
-        print(number_of_questions_dic)
     # print(questions_types)
     # get text in html form then render it
 
@@ -117,6 +115,7 @@ def passage_body(request, exam_id):
     for passage in all_passages:
         html_for_passage = str(passage.text)
         template = loader.get_template(html_for_passage).render()
+        print(type(template))
         templates.append(template)
 
     passage_question_type_count = zip(all_passages, questions_types, questions_bound, number_of_questions, templates)
@@ -139,11 +138,9 @@ def submit(request, exam_id):
         current_exam = models.Exam.objects.get(id=exam_id)
 
         all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
-        print(all_passages)
         all_questions = []
         for passage in all_passages:
             all_questions.extend(models.Question.objects.filter(passage=passage).order_by('priority'))
-        print(all_questions)
 
         refresh_checker = request.POST.get('refresh_checker')
 
@@ -156,26 +153,20 @@ def submit(request, exam_id):
         # get  user answer id of questions
         for question in all_questions:
             if question.type == 'truefalse':
-                # print('q' + str(question.id))
                 answer_id = request.POST.get('q' + str(question.id))
                 all_answers.append(answer_id)
 
             elif question.type == 'text':
-                # print('q' + str(question.id))
                 answer_text = request.POST.get('q' + str(question.id))
                 all_answers.append(answer_text)
 
             elif question.type == 'radiobutton':
-                # print('q' + str(question.id))
                 answer_id = request.POST.get('q' + str(question.id))
                 all_answers.append(answer_id)
 
             elif question.type == 'checkbox':
-                # print('q' + str(question.id))
                 answer_id = request.POST.getlist('q' + str(question.id))
                 all_answers.append(answer_id)
-
-        # print(all_answers)
 
         # calculate correct answers and grade
         for question, answer in zip(all_questions, all_answers):
@@ -213,8 +204,7 @@ def submit(request, exam_id):
         multi_number = 100 / len(all_questions)
         final_grade = grade * multi_number
         final_grade = round(final_grade, 2)
-        # print(final_grade)
-        # print(correct_answers)
+
         # create a json from answers
         len_all_questions = len(all_questions)
         save_list = {}
