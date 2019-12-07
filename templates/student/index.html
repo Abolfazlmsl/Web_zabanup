@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>information</title>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+    <p>Hi {{ request.user.first_name }}</p>
+    <br/>
+
+            first name: {{ user.first_name }}
+    <br/>
+
+
+            last name: {{ user.last_name }}
+    <br/>
+
+            email: {{ user.email }}
+    <br/>
+
+            username: {{ user.username }}
+    <br/>
+
+            phone number: {{ user.profile_set.first.phone_number }}
+    <br/>
+
+            address: {{ user.profile_set.first.address }}
+        <br/>
+
+{#        {% if request.GET.next %}#}
+{#            <input type="hidden" name="next" value="{{ request.GET.next }}">#}
+{#        {% endif %}#}
+
+
+
+    <button><a href="{% url 'student:edit_information' %}"> change information</a></button>
+    <button><a href="{% url 'student:answers' %}"> Your Answers result</a></button>
+{% endif %}
+</body>
+</html>

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',
+    'student.apps.StudentConfig',
 ]
 
 MIDDLEWARE = [

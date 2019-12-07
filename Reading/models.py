@@ -14,7 +14,7 @@ from django.http import JsonResponse
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(primary_key=True, max_length=11)
+    phone_number = models.CharField(max_length=11)
     address = models.TextField()
 
     def __str__(self):
@@ -170,3 +170,19 @@ class Comment(models.Model):
 
     def __str__(self):
         return '{}, {}, {}, {}'.format(self.id, self.user, self.text, self.parent_id)
+
+
+class FavoriteQuestion(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}, {}'.format(self.user, self.question)
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='receiver')
+    title = models.TextField(max_length=70, blank=False)
+    text = models.TextField(blank=False)
+    time = models.DateTimeField(auto_now=True)
