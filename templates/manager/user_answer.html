@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Exam</title>
+    <title>Taken Exams</title>
 </head>
 <body>
     <form action="" method="post">
@@ -18,7 +18,7 @@
     {% if alert %}
         {{ alert|linebreaks }}
         {% else %}
-        <h2>number of exams : {{ all_user_answers.count }}</h2>
+        <h2>number of taken exams : {{ all_user_answers.count }}</h2>
         {% for user_answer in all_user_answers %}
             <p> student : {{ user_answer.user.username }}</p>
             <p> exam : {{ user_answer.exam.id }}</p>

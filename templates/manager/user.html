@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <label>Username :
+            <input type="text" name="username">
+        </label>
+        <label>email :
+            <input type="email" name="email">
+        </label>
+        <label>phone number :
+            <input type="text" name="phone_number">
+        </label>
+        <input type="submit" name="filter_user_btn" value="Filter">
+    </form>
+    {% if alert %}
+        {{ alert|linebreaks }}
+        {% else %}
+        <h2>number of student : {{ all_user.count }}</h2>
+        {% for user in all_user %}
+            <p>first name : {{ user.first_name }}</p>
+            <p>last name : {{ user.last_name }}</p>
+            <p>username : {{ user.username }}</p>
+            <p>email : {{ user.email }}</p>
+            <p>last login : {{ user.last_login }}</p>
+            <p>date joined : {{ user.date_joined }}</p>
+            <p>phone number : {{ user.profile_set.first.phone_number }}</p>
+            <p>address : {{ user.profile_set.first.address }}</p>
+            <p><a href="{% url 'manager:UserDetail' user.id %}"><button>detail</button></a></p>
+            <p><a href="{% url 'manager:UserEdit' user.id%}"><button>edit</button></a></p>
+            <form action="{% url 'manager:UserEdit' user.id %}" method="post">
+                {% csrf_token %}
+                    <input type="submit" name="delete_btn" value="delete">
+            </form>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

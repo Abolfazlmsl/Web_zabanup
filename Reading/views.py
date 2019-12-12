@@ -426,17 +426,6 @@ def signup_view(request):
 def exam(request):
     # check method
     if request.POST:
-        # get all books
-        # the filters doesn't chose return none
-        all_books = []
-        for book in models.Exam.BOOK_List:
-            all_books.append(request.POST.get(book[0]))
-        # get filter that chose by user
-        filter_book = []
-        for book in all_books:
-            if book:
-                filter_book.append(book)
-
         # get all categories
         # the filters doesn't chose return none
         all_categories = []
@@ -461,9 +450,6 @@ def exam(request):
 
         # filter exams
         exams = []
-        # check if we have filter by book
-        if len(filter_book) > 0:
-            exams = models.Exam.objects.filter(book__in=filter_book)
         # check if we have filter by category
         if len(filter_category) > 0:
             exams = models.Exam.objects.filter(category__in=filter_category)
@@ -471,7 +457,7 @@ def exam(request):
         if len(filter_difficulty) > 0:
             exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
         # if don't chose any filter then select all exams
-        if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
+        if len(filter_difficulty) == 0 and len(filter_category) == 0:
             exams = get_list_or_404(models.Exam)
 
         exam_filter = models.Exam
@@ -483,10 +469,10 @@ def exam(request):
         }
         return render(request, 'Reading/filter.html', context=context)
     else:
-        exams = get_list_or_404(models.Exam)
+        books = get_list_or_404(models.Book)
         exam_filter = models.Exam
         context = {
-            'exams': exams,
+            'books': books,
             'exam_filter': exam_filter,
         }
         return render(request, 'Reading/filter.html', context=context)

@@ -1,32 +1,33 @@
 import os
+
 from django.contrib.auth.models import User
-from django.core import serializers
 from django.db import models
-from sorl.thumbnail import ImageField
-
-
 # User profile model
-from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.forms import model_to_dict
-from django.http import JsonResponse
+from sorl.thumbnail import ImageField
 
 
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(primary_key=True, max_length=11)
+    phone_number = models.CharField(max_length=11)
     address = models.TextField()
 
     def __str__(self):
         return '{}, {}'.format(self.user.first_name, self.user.last_name)
 
 
-# Exam model
+class Book(models.Model):
+    name = models.CharField(max_length=100)
+    rate = models.CharField(max_length=10)
+    date = models.DateField(auto_now=True)
+    test_taken = models.IntegerField()
+    image = ImageField(upload_to='../media/', null=True, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+
 class Exam(models.Model):
-    BOOK_List = [
-        ('oxford', 'Oxford'),
-        ('cambridge', 'Cambridge')
-    ]
     CATEGORY = [
         ('education', 'Education'),
         ('science', 'Science'),
@@ -42,21 +43,18 @@ class Exam(models.Model):
         ('upper_intermediate', 'Upper intermediate'),
         ('advanced', 'Advanced'),
     ]
-    book = models.CharField(max_length=32, choices=BOOK_List)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     category = models.CharField(max_length=32, choices=CATEGORY)
     difficulty = models.CharField(max_length=32, choices=DIFFICULTY)
-    image = ImageField(upload_to='../media/', null=True, blank=True)
 
     def __str__(self):
-        return '{}'.format(self.book)
+        return '{}, {}, {}'.format(self.book, self.category, self.difficulty)
 
     def get_api_passage(self):
         passage_question_answer = []
         passages = Passage.objects.filter(exam=self.id).values('id', 'title', 'text', 'image', 'priority')
         for passage in passages:
             temp_dict = passage
-            passage['image'] = 'http://127.0.0.1:8000/' + passage['image']
-            passage['text'] = 'http://127.0.0.1:8000/media/' + passage['text']
             questions = Question.objects.filter(passage=passage['id']).values('id', 'text', 'type', 'priority')
             temp_dict['question'] = []
             i = 0
@@ -133,6 +131,7 @@ class Question(models.Model):
     text = models.CharField(max_length=700)
     type = models.CharField(max_length=32, choices=CHOICES)
     priority = models.PositiveIntegerField()
+    description = models.CharField(max_length=200)
 
     def __str__(self):
         return '%s' % self.text
@@ -172,3 +171,38 @@ class Comment(models.Model):
 
     def __str__(self):
         return '{}, {}, {}, {}'.format(self.id, self.user, self.text, self.parent_id)
+
+
+class FavoriteQuestion(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}, {}'.format(self.user, self.question)
+
+
+class Ticket(models.Model):
+    CHOICES = [
+        ('practice', 'تمرین و آموزش'),
+        ('exam', 'آزمون'),
+        ('support', 'پشتیبانی'),
+        ('Sale', 'فروش'),
+    ]
+    title = models.CharField(max_length=90, blank=False)
+    staff = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='staff', null=True)
+    student = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='student', null=True)
+    date = models.DateTimeField(auto_now=True)
+    relate_unit = models.CharField(max_length=128, choices=CHOICES)
+
+    def __str__(self):
+        return '{}, {}, {}, {}'.format(self.title, self.relate_unit, self.staff, self.student)
+
+
+class TicketMessage(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    text = models.TextField(blank=False)
+    time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{}, {}'.format(self.ticket.id, self.sender)
