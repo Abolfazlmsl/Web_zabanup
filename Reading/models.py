@@ -180,9 +180,28 @@ class FavoriteQuestion(models.Model):
         return '{}, {}'.format(self.user, self.question)
 
 
-class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='receiver')
-    title = models.TextField(max_length=70, blank=False)
+class Ticket(models.Model):
+    CHOICES = [
+        ('practice', 'تمرین و آموزش'),
+        ('exam', 'آزمون'),
+        ('support', 'پشتیبانی'),
+        ('Sale', 'فروش'),
+    ]
+    title = models.CharField(max_length=90, blank=False)
+    staff = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='staff', null=True)
+    student = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='student', null=True)
+    date = models.DateTimeField(auto_now=True)
+    relate_unit = models.CharField(max_length=128, choices=CHOICES)
+
+    def str(self):
+        return '{}, {}, {}, {}'.format(self.title, self.relate_unit, self.staff, self.student)
+
+
+class TicketMessage(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField(blank=False)
     time = models.DateTimeField(auto_now=True)
+
+    def str(self):
+        return '{}, {}'.format(self.ticket, self.text)

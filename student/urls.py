@@ -17,4 +17,5 @@ urlpatterns = [
     path('answers/<int:pk>/', views.exam_answer_detail, name='examAnswerDetail'),
     path('message/', views.messages, name='messages'),
     path('sendmessage/', views.send_messages, name='send_messages'),
+    path('chat/<int:pk>/', views.chat, name='chat'),
 ]

@@ -95,7 +95,8 @@ def login_view(request):
             login(request, user)
             return redirect('student:index')
         else:
-            return render(request, 'student/login.html', context={'alert': 'user with this information does not exists!'})
+            return render(request, 'student/login.html',
+                          context={'alert': 'user with this information does not exists!'})
     else:
         return render(request, 'student/login.html')
 
@@ -139,18 +140,18 @@ def exam_answer_detail(request, pk):
         }
         return render(request, 'student/exam_detail.html', context)
     else:
-            context = {
-                'user_answer': user_answer,
-                'all_answer': all_answer,
-                'my_comment': my_comment,
-            }
+        context = {
+            'user_answer': user_answer,
+            'all_answer': all_answer,
+            'my_comment': my_comment,
+        }
 
-            return render(request, 'student/exam_detail.html', context)
+        return render(request, 'student/exam_detail.html', context)
 
 
 @login_required(login_url="/student/login/")
 def messages(request):
-    user_message = models.Message.objects.filter(receiver=request.user).order_by('time')
+    user_message = models.Ticket.objects.filter(student=request.user).order_by('time')
 
     context = {
         'user_message': user_message
@@ -160,29 +161,47 @@ def messages(request):
 
 
 def send_messages(request):
-    all_user = User.objects.exclude(id=request.user.id)
+    all_manager = User.groups.filter(name='Manager')
     if request.method == 'POST':
-        message_title = request.POST.get('message_title')
+        ticket_title = request.POST.get('ticket_title')
         message_text = request.POST.get('message_text')
+        related_unit = request.POST.get('related_unit')
 
         choosed_persons = []
 
-        for user in all_user:
-            checkbox_id = 'user'+str(user.id)
-            receiver = request.POST.get(checkbox_id)
-            if receiver:
-                choosed_persons.append(receiver)
+        for user in all_manager:
+            checkbox_id = 'user' + str(user.id)
+            manager = request.POST.get(checkbox_id)
+            if manager:
+                choosed_persons.append(manager)
 
         for person in choosed_persons:
             person_user = User.objects.get(id=person)
-            models.Message.objects.update_or_create(sender=request.user, receiver=person_user, title=message_title,
-                                                    text=message_text)
+            current_ticket = models.Ticket.objects.update_or_create(title=ticket_title, relate_unit=related_unit,
+                                                                    student=request.user, staff=person_user)
+            models.TicketMessage.objects.update_or_create(ticket=current_ticket[0], sender=request.user, text=message_text)
 
-    all_messages = models.Message.objects.filter(sender=request.user)
+    # all_messages = models.Message.objects.filter(sender=request.user)
+    all_tickets = models.Ticket.objects.filter(student=request.user)
+    choices_of_ticket = models.Ticket.CHOICES
     context = {
-        'all_user': all_user,
-        'all_messages': all_messages
+        'all_manager': all_manager,
+        # 'all_messages': all_messages,
+        'all_tickets': all_tickets,
+        'choices_of_ticket': choices_of_ticket,
     }
 
     return render(request, 'student/sent_message.html', context)
 
+
+def chat(request, pk):
+    if request.method == 'POST':
+        message_text = request.POST.get('message_text')
+
+        models.TicketMessage.objects.update_or_create(ticket_id=pk, sender=request.user, text=message_text)
+
+    all_messages = models.TicketMessage.objects.filter(ticket_id=pk).order_by('time')
+    context = {
+        'all_messages': all_messages
+    }
+    return render(request, 'student/chat.html', context=context)

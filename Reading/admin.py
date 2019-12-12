@@ -9,7 +9,8 @@ admin.site.register(models.UserAnswer)
 admin.site.register(models.Exam)
 admin.site.register(models.Comment)
 admin.site.register(models.FavoriteQuestion)
-admin.site.register(models.Message)
+admin.site.register(models.TicketMessage)
+admin.site.register(models.Ticket)
 
 
 class QuestionInline(admin.TabularInline):
