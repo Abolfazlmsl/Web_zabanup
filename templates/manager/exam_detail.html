@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>exam detail</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>book :
+        <select name="book">
+            {% for book in all_books %}
+                <option value="{{ book.id }}" {% if current_exam.book.id == book.id %} selected {% endif %}>{{ book.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br>
+    <label>category :
+        <select name="category">
+            {% for category in exam.CATEGORY %}
+                <option value="{{ category.0 }}" {% if current_exam.category == category.0 %} selected {% endif %}>{{ category.1 }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br>
+    <label>difficulty :
+        <select name="difficulty">
+            {% for difficulty in exam.DIFFICULTY %}
+                <option value="{{ difficulty.0 }}" {% if current_exam.difficulty == difficulty.0 %} selected {% endif %}>{{ difficulty.1 }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br>
+    <input type="submit" name="edit_exam_btn" value="submit">
+</form>
+</body>
+</html>

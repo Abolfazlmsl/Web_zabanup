@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam List</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <label>book :
+            <input type="text" name="book_filter">
+        </label>
+        <label>category :
+            <input type="text" name="category_filter">
+        </label>
+        <label>difficulty :
+            <input type="text" name="difficulty_filter">
+        </label>
+        <input type="submit" name="exam_filter_btn" value="filter">
+    </form>
+    <hr>
+    {% if alert %}
+        {{ alert }}
+        {% else %}
+        <h2>number of exams : {{ all_exams.count }}</h2>
+        <a href="{% url 'manager:ExamCreate' %}"><button>create new exam</button></a>
+        <hr>
+        {% for exam in all_exams %}
+            <p>book : {{ exam.book }}</p>
+            <p>category : {{ exam.category }}</p>
+            <p>difficulty : {{ exam.difficulty }}</p>
+            {% if exam.image %}
+            <p><img style="width: 400px; height: 200px" src="{% static exam.image.url %}" alt=""></p>
+            {% endif %}
+            <a href="{% url 'manager:ExamEdit' exam.id %}"><button>edit</button></a>
+            <form action="{% url 'manager:ExamEdit' exam.id %}" method="get">
+                <input type="submit" name='delete_btn' value="delete">
+            </form>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

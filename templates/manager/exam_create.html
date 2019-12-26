@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>create exam</title>
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>book :
+        <select name="book">
+            {% for book in all_books %}
+                <option value="{{ book.id }}">{{ book.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br>
+    <label>category :
+        <select name="category">
+            {% for category in exam.CATEGORY %}
+                <option value="{{ category.0 }}">{{ category.1 }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br>
+    <label>difficulty :
+        <select name="difficulty">
+            {% for difficulty in exam.DIFFICULTY %}
+                <option value="{{ difficulty.0 }}">{{ difficulty.1 }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br>
+    <input type="submit" name="create_exam_btn" value="create">
+</form>
+</body>
+</html>

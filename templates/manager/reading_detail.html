@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reading Detail</title>
+</head>
+<body>
+    <p>Title: {{ current_passage.title }}</p>
+    <p>Exam: {{ current_passage.exam }}</p>
+    <p>Priority: {{ current_passage.priority }}</p>
+    <img src="{{ current_passage.image.url }}" style="text-align: center; width: 400px" alt="passage_image">
+    <p>{{ current_passage.text|safe }}</p>
+</body>
+</html>

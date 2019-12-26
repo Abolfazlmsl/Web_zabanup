@@ -8,14 +8,13 @@ from django.conf.urls.static import static
 
 app_name = 'Reading'
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.exam, name='home'),
     path('signup/', views.signup_view, name='SignUp'),
     path('login/', views.login_view, name='Login'),
     path('logout/', views.logout_view, name='LogOut'),
     path('change_password/', views.change_password, name='changePassword'),
-    path('Exam/', views.exam, name='Exam'),
-    url(r'^Reading/(?P<passage_id>[0-9]+)/$', views.passage_body, name='passage_body'),
-    url(r'^Reading/(?P<passage_id>[0-9]+)/submit$', views.submit, name='submit'),
+    url(r'^Reading/(?P<exam_id>[0-9]+)/$', views.passage_body, name='passage_body'),
+    url(r'^Reading/(?P<exam_id>[0-9]+)/submit$', views.submit, name='submit'),
 
 ]
 
