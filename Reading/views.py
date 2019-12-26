@@ -1,209 +1,249 @@
 import json
-
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.template import loader
-
 from . import models
+
+
 # Create your views here.
 
-
-# home page that check authentication
-# if ok then render home page
-# else redirect to login page
-def home(request):
-    # check user is authenticated
-    if request.user.is_authenticated:
-        username = request.user.username
-        return render(request, 'Reading/home.html', context={'user': username})
-    else:
-        return redirect('Reading:Login')
-
-
 # get passage details and render passage page if user is authenticated
-def passage_body(request, passage_id):
+# @login_required(login_url="/login")
+def passage_body(request, exam_id):
     # check user is authenticated
-    if request.user.is_authenticated:
+    # this is use for refresh of submit page
+    user_answer = models.UserAnswer.objects.all().count()
 
-        # this is use for refresh of submit page
-        user_answer = models.UserAnswer.objects.all().count()
+    # get passage and question of it
+    current_exam = models.Exam.objects.get(id=exam_id)
+    all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
 
-        # get passage and question of it
-        passage = get_object_or_404(models.Passage, pk=passage_id)
-        questions = get_list_or_404(models.Question, passage=passage)
-
-        # define for add our questions to these list
-        dropdown = []
-        textbox = []
-        radiobutton = []
-        checkbox = []
-
-        # add same question to 4 different lists
+    all_questions = []
+    question_type = []
+    i: int = 0
+    j: int = 0
+    questions_bound = []
+    bound_temp = 1
+    for passage in all_passages:
+        questions = models.Question.objects.filter(passage=passage).order_by('priority')
+        questions_bound.append(str(bound_temp) + '-' + str(len(questions) + bound_temp - 1))
+        bound_temp += len(questions)
+        yes_no_list = []
+        true_false_list = []
+        textbox_list = []
+        matching_heading_list = []
+        matching_paragraph_list = []
+        summary_completion_list = []
+        radiobutton_list = []
+        checkbox_list = []
+        temp_type = []
         for question in questions:
-            # dropdown questions
-            if question.type == 'dropdown':
-                dropdown.append(question)
-            # textbox questions
+            j += 1
+            if question.type == 'yesno':
+                yes_no_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'truefalse':
+                true_false_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
             elif question.type == 'text':
-                textbox.append(question)
-            # radiobutton questions
+                textbox_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'matching_heading':
+                matching_heading_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'matching_paragraph':
+                matching_paragraph_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+            elif question.type == 'summary_completion':
+                summary_completion_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
             elif question.type == 'radiobutton':
-                radiobutton.append(question)
-            # checkbox questions
+                radiobutton_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
             elif question.type == 'checkbox':
-                checkbox.append(question)
+                checkbox_list.append((question.priority, question, j))
+                if question.type not in temp_type:
+                    temp_type.append(question.type)
+        all_questions.append([true_false_list, yes_no_list, textbox_list, matching_heading_list,
+                              matching_paragraph_list, summary_completion_list, radiobutton_list, checkbox_list])
+        question_type.append(temp_type)
+        all_questions[i].sort()
+        i += 1
 
-        # get text in html form then render it
-        ht = str(passage.text)
-        template = loader.get_template(ht).render()
-        print(passage.text.url)
-        exam = models.Exam.objects.filter(reading=passage)[0]
-        print(exam)
-        # create a context
-        context = {
-            'passage': passage,
-            'dropdown': dropdown,
-            'textbox': textbox,
-            'radiobutton': radiobutton,
-            'checkbox': checkbox,
-            'exam': exam,
-            'temp': template,
-            'refresh_checker': user_answer + 1,
-        }
-        return render(request, 'Reading/passages.html', context=context)
-    else:
-        return redirect('Reading:Login')
+    empty = []
+    for j in range(len(all_questions)):
+        for z in range(len(all_questions[j])):
+            if empty in all_questions[j]:
+                all_questions[j].remove(empty)
+
+    len_passages = 0
+    questions_types = []
+    question_type_zip = zip(all_questions, question_type)
+    for questions, types in question_type_zip:
+        question_type_dict = {}
+        len_passages += 1
+        for i in range(len(questions)):
+            question_type_dict[types[i]] = questions[i]
+        questions_types.append(question_type_dict)
+
+    prev_len = 0
+    number_of_questions = []
+    start_point = 1
+    for question in questions_types:
+        number_of_questions_dic = {}
+        for key in question:
+            if start_point == len(question[key]) + prev_len:
+                number_of_questions_dic[key] = str(start_point)
+            else:
+                number_of_questions_dic[key] = str(start_point) + '-' + str(len(question[key]) + prev_len)
+            prev_len += len(question[key])
+            start_point += len(question[key])
+        number_of_questions.append(number_of_questions_dic)
+    # print(questions_types)
+    # get text in html form then render it
+
+    templates = []
+    for passage in all_passages:
+        html_for_passage = str(passage.text)
+        template = loader.get_template(html_for_passage).render()
+        print(type(template))
+        templates.append(template)
+
+    passage_question_type_count = zip(all_passages, questions_types, questions_bound, number_of_questions, templates)
+
+    context = {
+        'refresh_checker': user_answer + 1,
+        'current_exam': current_exam,
+        'passage_question_type_count': passage_question_type_count,
+        'len_passages': len_passages,
+    }
+    return render(request, 'Reading/passages.html', context=context)
 
 
 # calculate grade and submit comments
-def submit(request, passage_id):
+@login_required(login_url="/login")
+def submit(request, exam_id):
     # calculate grade
     if request.POST.get('Submit'):
         # get passage and question
-        passage = get_object_or_404(models.Passage, pk=passage_id)
-        questions = get_list_or_404(models.Question, passage=passage)
+        current_exam = models.Exam.objects.get(id=exam_id)
+
+        all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
+        all_questions = []
+        for passage in all_passages:
+            all_questions.extend(models.Question.objects.filter(passage=passage).order_by('priority'))
+
         refresh_checker = request.POST.get('refresh_checker')
-        # initial counter for each type of question
-        dropdown_count = 0
-        textbox_count = 0
-        radiobutton_count = 0
-        checkbox_count = 0
-        # initial list for each type of question
-        dropdown_list = []
-        textbox_list = []
-        radiobutton_list = []
-        checkbox_list = []
+
+        all_answers = []
         correct_answers = []
 
         grade = 0
 
-        # calculate question of each type
-        for question in questions:
-            if question.type == 'dropdown':
-                dropdown_count += 1
-            elif question.type == 'text':
-                textbox_count += 1
-            elif question.type == 'radiobutton':
-                radiobutton_count += 1
-            elif question.type == 'checkbox':
-                checkbox_count += 1
-
         # get user answers
         # get  user answer id of questions
-        for i in range(dropdown_count):
-            plus = str(i+1)
-            answer_id = request.POST.get('q' + plus)
-            dropdown_list.append(answer_id)
-        for i in range(textbox_count):
-            # hidden_plus used for get text box question id
-            hidden_plus = str(i+1)
-            plus = str(i+1+dropdown_count)
-            answer_text = request.POST.get('q' + plus)
-            question_id = request.POST.get('hidden' + hidden_plus)
-            textbox_list.append([question_id, answer_text])
-        for i in range(radiobutton_count):
-            plus = str(i+1+dropdown_count+textbox_count)
-            answer_id = request.POST.get('q' + plus)
-            radiobutton_list.append(answer_id)
-        for i in range(checkbox_count):
-            plus = str(i+1+dropdown_count+textbox_count+radiobutton_count)
-            answer_id = request.POST.getlist('q' + plus)
-            question_id = request.POST.get('q' + plus + '_id')
-            checkbox_list.append([question_id, answer_id])
+        for question in all_questions:
+            if question.type == 'truefalse':
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
+
+            elif question.type == 'text':
+                answer_text = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_text)
+
+            elif question.type == 'radiobutton':
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
+
+            elif question.type == 'checkbox':
+                answer_id = request.POST.getlist('q' + str(question.id))
+                all_answers.append(answer_id)
 
         # calculate correct answers and grade
-        for answer in dropdown_list:
-            if answer:
-                my_answer = get_object_or_404(models.Answer, id=answer).truth
-                if my_answer:
-                    correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
+        for question, answer in zip(all_questions, all_answers):
+            if question.type == 'truefalse':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'text':
+                if answer == get_object_or_404(models.Answer, question=question.id).text:
+                    correct_answers.append(question.id)
+                    grade += 1
+            elif question.type == 'radiobutton':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'checkbox':
+                count_q = 0
+                answers_q = get_list_or_404(models.Answer, question=question)
+                for ans in answers_q:
+                    if ans.truth:
+                        count_q += 1
+                for ans in answer:
+                    if get_object_or_404(models.Answer, id=ans).truth:
+                        count_q -= 1
+                    else:
+                        count_q += 1
+                if count_q == 0:
+                    correct_answers.append(question.id)
                     grade += 1
 
-        for answer in textbox_list:
-            if answer[1] == get_object_or_404(models.Answer, question=answer[0]).text:
-                correct_answers.append(int(answer[0]))
-                grade += 1
-
-        for answer in radiobutton_list:
-            if answer:
-                my_answer = get_object_or_404(models.Answer, id=answer).truth
-                if my_answer:
-                    correct_answers.append(get_object_or_404(models.Answer, id=answer).question_id)
-                    grade += 1
-
-        for i in checkbox_list:
-            count_q = 0
-            question = get_object_or_404(models.Question, id=i[0])
-            answers_q = get_list_or_404(models.Answer, question=question)
-            for answer in answers_q:
-                if answer.truth:
-                    count_q += 1
-            for answer in i[1]:
-                if get_object_or_404(models.Answer, id=answer).truth:
-                    count_q -= 1
-                else:
-                    count_q += 1
-            if count_q == 0:
-                correct_answers.append(int(i[0]))
-                grade += 1
-
-        multi_number = 100 / passage.question_set.all().__len__()
-        final_grade = grade*multi_number
+        multi_number = 100 / len(all_questions)
+        final_grade = grade * multi_number
+        final_grade = round(final_grade, 2)
 
         # create a json from answers
+        len_all_questions = len(all_questions)
         save_list = {}
-        for question in passage.question_set.all():
+        for question, i in zip(all_questions, range(len_all_questions)):
             if question.id in correct_answers:
-                save_list[str(question.id)] = "correct"
+                save_list[str(i+1)] = "correct"
             else:
-                save_list[str(question.id)] = "wrong"
+                save_list[str(i+1)] = "wrong"
+
+        print(save_list)
         save_list = json.dumps(save_list)
         # save user grade
-        models.UserAnswer.objects.update_or_create(user=request.user, passage=passage, grade=final_grade,
+        models.UserAnswer.objects.update_or_create(user=request.user, exam=current_exam, grade=final_grade,
                                                    answer=str(save_list), counter=refresh_checker)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_user_answer = models.UserAnswer.objects.filter(passage=passage, user=request.user).last()
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_user_answer = models.UserAnswer.objects.filter(exam=current_exam, user=request.user).last()
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
+
         context = {
-            'passage': passage,
+            'all_questions': all_questions,
+            'all_passages': all_passages,
             'grade': final_grade,
             'correct_answers': correct_answers,
             'users_answer': users_answer,
             'last_user_answer': last_user_answer,
             'all_comments': all_comments,
+            'exam': current_exam,
             'comment': 0,
         }
         return render(request, 'Reading/submit.html', context)
 
     elif request.POST.get('comment-submit'):
 
-        passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+        current_exam = models.Exam.objects.get(id=exam_id)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, exam=current_exam, user=request.user).pop()
 
         comment_text = request.POST.get('comment_text')
         # change user answer to json
@@ -216,17 +256,17 @@ def submit(request, passage_id):
         last_user_answer = last_answer
         # add user comment to database
         if comment_text:
-            models.Comment.objects.update_or_create(passage=passage, text=comment_text, user=request.user)
+            models.Comment.objects.update_or_create(exam=current_exam, text=comment_text, user=request.user)
 
         final_grade = last_answer.grade
         # get all comments of passage from database
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
 
         context = {
-            'passage': passage,
+            'exam': current_exam,
             'grade': final_grade,
             'users_answer': users_answer,
             'my_answer': my_answers,
@@ -238,9 +278,9 @@ def submit(request, passage_id):
 
     elif request.POST.get('reply-submit'):
 
-        passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+        current_exam = models.Exam.objects.get(id=exam_id)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, exam=current_exam, user=request.user).pop()
         # get reply text and parent id of that reply
         reply_text = request.POST.get('reply-text')
         reply_parent_id = request.POST.get('hidden-reply')
@@ -254,16 +294,16 @@ def submit(request, passage_id):
 
         last_user_answer = last_answer
         # save reply to database
-        models.Comment.objects.update_or_create(passage=passage, text=reply_text, user=request.user, parent=reply_to)
+        models.Comment.objects.update_or_create(exam=current_exam, text=reply_text, user=request.user, parent=reply_to)
 
         final_grade = last_answer.grade
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
 
         context = {
-            'passage': passage,
+            'exam': current_exam,
             'grade': final_grade,
             'users_answer': users_answer,
             'my_answer': my_answers,
@@ -275,10 +315,10 @@ def submit(request, passage_id):
         return render(request, 'Reading/submit.html', context)
 
     else:
-        
-        passage = models.Passage.objects.get(id=passage_id)
-        users_answer = models.UserAnswer.objects.filter(passage=passage).order_by('-grade')
-        last_answer = get_list_or_404(models.UserAnswer, passage=passage, user=request.user).pop()
+
+        current_exam = models.Exam.objects.get(id=exam_id)
+        users_answer = models.UserAnswer.objects.filter(exam=current_exam).order_by('-grade')
+        last_answer = get_list_or_404(models.UserAnswer, exam=current_exam, user=request.user).pop()
 
         my_answer = last_answer.answer
         my_answer = json.loads(my_answer)
@@ -289,13 +329,13 @@ def submit(request, passage_id):
         last_user_answer = last_answer
         final_grade = last_answer.grade
 
-        if models.Comment.objects.filter(passage=passage):
-            all_comments = models.Comment.objects.filter(passage=passage)
+        if models.Comment.objects.filter(exam=current_exam):
+            all_comments = models.Comment.objects.filter(exam=current_exam)
         else:
             all_comments = []
 
         context = {
-            'passage': passage,
+            'exam': current_exam,
             'grade': final_grade,
             'users_answer': users_answer,
             'my_answer': my_answers,
@@ -318,7 +358,10 @@ def login_view(request):
         # check has this user or not
         if user:
             login(request, user)
-            return redirect('Reading:home')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('Reading:home')
         else:
             return render(request, 'Reading/login.html', context={'alert': 'The information is wrong!', })
     else:
@@ -341,7 +384,7 @@ def change_password(request):
         newpass = request.POST['newpass']
         u.set_password(newpass)
         u.save()
-        return redirect('Reading:submit')
+        return redirect('Reading:home')
     else:
         return render(request, 'Reading/change_password.html')
 
@@ -369,7 +412,12 @@ def signup_view(request):
                                           password=password)
             us.save()
             models.Profile(user=us, phone_number=phone_number, address=address).save()
-            return redirect('Reading:Login')
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('Reading:home')
     else:
         return render(request, 'Reading/signup.html')
 
@@ -378,20 +426,6 @@ def signup_view(request):
 def exam(request):
     # check method
     if request.POST:
-        # get current user
-        username = request.user.username
-
-        # get all books
-        # the filters doesn't chose return none
-        all_books = []
-        for book in models.Exam.BOOK_List:
-            all_books.append(request.POST.get(book[0]))
-        # get filter that chose by user
-        filter_book = []
-        for book in all_books:
-            if book:
-                filter_book.append(book)
-
         # get all categories
         # the filters doesn't chose return none
         all_categories = []
@@ -416,9 +450,6 @@ def exam(request):
 
         # filter exams
         exams = []
-        # check if we have filter by book
-        if len(filter_book) > 0:
-            exams = models.Exam.objects.filter(book__in=filter_book)
         # check if we have filter by category
         if len(filter_category) > 0:
             exams = models.Exam.objects.filter(category__in=filter_category)
@@ -426,7 +457,7 @@ def exam(request):
         if len(filter_difficulty) > 0:
             exams = models.Exam.objects.filter(difficulty__in=filter_difficulty)
         # if don't chose any filter then select all exams
-        if len(filter_difficulty) == 0 and len(filter_category) == 0 and len(filter_book) == 0:
+        if len(filter_difficulty) == 0 and len(filter_category) == 0:
             exams = get_list_or_404(models.Exam)
 
         exam_filter = models.Exam
@@ -436,13 +467,12 @@ def exam(request):
             'exam_filter': exam_filter,
             'exams': exams,
         }
-
         return render(request, 'Reading/filter.html', context=context)
     else:
-        exams = get_list_or_404(models.Exam)
+        books = get_list_or_404(models.Book)
         exam_filter = models.Exam
         context = {
-            'exams': exams,
+            'books': books,
             'exam_filter': exam_filter,
         }
         return render(request, 'Reading/filter.html', context=context)

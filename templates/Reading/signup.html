@@ -45,7 +45,9 @@
             address: <br/>
             <textarea name="address"></textarea>
         </label><br>
-
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
         <input class="btn btn-primary" type="submit" name="btn" value="Sign Up">
     </form>
     {% if alert %}

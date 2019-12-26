@@ -19,7 +19,14 @@
 
 <body>
 <!-- Nav tabs -->
+{% if request.user.is_authenticated %}
+        <button class="btn-primary"><a href="{% url 'Reading:LogOut' %}">LogOut</a> </button>
 
+{% else %}
+<div>
+    <button class="btn-primary"><a href="{% url 'Reading:Login' %}">Login</a> </button>
+</div>
+{% endif %}
 <form method="post">
     {% csrf_token %}
 <div class="container-fluid pt-2 pb-5">
@@ -28,7 +35,6 @@
             <div class="panel-group " id="accordion">
                 <div class="panel panel-default">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-
                         <div class="panel-heading">
                             <h5 class="panel-title z-depth-1" style="font-size: 110%">
                                 Book
@@ -112,7 +118,7 @@
 
                                     <!--Card image-->
                                     <div class="view overlay hm-black-light" >
-                                        <a href="{% url 'Reading:passage_body' exam.reading.id%}">
+                                        <a href="{% url 'Reading:passage_body' exam.id%}">
                                             <img src="{% static exam.image.url %}" class="img-fluid" alt="">
                                         </a>
                                     </div>

@@ -283,7 +283,7 @@ a:hover{
     @media (max-width: 992px) {
         #section{
             position: fixed;
-            bottom: 256px;
+            bottom: 56px;
             height: 50px;
             width: 100%;
             background-color: rgb(212, 214, 222);
@@ -332,11 +332,10 @@ a:hover{
             margin-top: -100px;
         }
         #footer-buttons-small{
-            display: flex;
+            margin-bottom: -35px;
             height: fit-content;
             align-self: center;
             justify-content: center;
-            margin-bottom: -15px;
         }
         #footer-buttons-small a{
             width: 100px;
@@ -354,7 +353,7 @@ a:hover{
     @media (min-width: 992px) {
         #section{
             position: fixed;
-            bottom: 156px;
+            bottom: 56px;
             right: 0;
             width: 50%;
             height: 50px;

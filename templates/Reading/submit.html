@@ -13,8 +13,8 @@
 <div class="" style="margin: 4%">
 {% if comment == 0 %}
 <h4>Dear {{ request.user.first_name }}</h4>
-<h4>Your Answers to the Passage {{ passage.id }} are:</h4>
-{% for question in passage.question_set.all %}
+<h4>Your Answers to the exam are:</h4>
+{% for question in all_questions %}
     {% if question.id in correct_answers %}
         <p>{{ forloop.counter }}- correct</p>
     {% else %}
@@ -51,7 +51,7 @@
 
 {% if comment == 1 %}
     <h4>Dear {{ request.user.first_name }}</h4>
-    <h4>Your Answers to the Passage {{ passage.id }} are:</h4>
+    <h4>Your Answers to the Passage {{ exam.id }} are:</h4>
     {% for answer in my_answer %}
         {{ forloop.counter }}-
         {{ answer }}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket</title>
+</head>
+<body>
+<form action="" method="post">
+    {% csrf_token %}
+    <label>student:
+        <input type="text" name="student">
+    </label>
+    <label>title:
+        <input type="text" name="title">
+    </label>
+    <input type="submit" value="search" name="ticket_search">
+</form>
+<hr>
+<a href="{% url 'manager:SendTicket' %}"><button>create new ticket</button></a>
+<hr>
+{% if alert %}
+    {{ alert }}
+{% else %}
+{% for ticket in all_tickets %}
+    <p>ticket: {{ forloop.counter }}</p>
+    <p>title: {{ ticket.title }}</p>
+    <p>subject: {{ ticket.relate_unit }}</p>
+    <p>staff: {{ ticket.staff }}</p>
+    <p>student: {{ ticket.student }}</p>
+    <a href="{% url 'manager:TicketHistory' ticket.id %}"><button>select</button></a>
+    <hr>
+{% endfor %}
+{% endif %}
+</body>
+</html>
