@@ -15,7 +15,9 @@ urlpatterns = [
     path('change_password/', views.change_password, name='changePassword'),
     path('answers/', views.answers, name='answers'),
     path('answers/<int:pk>/', views.exam_answer_detail, name='examAnswerDetail'),
-    path('message/', views.messages, name='messages'),
-    path('sendmessage/', views.send_messages, name='send_messages'),
-    path('chat/<int:pk>/', views.chat, name='chat'),
+    path('tickets/', views.tickets, name='tickets'),
+    path('sendticket/', views.send_tickets, name='send_tickets'),
+    path('ticketchat/<int:pk>/', views.ticket_chat, name='ticket_chat'),
+    path('userchat/', views.user_chat, name='user_chat'),
+    path('chat/<int:pk>', views.chat, name='chat'),
 ]

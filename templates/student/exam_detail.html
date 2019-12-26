@@ -24,7 +24,7 @@
     {% for comment in my_comment %}
         <p>{{ comment.text }}</p>
         <input type="submit" value="delete" name="delete">
-        <input type="text" hidden value="{{ comment.id }}" name="cmnt_id">
+        <input type="text" hidden value="{{ comment.id }}" name="comment_id">
     {% endfor %}
     </form>
 

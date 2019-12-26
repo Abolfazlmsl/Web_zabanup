@@ -11,6 +11,8 @@ admin.site.register(models.Comment)
 admin.site.register(models.FavoriteQuestion)
 admin.site.register(models.TicketMessage)
 admin.site.register(models.Ticket)
+admin.site.register(models.Chat)
+admin.site.register(models.ChatMessage)
 
 
 class QuestionInline(admin.TabularInline):

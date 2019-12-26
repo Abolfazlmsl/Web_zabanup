@@ -3,15 +3,13 @@ from django.contrib.auth.models import User
 from django.core import serializers
 from django.db import models
 from sorl.thumbnail import ImageField
-
-
-# User profile model
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.forms import model_to_dict
 from django.http import JsonResponse
 
 
+# User profile model
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=11)
@@ -87,6 +85,7 @@ class Passage(models.Model):
         return self.title
 
 
+# delete passage image file when admin deletes passage image
 @receiver(models.signals.post_delete, sender=Passage)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
 
@@ -99,6 +98,7 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
     #         os.remove(instance.image.path)
 
 
+#  delete old passage image when admin changes it with a new one!
 @receiver(models.signals.pre_save, sender=Passage)
 def auto_delete_file_on_change(sender, instance, **kwargs):
 
@@ -172,6 +172,7 @@ class Comment(models.Model):
         return '{}, {}, {}, {}'.format(self.id, self.user, self.text, self.parent_id)
 
 
+# Favorite Question of a User Model
 class FavoriteQuestion(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -180,6 +181,7 @@ class FavoriteQuestion(models.Model):
         return '{}, {}'.format(self.user, self.question)
 
 
+# Ticket Model
 class Ticket(models.Model):
     CHOICES = [
         ('practice', 'تمرین و آموزش'),
@@ -197,6 +199,7 @@ class Ticket(models.Model):
         return '{}, {}, {}, {}'.format(self.title, self.relate_unit, self.staff, self.student)
 
 
+# Messages of a Ticket model
 class TicketMessage(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -205,3 +208,24 @@ class TicketMessage(models.Model):
 
     def str(self):
         return '{}, {}'.format(self.ticket, self.text)
+
+
+# Chat Model
+class Chat(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='sender', null=True)
+    receiver = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='receiver', null=True)
+    date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{}, {}, {}'.format(self.sender, self.receiver, self.id)
+
+
+# Messages of a Chat Model
+class ChatMessage(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    text = models.TextField(blank=False)
+    time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{}, {}, {}'.format(self.chat, self.sender, self.text)
