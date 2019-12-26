@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sent</title>
+</head>
+<body>
+<h4>Send message to someOne!</h4>
+<div class="send-message">
+    <form method="post" action="">
+    {% csrf_token %}
+    <input type="text" placeholder="Put your Title here..." name="ticket_title" style="margin-bottom: 1%"/> <br/>
+    <textarea placeholder="Put your message here..." name="message_text"></textarea> <br/>
+    <p>for Who? </p>
+    {% for user in all_manager %}
+        <input type="checkbox"  name="user{{ user.id }}" value="{{ user.id }}"> {{ user.username }} <br/>
+    {% endfor %}
+    <select name="related_unit">
+    {% for unit in choices_of_ticket %}
+        <option value="{{ unit.0 }}">{{ unit.1 }}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" value="Send">
+    </form>
+
+    <hr style="margin-top: 2%"/>
+{#    <h3>History of sent messages </h3>#}
+{#    {% for message in all_messages %}#}
+{#        <div style="border-style: solid; margin-bottom: 1%">#}
+{#            <p>To: {{ message.receiver.first_name }} {{ message.receiver.last_name }}</p> <hr/>#}
+{#            <h3>title: {{ message.title }}</h3>#}
+{#            <h4>{{ message.text }}</h4>#}
+{#        </div>#}
+{#    {% endfor %}#}
+    <h3>History of Chats</h3>
+    {% for ticket in all_tickets %}
+        <a href= {% url 'student:chat' ticket.id %}>{{ ticket.receiver }} - {{ ticket.title }}</a> <br/>
+    {% endfor %}
+
+
+</div>
+</body>
+</html>

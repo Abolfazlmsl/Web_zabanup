@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>messages</title>
+</head>
+<body>
+<h2>Messages from Admin</h2>
+{% for message in user_message %}
+    <div style="border-style: solid; margin-bottom: 3%">
+    <h4>{{ message.title }}</h4>
+    <hr/>
+    <h6>{{ message.text }}</h6>
+    <hr style="width: 25%;margin-left: 0"/>
+    <p>{{ message.time }}</p>
+    </div>
+{% endfor %}
+</body>
+</html>

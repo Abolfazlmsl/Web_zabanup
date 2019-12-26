@@ -139,10 +139,18 @@ def submit(request, exam_id):
 
         all_passages = models.Passage.objects.filter(exam=current_exam).order_by('priority')
         all_questions = []
+        all_favorite_question = []
+
         for passage in all_passages:
             all_questions.extend(models.Question.objects.filter(passage=passage).order_by('priority'))
 
         refresh_checker = request.POST.get('refresh_checker')
+
+        for question in all_questions:
+            favorite_question_checker = request.POST.get('favorite' + str(question.id))
+            if favorite_question_checker:
+                models.FavoriteQuestion.objects.update_or_create(user=request.user, question=question)
+
 
         all_answers = []
         correct_answers = []
@@ -294,7 +302,7 @@ def submit(request, exam_id):
 
         last_user_answer = last_answer
         # save reply to database
-        models.Comment.objects.update_or_create(exam=current_exam, text=reply_text, user=request.user, parent=reply_to)
+        models.Comment.objects.update_or_cureate(exam=current_exam, text=reply_text, user=request.user, parent=reply_to)
 
         final_grade = last_answer.grade
         if models.Comment.objects.filter(exam=current_exam):
@@ -375,18 +383,7 @@ def logout_view(request):
 
 
 # change password of user
-def change_password(request):
-    # check our method is post
-    if request.method == 'POST':
-        # get currently user
-        u = User.objects.get(username=request.user.username)
-        # get new password write by user and save it in db
-        newpass = request.POST['newpass']
-        u.set_password(newpass)
-        u.save()
-        return redirect('Reading:home')
-    else:
-        return render(request, 'Reading/change_password.html')
+
 
 
 # signup of user

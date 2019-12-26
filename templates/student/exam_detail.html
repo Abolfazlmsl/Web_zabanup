@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Detail</title>
+</head>
+<body>
+    <h2>Your top 10 Answers</h2>
+    {% for answer in user_answer %}
+    {{ forloop.counter }} - <span style="color: red">{{ answer.grade }}</span> {{ answer.time }} - {{ answer.exam.book }} <br/>
+    {% endfor %}
+    <h2>Top 10 Answers of Members</h2>
+    {% for answer in all_answer %}
+        {% if answer.user == request.user %}
+            <p style="color: #1e7e34">{{ forloop.counter }} - <span style="color: red">{{ answer.grade }}</span> {{ answer.time }} - {{ answer.exam.book }} - {{ answer.user }}</p> <br/>
+        {% else %}
+            <p>{{ forloop.counter }} - <span style="color: red">{{ answer.grade }}</span> {{ answer.time }} - {{ answer.exam.book }} - {{ answer.user }}</p> <br/>
+        {% endif %}
+    {% endfor %}
+<hr/>
+
+    <form action="" method="post">
+    {% csrf_token %}
+    {% for comment in my_comment %}
+        <p>{{ comment.text }}</p>
+        <input type="submit" value="delete" name="delete">
+        <input type="text" hidden value="{{ comment.id }}" name="comment_id">
+    {% endfor %}
+    </form>
+
+{% if no_comment %}
+    {{ no_comment }}
+{% endif %}
+</body>
+</html>

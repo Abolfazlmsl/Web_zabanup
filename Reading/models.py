@@ -1,11 +1,9 @@
 import os
-
 from django.contrib.auth.models import User
 from django.db import models
-# User profile model
-from django.dispatch import receiver
 from sorl.thumbnail import ImageField
-from tinymce.models import HTMLField
+
+# User profile model
 from ckeditor.fields import RichTextField
 
 
@@ -175,6 +173,7 @@ class Comment(models.Model):
         return '{}, {}, {}, {}'.format(self.id, self.user, self.text, self.parent_id)
 
 
+# Favorite Question of a User Model
 class FavoriteQuestion(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -183,6 +182,7 @@ class FavoriteQuestion(models.Model):
         return '{}, {}'.format(self.user, self.question)
 
 
+# Ticket Model
 class Ticket(models.Model):
     CHOICES = [
         ('practice', 'تمرین و آموزش'),
@@ -196,15 +196,37 @@ class Ticket(models.Model):
     date = models.DateTimeField(auto_now=True)
     relate_unit = models.CharField(max_length=128, choices=CHOICES)
 
-    def __str__(self):
+    def str(self):
         return '{}, {}, {}, {}'.format(self.title, self.relate_unit, self.staff, self.student)
 
 
+# Messages of a Ticket model
 class TicketMessage(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     text = models.TextField(blank=False)
     time = models.DateTimeField(auto_now=True)
 
+    def str(self):
+        return '{}, {}'.format(self.ticket, self.text)
+
+
+# Chat Model
+class Chat(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='sender', null=True)
+    receiver = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='receiver', null=True)
+    date = models.DateTimeField(auto_now=True)
+
     def __str__(self):
-        return '{}, {}'.format(self.ticket.id, self.sender)
+        return '{}, {}, {}'.format(self.sender, self.receiver, self.id)
+
+
+# Messages of a Chat Model
+class ChatMessage(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    text = models.TextField(blank=False)
+    time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return '{}, {}, {}'.format(self.chat, self.sender, self.text)
