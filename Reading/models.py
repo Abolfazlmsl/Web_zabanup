@@ -5,6 +5,8 @@ from django.db import models
 # User profile model
 from django.dispatch import receiver
 from sorl.thumbnail import ImageField
+from tinymce.models import HTMLField
+from ckeditor.fields import RichTextField
 
 
 class Profile(models.Model):
@@ -78,7 +80,7 @@ class Exam(models.Model):
 # Passage model
 class Passage(models.Model):
     title = models.CharField(max_length=200)
-    text = models.FileField()
+    text = RichTextField()
     image = ImageField(upload_to='../media/')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     priority = models.PositiveIntegerField()
@@ -87,33 +89,33 @@ class Passage(models.Model):
         return self.title
 
 
-@receiver(models.signals.post_delete, sender=Passage)
-def auto_delete_file_on_delete(sender, instance, **kwargs):
-
-    if instance.text:
-        if os.path.isfile(instance.text.path):
-            os.remove(instance.text.path)
-
-    # if instance.image:
-    #     if os.path.isfile(instance.image.path):
-    #         os.remove(instance.image.path)
-
-
-@receiver(models.signals.pre_save, sender=Passage)
-def auto_delete_file_on_change(sender, instance, **kwargs):
-
-    if not instance.pk:
-        return False
-
-    try:
-        old_file = Passage.objects.get(pk=instance.pk).text
-    except Passage.DoesNotExist:
-        return False
-
-    new_file = instance.text
-    if not old_file == new_file:
-        if os.path.isfile(old_file.path):
-            os.remove(old_file.path)
+# @receiver(models.signals.post_delete, sender=Passage)
+# def auto_delete_file_on_delete(sender, instance, **kwargs):
+#
+#     if instance.text:
+#         if os.path.isfile(instance.text.path):
+#             os.remove(instance.text.path)
+#
+#     if instance.image:
+#         if os.path.isfile(instance.image.path):
+#             os.remove(instance.image.path)
+#
+#
+# @receiver(models.signals.pre_save, sender=Passage)
+# def auto_delete_file_on_change(sender, instance, **kwargs):
+#
+#     if not instance.pk:
+#         return False
+#
+#     try:
+#         old_file = Passage.objects.get(pk=instance.pk).text
+#     except Passage.DoesNotExist:
+#         return False
+#
+#     new_file = instance.text
+#     if not old_file == new_file:
+#         if os.path.isfile(old_file.path):
+#             os.remove(old_file.path)
 
 
 # Question model

@@ -10,8 +10,8 @@
     {% csrf_token %}
     <label>book :
         <select name="book">
-            {% for book in exam.BOOK_List %}
-                <option value="{{ book.0 }}" {% if current_exam.book == book.0 %} selected {% endif %}>{{ book.1 }}</option>
+            {% for book in all_books %}
+                <option value="{{ book.id }}" {% if current_exam.book.id == book.id %} selected {% endif %}>{{ book.name }}</option>
             {% endfor %}
         </select>
     </label>
@@ -31,11 +31,6 @@
             {% endfor %}
         </select>
     </label>
-    {% if current_exam.image %}
-        <p><img src="{{ current_exam.image.url }}" alt=""></p>
-    {% endif %}
-    <br>
-    <input type="file" name="image">
     <br>
     <input type="submit" name="edit_exam_btn" value="submit">
 </form>

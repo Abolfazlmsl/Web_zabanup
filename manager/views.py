@@ -254,13 +254,14 @@ def exam_create(request):
             book = request.POST.get('book')
             category = request.POST.get('category')
             difficulty = request.POST.get('difficulty')
-            image = request.POST.get('image')
             # save it
-            models.Exam.objects.create(book=book, difficulty=difficulty, category=category, image=image)
+            models.Exam.objects.create(book_id=book, difficulty=difficulty, category=category)
             return redirect('manager:ExamList')
         else:
+            all_books = models.Book.objects.all()
             context = {
-                'exam': models.Exam
+                'all_books': all_books,
+                'exam': models.Exam,
             }
             return render(request, 'manager/exam_create.html', context)
     return redirect('manager:LoginView')
@@ -283,25 +284,27 @@ def exam_edit(request, pk):
             book = request.POST.get('book')
             category = request.POST.get('category')
             difficulty = request.POST.get('difficulty')
-            image = None
-            if request.FILES:
-                image = request.FILES['image']
+            # image = None
+            # if request.FILES:
+            #     image = request.FILES['image']
 
             # save new information
             current_exam = models.Exam.objects.get(id=pk)
-            current_exam.book = book
+            current_exam.book.id = book
             current_exam.category = category
             current_exam.difficulty = difficulty
-            if image is not None:
-                current_exam.image = image
+            # if image is not None:
+            #     current_exam.image = image
             current_exam.save()
 
             return redirect('manager:ExamList')
 
         else:
             current_exam = models.Exam.objects.get(id=pk)
+            all_books = models.Book.objects.all()
             context = {
                 'current_exam': current_exam,
+                'all_books': all_books,
                 'exam': models.Exam,
             }
             return render(request, 'manager/exam_detail.html', context)
@@ -380,13 +383,59 @@ def ticket(request):
 
 # this view for show messages of a ticket or send message in ticket
 def ticket_history(request, pk):
-    # this part for send message
-    if request.method == 'POST':
-        text = request.POST.get('new_message')
-        models.TicketMessage.objects.update_or_create(ticket_id=pk, text=text, sender=request.user)
-    # end filtering part
-    messages_for_ticket = models.TicketMessage.objects.filter(ticket_id=pk)
+    # check the login user is staff or superuser
+    if request.user.groups.filter(name='Manager').exists() or request.user.is_superuser:
+        # this part for send message
+        if request.method == 'POST':
+            text = request.POST.get('new_message')
+            models.TicketMessage.objects.update_or_create(ticket_id=pk, text=text, sender=request.user)
+        # end filtering part
+        messages_for_ticket = models.TicketMessage.objects.filter(ticket_id=pk)
+        context = {
+            'messages_for_ticket': messages_for_ticket,
+        }
+        return render(request, 'manager/ticket_history.html', context)
+    return redirect('manager:LoginView')
+
+
+def reading_list(request):
+    all_reading = models.Passage.objects.all()
     context = {
-        'messages_for_ticket': messages_for_ticket,
+        'all_reading': all_reading,
     }
-    return render(request, 'manager/ticket_history.html', context)
+    return render(request, 'manager/reading_list.html', context)
+
+
+def book_list(request):
+    return render(request, 'manager/book_list.html')
+
+
+def reading_create(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        exam = request.POST.get('exam')
+        image = None
+        if request.FILES:
+            image = request.FILES['image']
+        priority = request.POST.get('priority')
+        text = request.POST.get('text')
+        models.Passage.objects.create(title=title, exam_id=exam, image=image, priority=priority, text=text)
+        print(text)
+        return redirect('manager:ReadingList')
+    all_exam = models.Exam.objects.all()
+    context = {
+        'all_exam': all_exam,
+    }
+    return render(request, 'manager/reading_create.html', context)
+
+
+def reading_detail(request, pk):
+    current_passage = models.Passage.objects.get(id=pk)
+    context = {
+        'current_passage': current_passage,
+    }
+    return render(request, 'manager/reading_detail.html', context)
+
+
+def reading_edit(request, pk):
+    return render(request, 'manager/reading_edit.html')

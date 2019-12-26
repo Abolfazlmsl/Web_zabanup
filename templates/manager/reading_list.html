@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reading List</title>
+</head>
+<body>
+<a href="{% url 'manager:ReadingCreate' %}"><button>create new reading</button></a>
+<hr>
+{% for reading in all_reading %}
+    <p>Title: {{ reading.title }}</p>
+    <p>exam: {{ reading.exam }}</p>
+    <p>priority: {{ reading.priority }}</p>
+    <a href="{% url 'manager:ReadingDetail' reading.id %}"><button>Detail</button></a>
+    <br>
+    <a href="{% url 'manager:ReadingEdit' reading.id %}"><button>Edit</button></a>
+    <form action="{% url 'manager:ReadingEdit' reading.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="delete_reading" value="Delete">
+    </form>
+    <hr>
+{% endfor %}
+</body>
+</html>

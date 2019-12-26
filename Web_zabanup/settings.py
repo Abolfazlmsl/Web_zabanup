@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',
     'manager.apps.ManagerConfig',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -167,3 +168,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/static/media")
 STATICFILES_DIRS = [
     os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/static"),
 ]
+
+
+

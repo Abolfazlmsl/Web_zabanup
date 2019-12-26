@@ -5,12 +5,12 @@
     <title>create exam</title>
 </head>
 <body>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <label>book :
         <select name="book">
-            {% for book in exam.BOOK_List %}
-                <option value="{{ book.0 }}">{{ book.1 }}</option>
+            {% for book in all_books %}
+                <option value="{{ book.id }}">{{ book.name }}</option>
             {% endfor %}
         </select>
     </label>
@@ -30,8 +30,6 @@
             {% endfor %}
         </select>
     </label>
-    <br>
-    <input type="file" name="image">
     <br>
     <input type="submit" name="create_exam_btn" value="create">
 </form>
