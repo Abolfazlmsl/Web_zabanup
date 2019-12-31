@@ -8,34 +8,38 @@ from ckeditor.fields import RichTextField
 
 
 class Profile(models.Model):
+    GENDER = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=11)
-    address = models.TextField()
+    gender = models.CharField(max_length=128, choices=GENDER)
 
     def __str__(self):
-        return '{}, {}'.format(self.user.first_name, self.user.last_name)
+        return '{}, {}, {}'.format(self.user.first_name, self.user.last_name, self.gender)
 
 
 class Book(models.Model):
     name = models.CharField(max_length=100)
-    rate = models.CharField(max_length=10)
+    rate = models.CharField(max_length=10, blank=True, null=True)
     date = models.DateField(auto_now=True)
-    test_taken = models.IntegerField()
+    test_taken = models.IntegerField(blank=True, null=True)
     image = ImageField(upload_to='../media/', null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.name)
 
 
+class ExamCategory(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+
 class Exam(models.Model):
-    CATEGORY = [
-        ('education', 'Education'),
-        ('science', 'Science'),
-        ('economic', 'Economic'),
-        ('sport', 'Sport'),
-        ('nature_and_environment', 'Nature and Environment'),
-        ('technology', 'Technology'),
-    ]
+
     DIFFICULTY = [
         ('beginner', 'Beginner'),
         ('pre_intermediate', 'Pre intermediate'),
@@ -44,7 +48,7 @@ class Exam(models.Model):
         ('advanced', 'Advanced'),
     ]
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    category = models.CharField(max_length=32, choices=CATEGORY)
+    category = models.ManyToManyField(ExamCategory)
     difficulty = models.CharField(max_length=32, choices=DIFFICULTY)
 
     def __str__(self):

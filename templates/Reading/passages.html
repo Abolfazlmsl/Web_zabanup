@@ -92,8 +92,8 @@
                     </li>
 {#                     an item of the list that shows "Exit" #}
                     <li>
-                        <a href="{% url 'Reading:home' %}" class="d-lg-none"><i class="fa fa-sign-in-alt mr-3"></i>Exit</a>
-                        <a href="{% url 'Reading:home' %}" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Exit"><i class="fa fa-sign-in-alt mr-2"></i></a>
+                        <a href="{% url 'Reading:Index' %}" class="d-lg-none"><i class="fa fa-sign-in-alt mr-3"></i>Exit</a>
+                        <a href="{% url 'Reading:Index' %}" class="d-none d-lg-block mx-3 mt-1" style="font-size: 25px" data-toggle="tooltip" title="Exit"><i class="fa fa-sign-in-alt mr-2"></i></a>
                     </li>
                 </ul>
             </nav>
@@ -535,11 +535,11 @@
     </div>
 </footer>
 {# importing javascript files to project #}
-<script src="{% static 'Reading/JavaScript/jquery-3.3.1.slim.min.js' %}"></script>
-<script src="{% static 'Reading/JavaScript/popper.min.js' %}"></script>
-<script src="{% static 'Reading/JavaScript/bootstrap.min.js' %}"></script>
-<script src="{% static 'Reading/JavaScript/scripts.js' %}"></script>
-<script src="{%  static 'Reading/JavaScript/all.js' %}"></script>
+<script src="{% static 'Reading/js/jquery-3.3.1.slim.min.js' %}"></script>
+<script src="{% static 'Reading/js/popper.min.js' %}"></script>
+<script src="{% static 'Reading/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'Reading/js/scripts.js' %}"></script>
+<script src="{%  static 'Reading/js/all.js' %}"></script>
 
 
 
