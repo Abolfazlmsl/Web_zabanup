@@ -481,7 +481,13 @@ def index(request):
 
 def book(request):
     books = models.Book.objects.all()
+    exams = models.Exam.objects.all()
+    exam_category = models.ExamCategory.objects.all()
+    question_type = models.Question.CHOICES
     context = {
         'books': books,
+        'exams': exams,
+        'exam_category': exam_category,
+        'question_type': question_type,
     }
     return render(request, 'Reading/books.html', context=context)
