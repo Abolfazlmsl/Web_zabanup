@@ -1,0 +1,55 @@
+{% extends 'Reading/base.html' %}
+{% block title %}
+    <title>
+        زبان‌آپ | ارزیابی سطح زبان
+    </title>
+{% endblock %}
+
+{% block body %}
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'Reading/Css/index.css' %}">
+
+    <!--Navbar-->
+    {% include 'Reading/header.html' %}
+    <!--/.Navbar-->
+
+    <div class="container my-5 z-depth-1">
+
+
+        <!--Section: Content-->
+        <section class="dark-grey-text">
+
+            <div class="row pr-lg-5">
+                <div class="col-md-7 mb-4">
+
+                    <div class="view my-5  rounded" >
+                        <img src="{% static 'Reading/Images/zabanup.jpg' %}" class="img-fluid" alt="زبان آپ">
+                    </div>
+
+                </div>
+                <div class="col-md-5 d-flex align-items-center">
+                    <div style="font-family: Yekan" class="text-center">
+
+                        <h3 class="font-weight-bold mb-4">آزمون آنلاین IELTS </h3>
+                        <h1 class="font-weight-bold mb-4" style="color: red">زبان آپ</h1>
+
+                        <p>
+                            آزمون یادگیری علمی زبان توسط مدرس حرفه ای با تکنیک های بسیار ساده و فوق العاده کاربردی. متناسب برای زبان آموزان.
+                            <br>
+                            تربیت مدرس زبان به صورت حرفه ای.
+                        </p>
+                        <a href="{% url 'Reading:Book' %}">
+                            <button type="button" class="btn btn-rounded mx-0 text-white" style="background-color: rgb(66, 133, 244)">برگذاری آزمون</button>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!--Section: Content-->
+
+
+    </div>
+
+{% endblock %}

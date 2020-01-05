@@ -1,0 +1,7 @@
+@font-face {
+    src: url("../Fonts/Yekan.ttf");
+    font-family: Yekan;
+}
+.navbar{
+    font-family: Yekan;
+}

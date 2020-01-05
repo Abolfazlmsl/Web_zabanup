@@ -8,12 +8,16 @@ from ckeditor.fields import RichTextField
 
 
 class Profile(models.Model):
+    GENDER = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=11)
-    address = models.TextField()
+    gender = models.CharField(max_length=128, choices=GENDER)
 
     def __str__(self):
-        return '{}, {}'.format(self.user.first_name, self.user.last_name)
+        return '{}, {}, {}'.format(self.user.first_name, self.user.last_name, self.gender)
 
 
 class Book(models.Model):
