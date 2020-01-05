@@ -14,12 +14,9 @@ class Profile(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=11)
-<<<<<<< HEAD
     address = models.TextField()
     picture = models.FileField(null=True, blank=True)
-=======
     gender = models.CharField(max_length=128, choices=GENDER)
->>>>>>> origin/master
 
     def __str__(self):
         return '{}, {}, {}'.format(self.user.first_name, self.user.last_name, self.gender)
