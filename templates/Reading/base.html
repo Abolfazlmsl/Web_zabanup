@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block description %}
+
+    {% endblock %}
+{#    <link rel="stylesheet" href="{% static '/static/kootwall/css/bootstrap.min.css' %}">#}
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'Reading/css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'Reading/css/mdb.min.css' %}" >
+    <link rel="stylesheet" href="{% static 'Reading/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'Reading/css/rtl.css' %}">
+    <style>
+        @font-face {
+            src: url("../../static/Reading/Fonts/Yekan.ttf");
+            font-family: Yekan, Calibri;
+        }
+    </style>
+
+    {% block title %}
+
+    {% endblock %}
+
+</head>
+
+<body style="direction: rtl ; text-align: right ; font-family: IRANSans,serif !important; font-size: 14px" id="home">
+
+
+    <main class="container-fluid" style="max-width: calc(1800px + 2%); margin-top: 20px">
+
+        {% block body %}
+        {% endblock %}
+    </main>
+
+
+
+    <!-- hidden url params to send to js -->
+    <input type="hidden" id="url-home" data-url="{% url 'Reading:Index' %}" />
+    <input type="hidden" id="url-base" data-url="http://{{ request.get_host }}/" />
+
+
+    <script src="{% static 'Reading/js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'Reading/js/popper.min.js' %}"></script>
+    <script src="{% static 'Reading/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'Reading/js/mdb.min.js' %}"></script>
+
+    <script>
+        $("#go-to-top").click(function () {
+            $("html, body").animate({scrollTop: 0}, 1000);
+        })
+    </script>
+
+    {% block JavaScript %}
+
+    {% endblock %}
+</body>
+</html>

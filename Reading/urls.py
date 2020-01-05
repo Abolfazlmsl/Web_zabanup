@@ -8,7 +8,9 @@ from django.conf.urls.static import static
 
 app_name = 'Reading'
 urlpatterns = [
-    path('', views.exam, name='home'),
+    path('', views.index, name='Index'),
+    path('book/', views.book, name='Book'),
+    path('book/<int:pk>/', views.exam, name='Exam'),
     path('signup/', views.signup_view, name='SignUp'),
     path('login/', views.login_view, name='Login'),
     path('logout/', views.logout_view, name='LogOut'),
