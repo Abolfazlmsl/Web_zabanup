@@ -484,9 +484,20 @@ def book(request):
     exams = models.Exam.objects.all()
     exam_category = models.ExamCategory.objects.all()
     question_type = models.Question.CHOICES
+    question_type_for_exam = []
+    for exam in exams:
+        temp = []
+        all_passages = models.Passage.objects.filter(exam=exam)
+        for passage in all_passages:
+            all_questions = models.Question.objects.filter(passage=passage)
+            for question in all_questions:
+                if question.type not in question_type_for_exam:
+                    temp.append(question.type)
+        question_type_for_exam.append(temp)
+    exam_with_question_type = zip(exams, question_type_for_exam)
     context = {
         'books': books,
-        'exams': exams,
+        'exams': exam_with_question_type,
         'exam_category': exam_category,
         'question_type': question_type,
     }
