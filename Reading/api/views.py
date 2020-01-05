@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from rest_framework import generics
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from . import permissons
 from Reading import models
@@ -159,3 +160,79 @@ def aes_encrypt(text, key):
     cipher_text = cipher.encrypt(text)
     return cipher_text
 
+
+@api_view(['get'])
+def book(request):
+    exam_detail_json = {}
+
+    # book part
+    all_books = models.Book.objects.all()
+    book_list = []
+    for t_book in all_books:
+        temp_dictionary = {
+            "id": t_book.id,
+            "name": t_book.name,
+            "image": t_book.image.url
+        }
+        book_list.append(temp_dictionary)
+    exam_detail_json['book'] = book_list
+
+    # categories part
+    all_categories = models.ExamCategory.objects.all()
+    category_list = []
+    for category in all_categories:
+        temp_dictionary = {
+            "id": category.id,
+            "name": category.name
+        }
+        category_list.append(temp_dictionary)
+    exam_detail_json['category'] = category_list
+
+    # question type part
+    question_type = models.Question.CHOICES
+    type_list = []
+    for qt in question_type:
+        temp_dictionary = {
+            "name": qt[0],
+            "value": qt[1]
+        }
+        type_list.append(temp_dictionary)
+    exam_detail_json['question_type'] = type_list
+
+    # passage type part
+    exam_detail_json['passage_type'] = []
+
+    # exam part
+    all_exams = models.Exam.objects.all()
+    exam_list = []
+    for exam in all_exams:
+        first_passage = models.Passage.objects.get(exam=exam, priority=1)
+        temp_dictionary = {
+            "id": exam.id,
+            "book": exam.book_id,
+            "name": first_passage.title,
+            "image": first_passage.image.url,
+            "categories": [],
+            "questions_type": [],
+        }
+        for category in exam.category.all():
+            temp_dictionary_sec = {
+                'id': category.id,
+                'name': category.name
+            }
+            temp_dictionary["categories"].append(temp_dictionary_sec)
+        temp = []
+        all_passages = models.Passage.objects.filter(exam=exam)
+        for passage in all_passages:
+            all_questions = models.Question.objects.filter(passage=passage)
+            for question in all_questions:
+                if question.type not in temp:
+                    temp.append(question.type)
+                    temp_dictionary_sec = {
+                        'name': question.type
+                    }
+                    temp_dictionary["questions_type"].append(temp_dictionary_sec)
+        exam_list.append(temp_dictionary)
+    exam_detail_json['exams'] = exam_list
+
+    return JsonResponse(exam_detail_json, safe=False)

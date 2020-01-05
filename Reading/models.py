@@ -11,6 +11,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=11)
     address = models.TextField()
+    picture = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return '{}, {}'.format(self.user.first_name, self.user.last_name)
@@ -119,7 +120,8 @@ class Passage(models.Model):
 # Question model
 class Question(models.Model):
     CHOICES = [
-        ('dropdown', (('truefalse', 'TrueFalse'), ('yesno', 'YesNo'))),
+        ('truefalse', 'TrueFalse'),
+        ('yesno', 'YesNo'),
         ('text', 'Text'),
         ('matching_heading', 'Matching Heading'),
         ('matching_paragraph', 'Matching Paragraph'),
