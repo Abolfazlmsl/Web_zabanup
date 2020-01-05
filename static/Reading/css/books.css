@@ -1,3 +1,13 @@
+@font-face {
+    src: url("../Fonts/Yekan/Weblogma_Yekan.ttf");
+    font-family: Yekan;
+}
+
+@font-face {
+    src: url("../Fonts/Segoe/Segoe-UI.ttf") format('truetype');
+    src: url("../Fonts/Segoe/Segoe-UI.woff") format('woff');
+    font-family: segoe;
+}
 * {
   box-sizing: border-box;
 }

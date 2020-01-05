@@ -100,7 +100,7 @@
                         {% for book in books %}
                             <div class="form-check d-flex align-items-center my-2 p-0" style="direction: ltr">
                                 <input class="form-check-input" type="checkbox" id="book-{{ book.id }}">
-                                <label class="form-check-label"  for="book-{{ book.id }}" style="font-size: 17px">
+                                <label class="form-check-label"  for="book-{{ book.id }}" style="font-size: 16px; font-family: segoe">
                                     {{ book.name }}
                                 </label>
                             </div>
@@ -139,7 +139,12 @@
                     <hr class="mt-1 mb-4">
                     <div class="book-carousel owl-carousel owl-theme">
                         {% for exam in exams %}
-                            {% if category.name in exam.category.all %}
+                            <p>cat :{{ category }}</p>
+                            <p>count :{{ exam.category.all.count }}</p>
+                            {% for cat in exam.category.all%}
+                                <p>all: {{ cat }}</p>
+                            {% endfor %}
+                            {% if category in exam.category.all %}
                                 <div class="{{category.name}} book-cart mx-auto item zoom">
                                     <div class="content">
                                         <img src="{% static 'Reading/Images/zabanup.jpg' %}" alt="Mountains" style="width:100%">
