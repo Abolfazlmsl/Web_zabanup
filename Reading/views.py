@@ -369,7 +369,7 @@ def login_view(request):
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             else:
-                return redirect('Reading:home')
+                return redirect('Reading:Index')
         else:
             return render(request, 'Reading/login.html', context={'alert': 'The information is wrong!', })
     else:
@@ -379,11 +379,7 @@ def login_view(request):
 # logout from website
 def logout_view(request):
     logout(request)
-    return redirect('Reading:home')
-
-
-# change password of user
-
+    return redirect('Reading:Index')
 
 
 # signup of user
@@ -397,7 +393,8 @@ def signup_view(request):
         phone_number = request.POST.get('phone_number')
         password = request.POST.get('password')
         re_password = request.POST.get('re_password')
-        address = request.POST.get('address')
+        gender = request.POST.get('gender')
+        print(gender)
         # check password and verify password be same
         if password != re_password:
             context = {
@@ -408,19 +405,22 @@ def signup_view(request):
             us = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username,
                                           password=password)
             us.save()
-            models.Profile(user=us, phone_number=phone_number, address=address).save()
+            models.Profile(user=us, phone_number=phone_number, gender=gender).save()
             user = authenticate(request, username=username, password=password)
             login(request, user)
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             else:
-                return redirect('Reading:home')
+                return redirect('Reading:Index')
     else:
-        return render(request, 'Reading/signup.html')
+        context = {
+            'genders': models.Profile.GENDER,
+        }
+        return render(request, 'Reading/signup.html', context=context)
 
 
 # show and filter exams
-def exam(request):
+def exam(request, pk):
     # check method
     if request.POST:
         # get all categories
@@ -464,12 +464,41 @@ def exam(request):
             'exam_filter': exam_filter,
             'exams': exams,
         }
-        return render(request, 'Reading/filter.html', context=context)
+        return render(request, 'Reading/exam.html', context=context)
     else:
-        books = get_list_or_404(models.Book)
+        exams = models.Exam.objects.filter(book_id=pk)
         exam_filter = models.Exam
         context = {
-            'books': books,
+            'exams': exams,
             'exam_filter': exam_filter,
         }
-        return render(request, 'Reading/filter.html', context=context)
+        return render(request, 'Reading/exam.html', context=context)
+
+
+def index(request):
+    return render(request, 'Reading/index.html')
+
+
+def book(request):
+    books = models.Book.objects.all()
+    exams = models.Exam.objects.all()
+    exam_category = models.ExamCategory.objects.all()
+    question_type = models.Question.CHOICES
+    question_type_for_exam = []
+    for exam in exams:
+        temp = []
+        all_passages = models.Passage.objects.filter(exam=exam)
+        for passage in all_passages:
+            all_questions = models.Question.objects.filter(passage=passage)
+            for question in all_questions:
+                if question.type not in question_type_for_exam:
+                    temp.append(question.type)
+        question_type_for_exam.append(temp)
+    exam_with_question_type = zip(exams, question_type_for_exam)
+    context = {
+        'books': books,
+        'exams': exam_with_question_type,
+        'exam_category': exam_category,
+        'question_type': question_type,
+    }
+    return render(request, 'Reading/books.html', context=context)
