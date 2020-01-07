@@ -164,7 +164,23 @@ def submit(request, exam_id):
                 answer_id = request.POST.get('q' + str(question.id))
                 all_answers.append(answer_id)
 
+            elif question.type == 'yesno':
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
+
+            elif question.type == 'matching_heading':
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
+
+            elif question.type == 'matching_paragraph':
+                answer_id = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_id)
+
             elif question.type == 'text':
+                answer_text = request.POST.get('q' + str(question.id))
+                all_answers.append(answer_text)
+
+            elif question.type == 'summary_completion':
                 answer_text = request.POST.get('q' + str(question.id))
                 all_answers.append(answer_text)
 
@@ -184,6 +200,28 @@ def submit(request, exam_id):
                     if my_answer:
                         correct_answers.append(question.id)
                         grade += 1
+            elif question.type == 'yesno':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'matching_heading':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'matching_paragraph':
+                if answer:
+                    my_answer = get_object_or_404(models.Answer, id=answer).truth
+                    if my_answer:
+                        correct_answers.append(question.id)
+                        grade += 1
+            elif question.type == 'summary_completion':
+                if answer == get_object_or_404(models.Answer, question=question.id).text:
+                    correct_answers.append(question.id)
+                    grade += 1
             elif question.type == 'text':
                 if answer == get_object_or_404(models.Answer, question=question.id).text:
                     correct_answers.append(question.id)

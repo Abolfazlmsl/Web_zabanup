@@ -5,15 +5,14 @@ from Reading import models
 
 class ExamDetailSerializers(serializers.ModelSerializer):
     passage = serializers.SerializerMethodField(read_only=True)
-
     class Meta:
         model = models.Exam
+
         fields = [
             'id',
             'book',
             'category',
             'difficulty',
-            'image',
             'passage',
         ]
         depth = 3
@@ -31,7 +30,6 @@ class ExamSerializers(serializers.ModelSerializer):
             'book',
             'category',
             'difficulty',
-            'image',
         ]
 
 

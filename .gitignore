@@ -2,6 +2,7 @@
 /.idea/
 /Reading/__pycache__/
 /Reading/migrations/
+/static/media/
 /venv/
 /__pycache__/
 /admin/

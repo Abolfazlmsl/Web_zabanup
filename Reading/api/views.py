@@ -38,6 +38,19 @@ class ExamDetail(generics.RetrieveAPIView):
     queryset = models.Exam.objects.all()
     serializer_class = serializers.ExamDetailSerializers
 
+    def get_queryset(self):
+        query = models.Exam.objects.all()
+
+        exam = self.request.GET.get('exam')
+        user = self.request.GET.get('user')
+
+        if exam is not None:
+            query = query.filter(exam=exam)
+        if user is not None:
+            query = query.filter(user=user)
+
+        return query
+
 
 class UserAnswerList(generics.ListAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
