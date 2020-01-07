@@ -164,46 +164,57 @@ def aes_encrypt(text, key):
 @api_view(['get'])
 def book(request):
     exam_detail_json = {}
+    question_type_filter = request.GET.get('question_type')
+    category_filter = request.GET.get('category')
+    book_filter = request.GET.get('book')
 
-    # book part
-    all_books = models.Book.objects.all()
-    book_list = []
-    for t_book in all_books:
-        temp_dictionary = {
-            "id": t_book.id,
-            "name": t_book.name,
-            "image": t_book.image.url
-        }
-        book_list.append(temp_dictionary)
-    exam_detail_json['book'] = book_list
+    # check user want filter exams or not
+    if not book_filter and not category_filter and not question_type_filter:
+        # book part
+        all_books = models.Book.objects.all()
+        book_list = []
+        for t_book in all_books:
+            temp_dictionary = {
+                "id": t_book.id,
+                "name": t_book.name,
+                "image": t_book.image.url
+            }
+            book_list.append(temp_dictionary)
+        exam_detail_json['book'] = book_list
 
-    # categories part
-    all_categories = models.ExamCategory.objects.all()
-    category_list = []
-    for category in all_categories:
-        temp_dictionary = {
-            "id": category.id,
-            "name": category.name
-        }
-        category_list.append(temp_dictionary)
-    exam_detail_json['category'] = category_list
+        # categories part
+        all_categories = models.ExamCategory.objects.all()
+        category_list = []
+        for category in all_categories:
+            temp_dictionary = {
+                "id": category.id,
+                "name": category.name
+            }
+            category_list.append(temp_dictionary)
+        exam_detail_json['category'] = category_list
 
-    # question type part
-    question_type = models.Question.CHOICES
-    type_list = []
-    for qt in question_type:
-        temp_dictionary = {
-            "name": qt[0],
-            "value": qt[1]
-        }
-        type_list.append(temp_dictionary)
-    exam_detail_json['question_type'] = type_list
+        # question type part
+        question_type = models.Question.CHOICES
+        type_list = []
+        for qt in question_type:
+            temp_dictionary = {
+                "name": qt[0],
+                "value": qt[1]
+            }
+            type_list.append(temp_dictionary)
+        exam_detail_json['question_type'] = type_list
 
-    # passage type part
-    exam_detail_json['passage_type'] = []
+        # passage type part
+        exam_detail_json['passage_type'] = []
 
     # exam part
     all_exams = models.Exam.objects.all()
+    if book_filter:
+        all_exams.filter(book_id=book_filter)
+    if category_filter:
+        all_exams.filter(category_id=category_filter)
+    if question_type_filter:
+        all_exams.filter(passage__question__type__in=question_type_filter)
     exam_list = []
     for exam in all_exams:
         first_passage = models.Passage.objects.get(exam=exam, priority=1)
