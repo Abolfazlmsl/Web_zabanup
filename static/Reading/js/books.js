@@ -123,7 +123,7 @@ function getData() {
                     `<button class="btn btn-sm btn-rounded" style="font-size: 12px" id="category-${item.id}" onclick="filterSelection('${item.name}')">${item.name}</button>`
                 )
             });
-            console.log(categoryInfo)
+            // console.log(categoryInfo)
             activeBtn();
 
             // Books information
@@ -157,17 +157,17 @@ function getData() {
                     value: item["value"]
                 });
             });
-            console.log(questionTypeInfo.length);
+            // console.log(questionTypeInfo);
             questionTypeInfo.map(item => {
                 $("#question-type-choices").append(
                     `<div class="form-check d-flex align-items-center my-2 p-0" style="direction: ltr">` +
-                        `<input class="form-check-input" type="checkbox" id="${item.name}">` +
+                        `<input class="form-check-input question-type-item" type="checkbox" id="${item.name}" onclick="filterQType(${item.name})">` +
                         `<label class="form-check-label"  for="${item.name}" style="font-size: 17px">` +
                             `${item.value}` +
                         `</label>` +
                     `</div>`
                 )
-            })
+            });
 
             // Exam information
             let examInfo = [];
@@ -198,36 +198,37 @@ function getData() {
                     exams: exam
                 })
             }
-            console.log(examList);
+            // console.log(examList);
             examList.map(item => {
                 $("#show-exams-container").append(
-                    `<div class="col-12 ${item.category}-box">` +
-                        `<b class="mr-2" style="font-size: 18px">${item.category}</b>` +
-                        `<hr class="mt-1 mb-4">` +
-                        `<div class="book-carousel" id="${item.category}">` +
+                    `<div class="col-12 mb-0 ${item.category}-box">` +
+                        `<b class="mr-2" style="font-size: 18px; font-family: segoe, Yekan; font-weight: bold">${item.category}</b>` +
+                        `<hr class="mt-1 mb-0">` +
+                        `<div class="book-carousel p-3" id="${item.category}">` +
 
-                        `</div>` +
-                        `<div class="row filtered-${item.category} d-none mx-0">` +
-                            `<div class="${item.category}-filtered book-cart item mx-auto mx-md-2 my-1">` +
-
-                            `</div>` +
                         `</div>` +
                     `</div>`
                 );
                 item.exams.map(itm => {
-                    console.log(item.category)
+                    // console.log(item.category);
                     $(`#${item.category}`).append(
-                        `<div class="book-cart mx-auto item zoom">` +
-                            `<div class="content">` +
-                                `<img src="${itm.image}" alt="Mountains" style="width:100%">` +
-                                `<h6 class="mt-3">${itm.name}</h6>` +
-                                `<h6 class="mt-3">${itm.categories.name}</h6>` +
-                                `<p>Description of ${itm.book}</p>` +
+                        `<div class="view overlay zoom book-cart" id="exam-${itm.id}" style="overflow: hidden" book="${itm.book}">` +
+                            `<img src="${itm.image}" class="img-fluid rounded" alt="${itm.name}" style="height: 200px!important;">` +
+                                `<div class="mask flex-center take-test">` +
+                                `<button class="btn peach-gradient z-depth-4 btn-rounded w-100 mx-4" style="font-family: segoe; font-weight: bold; color: black">Take Test</button>`+
                             `</div>` +
+                            `<p class="text-uppercase text-center mt-4 mb-0" style="font-family: segoe, Yekan">${itm.name}</p>` +
                         `</div>`
-                    )
+                    );
+                    // console.log(itm.question_type)
+                    itm.question_type.map(type => {
+                        $(`#exam-${itm.id}`).attr('questionType', type.name)
+                    });
+                    itm.categories.map(type => {
+                        $(`#exam-${itm.id}`).attr('categories', type.id)
+                    });
                 })
-            })
+            });
 
 //       `<div class="content">` +
 //                                     `<img src="{% static 'Reading/Images/zabanup.jpg' %}" alt="Mountains" style="width:100%">` +
@@ -245,7 +246,7 @@ function activeBtn() {
     var btnContainer = document.getElementById("exam-categories");
     var btns = btnContainer.getElementsByClassName("btn");
     for (var i = 0; i < btns.length; i++) {
-        console.log("btns: " + btns.length);
+        // console.log("btns: " + btns.length);
       btns[i].addEventListener("click", function(){
         var current = document.getElementsByClassName("active");
         current[0].className = current[0].className.replace(" active", "");
@@ -256,6 +257,7 @@ function activeBtn() {
 
 function addOwl() {
     $(".book-carousel").addClass('owl-carousel').addClass('owl-theme');
+    // $(".book-cart").addClass('col-auto').addClass('col-md-6').addClass('col-lg-4').addClass('my-3');
     $('.owl-carousel').owlCarousel({
         rtl:true,
         loop:false,
@@ -267,11 +269,25 @@ function addOwl() {
                 items:1
             },
             600:{
-                items:3
+                items:2
             },
             1000:{
-                items:4
+                items:3
             }
         }
     });
+}
+
+function filterQType(QTypeId){
+    let selectedTypeList = [];
+    $(".question-type-item").each(function (index){
+        if($(this).is(':checked')){
+            selectedTypeList.push($(this).attr('id'))
+        }
+    })
+    console.log(selectedTypeList);
+
+
+
+
 }

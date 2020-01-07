@@ -84,20 +84,20 @@ h1 {
   background-color: #666;
    color: white;
 }
-.book-box{
-  width: 100%;
-  height: fit-content;
-  border: 1px solid grey;
-  border-radius: 5px;
-  padding: 10px 5px;
-
+/*.book-cart{*/
+/*  !*min-height: 200px;*!*/
+/*    height: 150px!important;*/
+/*}*/
+.cart-image{
+    width: 100% !important;
+    height: 150px !important;
+    object-fit: cover;
 }
-.book-cart{
-  background-color: black;
-  width: 240px;
-  /*min-height: 200px;*/
-  height: fit-content;
-  margin: 0 10px;
+.exam-description{
+    background-color: #0d5bdd;
+    position: absolute;
+    top: 10px;
+    height: 150px;
 }
 .books-sidebar{
   position: sticky;
@@ -188,3 +188,8 @@ h1 {
 
     -ms-transform: rotate(0deg);
 }
+
+/*.take-test {*/
+/*    background: rgb(187,187,187);*/
+/*    background: linear-gradient(90deg, rgba(187,187,187,1) 0%, rgba(237,103,103,1) 50%, rgba(187,187,187,1) 100%);*/
+/*}*/
