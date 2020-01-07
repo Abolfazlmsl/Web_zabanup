@@ -277,14 +277,14 @@ function addOwl() {
         }
     });
 }
-
+let selectedTypeList = [];
 function filterQType(QTypeId){
-    let selectedTypeList = [];
+
     $(".question-type-item").each(function (index){
         if($(this).is(':checked')){
             selectedTypeList.push($(this).attr('id'))
         }
-    })
+    });
     console.log(selectedTypeList);
 
 
