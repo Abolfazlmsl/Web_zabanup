@@ -221,13 +221,16 @@ def book(request):
         exam_detail_json['passage_type'] = []
 
     # exam part
+
     all_exams = models.Exam.objects.all()
     if book_filter:
-        all_exams.filter(book_id=book_filter)
+        book_filter = book_filter.split(',')
+        all_exams = all_exams.filter(book_id__in=book_filter)
     if category_filter:
-        all_exams.filter(category_id=category_filter)
+        all_exams = all_exams.filter(category_id=category_filter)
     if question_type_filter:
-        all_exams.filter(passage__question__type__in=question_type_filter)
+        question_type_filter = question_type_filter.split(',')
+        all_exams = all_exams.filter(passage__question__type__in=question_type_filter)
     exam_list = []
     for exam in all_exams:
         first_passage = models.Passage.objects.get(exam=exam, priority=1)

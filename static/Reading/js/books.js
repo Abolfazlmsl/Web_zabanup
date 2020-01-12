@@ -277,15 +277,18 @@ function addOwl() {
         }
     });
 }
-let selectedTypeList = [];
+let selectedTypes = [];
+let selectedBooks = [];
+let selectedCategories = [];
 function filterQType(QTypeId){
 
     $(".question-type-item").each(function (index){
         if($(this).is(':checked')){
-            selectedTypeList.push($(this).attr('id'))
+            selectedTypes.push($(this).attr('id'))
         }
     });
-    console.log(selectedTypeList);
+    
+    console.log();
 
 
 
