@@ -220,23 +220,28 @@ def book(request):
         # passage type part
         exam_detail_json['passage_type'] = []
 
+    print(question_type_filter)
     # exam part
 
     all_exams = models.Exam.objects.all()
     if book_filter:
         book_filter = book_filter.split(',')
+        print(book_filter)
         all_exams = all_exams.filter(book_id__in=book_filter)
     if category_filter:
         all_exams = all_exams.filter(category_id=category_filter)
     if question_type_filter:
         question_type_filter = question_type_filter.split(',')
+        print(question_type_filter)
         all_exams = all_exams.filter(passage__question__type__in=question_type_filter)
     exam_list = []
     for exam in all_exams:
         first_passage = models.Passage.objects.get(exam=exam, priority=1)
         temp_dictionary = {
             "id": exam.id,
-            "book": exam.book_id,
+            "book": {'id': exam.book_id,
+                     'name': exam.book.name
+                     },
             "name": first_passage.title,
             "image": first_passage.image.url,
             "categories": [],

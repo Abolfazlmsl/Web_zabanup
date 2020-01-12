@@ -1,43 +1,3 @@
-// filterSelection("all") // Execute the function and show all columns
-// function filterSelection(c) {
-//   let x, i;
-//   x = document.getElementsByClassName("column");
-//   if (c === "all") c = "";
-//   // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
-//   for (i = 0; i < x.length; i++) {
-//     w3RemoveClass(x[i], "show");
-//     if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
-//   }
-// }
-//
-// // Show filtered elements
-// function w3AddClass(element, name) {
-//   let i, arr1, arr2;
-//   arr1 = element.className.split(" ");
-//   arr2 = name.split(" ");
-//   for (i = 0; i < arr2.length; i++) {
-//     if (arr1.indexOf(arr2[i]) === -1) {
-//       element.className += " " + arr2[i];
-//     }
-//   }
-// }
-
-// // Hide elements that are not selected
-// function w3RemoveClass(element, name) {
-//   var i, arr1, arr2;
-//   arr1 = element.className.split(" ");
-//   arr2 = name.split(" ");
-//   for (i = 0; i < arr2.length; i++) {
-//     while (arr1.indexOf(arr2[i]) > -1) {
-//       arr1.splice(arr1.indexOf(arr2[i]), 1);
-//     }
-//   }
-//   element.className = arr1.join(" ");
-// }
-//
-// // Add active class to the current button (highlight it)
-
-
 function filterSelection(category){
     if(category === 'all'){
         $(".nature-box").fadeIn();
@@ -93,8 +53,10 @@ $("#toggle-cambridge-books").click(function () {
     }
 });
 
-getData()
+getData();
+
 function getData() {
+    $(".book-page-loader").removeClass('d-none').addClass('d-flex');
     $.ajax({
         url: 'http://127.0.0.1:8000/api/book/',
         type: "GET",
@@ -118,17 +80,18 @@ function getData() {
                 })
             });
 
+            // Fill the category buttons in top of the page;
             categoryInfo.map(item => {
                 $("#exam-categories").append(
-                    `<button class="btn btn-sm btn-rounded" style="font-size: 12px" id="category-${item.id}" onclick="filterSelection('${item.name}')">${item.name}</button>`
+                    `<button class="btn btn-sm btn-rounded select-category" style="font-size: 12px" id="category-${item.id}" onclick="filtering()">${item.name}</button>`
                 )
             });
-            // console.log(categoryInfo)
+
+            //Active selected category button
             activeBtn();
 
             // Books information
             let bookInfo = [];
-
             books.map(item => {
                 bookInfo.push({
                     id: item["id"],
@@ -136,38 +99,40 @@ function getData() {
                     image: item["image"]
                 })
             });
+
+            // Fill the books filter in the sidebar
             bookInfo.map(item => {
                 $("#cambridge-book-choices").append(
                     `<div class="form-check d-flex align-items-center my-2 p-0" style="direction: ltr">` +
-                        `<input class="form-check-input" type="checkbox" id="book-${item.id}">` +
-                        `<label class="form-check-label"  for="book-${item.id}" style="font-size: 16px; font-family: segoe">` +
+                        `<input class="form-check-input book-name-item" type="checkbox" id="${item.id}" onclick="filtering()">` +
+                        `<label class="form-check-label"  for="${item.id}" style="font-size: 16px; font-family: segoe">` +
                             `${item.name}` +
                         `</label>` +
                     `</div>`
                 )
             });
 
-
             // Questions Type information
             let questionTypeInfo = [];
-
             questionType.map(item => {
                 questionTypeInfo.push({
                     name: item["name"],
                     value: item["value"]
                 });
             });
-            // console.log(questionTypeInfo);
+
+            // fill the question types in the sidebar
             questionTypeInfo.map(item => {
                 $("#question-type-choices").append(
                     `<div class="form-check d-flex align-items-center my-2 p-0" style="direction: ltr">` +
-                        `<input class="form-check-input question-type-item" type="checkbox" id="${item.name}" onclick="filterQType(${item.name})">` +
+                        `<input class="form-check-input question-type-item" type="checkbox" id="${item.name}" onclick="filtering()">` +
                         `<label class="form-check-label"  for="${item.name}" style="font-size: 17px">` +
                             `${item.value}` +
                         `</label>` +
                     `</div>`
                 )
             });
+
 
             // Exam information
             let examInfo = [];
@@ -198,6 +163,7 @@ function getData() {
                     exams: exam
                 })
             }
+
             // console.log(examList);
             examList.map(item => {
                 $("#show-exams-container").append(
@@ -213,14 +179,36 @@ function getData() {
                     // console.log(item.category);
                     $(`#${item.category}`).append(
                         `<div class="view overlay zoom book-cart" id="exam-${itm.id}" style="overflow: hidden" book="${itm.book}">` +
-                            `<img src="${itm.image}" class="img-fluid rounded" alt="${itm.name}" style="height: 200px!important;">` +
-                                `<div class="mask flex-center take-test">` +
-                                `<button class="btn peach-gradient z-depth-4 btn-rounded w-100 mx-4" style="font-family: segoe; font-weight: bold; color: black">Take Test</button>`+
+                            `<img src="${itm.image}" class="img-fluid rounded exam-image" alt="${itm.name}" style="height: 200px!important; width: 100%">` +
+                            `<div class="mask row m-0 flex-center take-test">` +
+                                `<div class="col-12 d-flex justify-content-center align-items-center bg-light px-4" style="position: absolute; top: 10%; width: fit-content; border-radius: 15px">` +
+                                    `<p class="text-center my-1" style="font-family: segoe">${itm.book.name}</p>` +
+                                `</div>`+
+                                `<div class="col-12 d-flex justify-content-center align-items-center bg-light px-4" style="position: absolute; top: 30%; width: fit-content; border-radius: 15px; padding-top: 3px; padding-bottom: 5px" id="exam-${itm.id}-categories">` +
+                                    // Categories of This Exam will show here
+                                `</div>`+
+                                `<div class="col-12 d-flex" style="position: absolute; top: 55%">` +
+                                    `<button class="btn peach-gradient w-100 z-depth-4 btn-rounded mx-3" style="font-family: segoe; font-weight: bold; color: black">Take Test</button>`+
+                                `</div>` +
                             `</div>` +
-                            `<p class="text-uppercase text-center mt-4 mb-0" style="font-family: segoe, Yekan">${itm.name}</p>` +
+                            `<p class="text-uppercase text-center mt-2 mb-0" style="font-family: segoe, Yekan; font-weight: bold">${itm.name}</p>` +
                         `</div>`
                     );
-                    // console.log(itm.question_type)
+                    let examCategoryName = [];
+                    itm.categories.map(category => {
+                        examCategoryName.push(category.name);
+                        // console.log(examCategoryName);
+                        // console.log(category)
+
+                    });
+                    $(`#exam-${itm.id}-categories`).empty();
+                    examCategoryName = examCategoryName.toString();
+                    let examCatList = examCategoryName.split(',');
+                    let finalExamCategories = examCatList.join(" - ");
+                    // console.log(finalExamCategories);
+                    $(`#exam-${itm.id}-categories`).append(
+                        `<p class="text-center" style="font-family: segoe, Yekan">${finalExamCategories}</p>`
+                    );
                     itm.question_type.map(type => {
                         $(`#exam-${itm.id}`).attr('questionType', type.name)
                     });
@@ -229,14 +217,9 @@ function getData() {
                     });
                 })
             });
-
-//       `<div class="content">` +
-//                                     `<img src="{% static 'Reading/Images/zabanup.jpg' %}" alt="Mountains" style="width:100%">` +
-//                                     `<h4 class="mt-3">Book 1</h4>` +
-//                                     `<p>Description of Book 1</p>` +
-//                                 `</div>` +      //
-            // console.log(examInfo)
             addOwl()
+
+            $(".book-page-loader").addClass('d-none').removeClass('d-flex');
         }
 
     })
@@ -280,16 +263,95 @@ function addOwl() {
 let selectedTypes = [];
 let selectedBooks = [];
 let selectedCategories = [];
-function filterQType(QTypeId){
-
+function filtering(){
+    // console.log(QTypeId.id);
+    selectedTypes = [];
+    selectedBooks = [];
+    selectedCategories = [];
     $(".question-type-item").each(function (index){
         if($(this).is(':checked')){
             selectedTypes.push($(this).attr('id'))
         }
     });
-    
-    console.log();
+    $(".book-name-item").each(function () {
+        if($(this).is(':checked')){
+            selectedBooks.push($(this).attr('id'))
+        }
+    });
+    if (selectedTypes.toString() === '' && selectedBooks.toString() === '') {
+        $(`#show-exams-container`).empty();
+        $("#exam-categories").empty();
+        $("#exam-categories").append(
+            `<button class="btn btn-sm btn-rounded active" style="font-size: 12px" onclick="filterSelection('all')"> Show all</button>`
+        );
+        $("#question-type-choices").empty();
+        $("#passage-type-choices").empty();
+        $("#cambridge-book-choices").empty();
+        getData()
+    } else {
+        $(".book-page-loader").removeClass('d-none').addClass('d-flex');
+        $.ajax({
+        url: 'http://127.0.0.1:8000/api/book/',
+        type: "GET",
+        dataType: 'json',
+        data: {
+            'question_type': selectedTypes.toString(),
+            'book': selectedBooks.toString()
+        },
+        success: function (data) {
+            let examInfo = [];
+            // console.log(JSON.stringify(data));
+            data["exams"].map(item => {
+                examInfo.push({
+                    id: item["id"],
+                    book: item["book"]["name"],
+                    name: item["name"],
+                    image: item["image"],
+                    categories: item["categories"],
+                    questionTypes: item["questions_type"]
+                })
+            });
+            $(`#show-exams-container`).empty();
+            examInfo.map(itm => {
+                // console.log(itm);
+                // $(`#show-exams-container`).addClass('bg-danger');
+                $(`#show-exams-container`).append(
+                    `<div class="col-12 view col-md-6 col-lg-4 overlay zoom book-cart my-4" id="exam-${itm.id}" style="overflow: hidden" book="${itm.book}">` +
+                        `<img src="${itm.image}" class="img-fluid rounded exam-image" alt="${itm.name}" style="height: 200px!important; width: 100%">` +
+                        `<div class="mask row m-0 flex-center take-test">` +
+                            `<div class="col-12 d-flex justify-content-center align-items-center bg-light px-4" style="position: absolute; top: 10%; width: fit-content; border-radius: 15px">` +
+                                `<p class="text-center my-1" style="font-family: segoe">${itm.book}</p>` +
+                            `</div>`+
+                            `<div class="col-12 d-flex justify-content-center align-items-center bg-light px-4" style="position: absolute; top: 30%; width: fit-content; border-radius: 15px; padding-top: 3px; padding-bottom: 5px" id="exam-${itm.id}-categories">` +
+                                // Categories of This Exam will show here
+                            `</div>`+
+                            `<div class="col-12 d-flex" style="position: absolute; top: 55%">` +
+                                `<button class="btn peach-gradient w-100 z-depth-4 btn-rounded mx-3" style="font-family: segoe; font-weight: bold; color: black">Take Test</button>`+
+                            `</div>` +
+                        `</div>` +
+                        `<p class="text-uppercase text-center mt-2 mb-0" style="font-family: segoe, Yekan; font-weight: bold">${itm.name}</p>` +
+                    `</div>`
+                );
+                let examCategoryName = [];
+                itm.categories.map(category => {
+                    examCategoryName.push(category.name);
+                    // console.log(examCategoryName);
+                    // console.log(category)
 
+                });
+                examCategoryName = examCategoryName.toString();
+                let examCatList = examCategoryName.split(',');
+                let finalExamCategories = examCatList.join(" - ");
+                // console.log(examCategoryName);
+                $(`#exam-${itm.id}-categories`).append(
+                    `<p class="text-center" style="font-family: segoe, Yekan">${finalExamCategories}</p>`
+                )
+            })
+            // console.log(examInfo.categories)
+            $(".book-page-loader").addClass('d-none').removeClass('d-flex');
+        }
+    })
+    }
 
 
 
