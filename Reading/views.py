@@ -113,10 +113,11 @@ def passage_body(request, exam_id):
 
     templates = []
     for passage in all_passages:
-        html_for_passage = str(passage.text)
-        template = loader.get_template(html_for_passage).render()
-        print(type(template))
-        templates.append(template)
+        passage_text = passage.text
+        # template = loader.get_template(html_for_passage).render()
+        # print(type(template))
+        templates.append(passage_text)
+    print(templates)
 
     passage_question_type_count = zip(all_passages, questions_types, questions_bound, number_of_questions, templates)
 
@@ -156,6 +157,7 @@ def submit(request, exam_id):
         correct_answers = []
 
         grade = 0
+        final_grade = 0
 
         # get user answers
         # get  user answer id of questions
@@ -246,10 +248,39 @@ def submit(request, exam_id):
                 if count_q == 0:
                     correct_answers.append(question.id)
                     grade += 1
+        print(grade)
+        if grade <= 5:
+            final_grade = 2.5
+        elif 6 <= grade <= 7:
+            final_grade = 3
+        elif 8 <= grade <= 9:
+            final_grade = 3.5
+        elif 10 <= grade <= 12:
+            final_grade = 4
+        elif 13 <= grade <= 14:
+            final_grade = 4.5
+        elif 15 <= grade <= 18:
+            final_grade = 5
+        elif 19 <= grade <= 22:
+            final_grade = 5.5
+        elif 23 <= grade <= 26:
+            final_grade = 6
+        elif 27 <= grade <= 29:
+            final_grade = 6.5
+        elif 30 <= grade <= 32:
+            final_grade = 7
+        elif 33 <= grade <= 34:
+            final_grade = 7.5
+        elif 35 <= grade <= 36:
+            final_grade = 8
+        elif 37 <= grade <= 38:
+            final_grade = 8.5
+        elif 39 <= grade <= 40:
+            final_grade = 9
 
-        multi_number = 100 / len(all_questions)
-        final_grade = grade * multi_number
-        final_grade = round(final_grade, 2)
+        # multi_number = 100 / len(all_questions)
+        # final_grade = grade * multi_number
+        # final_grade = round(final_grade, 2)
 
         # create a json from answers
         len_all_questions = len(all_questions)

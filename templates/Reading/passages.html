@@ -156,10 +156,10 @@
                             {{ passage.title }}
                         </h3>
                     </div>
-                    <div class="row mb-5">
-                        <p>
-                            {{ template|linebreaks }}
-                        </p>
+                    <div class="mb-5">
+
+                            {{ template|safe }}
+
                     </div>
                 </div>
             </div>
@@ -216,6 +216,78 @@
                         </table>
                         {# Dropdown questions starts #}
                         {% for dd in questions_types.truefalse %}
+                            <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
+                                <div class="col-1 mt-2 mt-md-0">
+                                    <div class="row">
+                                        <div class="col-auto questionNumber rounded m-auto">
+                                            <strong class="text-white q-num">{{ dd.2 }}</strong>
+                                        </div>
+                                            <p>favorite</p><input type="checkbox" name="favorite{{ dd.1.id }}">
+                                    </div>
+                                </div>
+                                <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
+                                    <label for="q{{ forloop.counter }}">
+                                        <select class="border btn-sm" name="q{{ dd.1.id }}" id="q{{ forloop.counter }}">
+                                            <option disabled selected></option>
+                                            {% for answer in dd.1.answer_set.all %}
+                                                <option name="answer[{{ answer.id }}]" id="answer{{ answer.id }}" value="{{ answer.id }}">{{ answer.text }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-8 my-2 my-md-0">
+                                    <p class="my-0">
+                                        {{ dd.1.text }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {# Dropdown questions ends #}
+                        {% endif %}
+
+                         {% if questions_types.yesno and questions_types.yesno.0.0 == forloop.counter  %}
+                            <div class="row">
+                            <div class="col-auto mr-auto align-middle">
+
+                                <h5 class="mb-4">
+                                    Questions {{ number_of_questions.yesno }}
+                                </h5>
+                            </div>
+                            {# notepad to save drafts #}
+                            <div class="col-auto">
+                                <p>
+                                    <button type="button" class="btn btn-light btn-sm border align-middle"
+                                            data-toggle="collapse" data-target="#notepad1"
+                                            aria-expanded="false" aria-controls="notepad">
+                                        Show Notepad
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <div class="collapse" id="notepad1">
+                                    <label class="w-100">
+                                        <textarea class="input-group pl-2" placeholder="Your draft goes here..."></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {# Some descriptions about true flase questions #}
+                        <p><i>Do the following statements agree with the information given in Reading Passage 1?</i></p>
+                        <p class="mb-4"><i>In <b>boxes {{ number_of_questions.yesno }}</b> on your answer sheet, write</i></p>
+                        <table class="table border table-sm table-striped mb-4">
+                            <tbody>
+                                <tr>
+                                    <th class="pl-3">YES</th>
+                                    <td>if the statement is true</td>
+                                </tr>
+                                <tr>
+                                    <th class="pl-3">NO</th>
+                                    <td>if the statement is false</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {# Dropdown questions starts #}
+                        {% for dd in questions_types.yesno %}
                             <div class="row container-fluid border questionsRow ml-0 mb-2 align-items-center">
                                 <div class="col-1 mt-2 mt-md-0">
                                     <div class="row">
@@ -462,17 +534,17 @@
 
 
 <footer>
-    {# Footer part of the page #}
+     Footer part of the page
     <div class="container-fluid">
         <div class="row container-fluid justify-content-between d-lg-flex" id="footer">
             <div class="col-auto col-lg-3 col-xl-5" id="question-palette">
                 <a class="align-items-center"><h5><i class="fa fa-ellipsis-h mr-2"></i>Question Palette</h5></a>
             </div>
-            {# Time of the test #}
+{#             Time of the test#}
             <div class="col-auto col-lg-2 text-center" id="timer">
                 <span class="text-white"><i class="fa fa-clock mr-2"></i>60:00</span>
             </div>
-            {# Submit, Review and Solution buttons #}
+{#             Submit, Review and Solution buttons#}
             <div class="col-lg-5 col-xl-4 text-right" id="footer-buttons">
                 <a class="btn btn-light btn-sm mx-2 text-center" id="submit-button">
                     <span class="fa fa-paper-plane mr-1"></span> Submit
@@ -487,14 +559,14 @@
             <div class="col-auto text-center" id="arrow">
                 <i class="fa fa-arrow-down ml-2" id="arrow-self"></i>
             </div>
-            {# answersheet of questions #}
+{#             answersheet of questions#}
             <div class="col-12 d-none d-lg-flex border-top" id="footer-collapse">
                 <div class="row text-white" style="width: 102%">
                     <div class="col-auto pt-2">
                         <div class="mb-2"><span><i class="fa fa-circle mr-2"></i>Answered</span></div>
                         <div><span><i class="fa fa-circle-notch mr-2"></i>Unanswered</span></div>
                     </div>
-                    {# questions icons to see answered and unanswered questions #}
+{#                     questions icons to see answered and unanswered questions#}
                     <div class="col-10 mx-auto text-center d-flex" id="answer-sheet">
                         {% for qNumber in passage.question_set.all %}
                             <div class="row">
@@ -506,7 +578,7 @@
                     </div>
                 </div>
             </div>
-            {# answersheet for questions in medium and small screens #}
+{#             answersheet for questions in medium and small screens#}
             <div class="col-12 d-flex d-lg-none border-top" id="footer-collapse-small">
                 <div class="row mx-auto">
                     <div class="col-12 mx-auto text-center d-flex" id="answer-sheet-small">
@@ -535,7 +607,7 @@
     </div>
 </footer>
 {# importing javascript files to project #}
-<script src="{% static 'Reading/js/jquery-3.3.1.slim.min.js' %}"></script>
+<script src="{% static 'Reading/js/jquery-3.4.1.min.js' %}"></script>
 <script src="{% static 'Reading/js/popper.min.js' %}"></script>
 <script src="{% static 'Reading/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'Reading/js/scripts.js' %}"></script>
