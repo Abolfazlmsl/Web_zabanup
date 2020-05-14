@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kilowatt_Pyzaban',
-        'USER': 'postgres',
-        'PASSWORD': 'Amir1376',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'zabanup_db',
+        'USER': 'admin',
+        'PASSWORD': '',
+        'PORT': 3306,
         'HOST': 'localhost'
 
     }
