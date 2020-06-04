@@ -51,13 +51,17 @@
                     </b>
                     <hr class="hr mt-2">
                     <div class="pt-2 pr-2">
-                        <a href="{% url 'student:studentPanel' %}" id="profile" class="d-block mb-3" style="color: rgb(102,102,102)">
+                        <a href="{% url 'student:studentPanel' %}" id="profile" class="d-block mb-3" style="color: rgb(102, 102, 102)">
                             <i class="fa fa-id-card align-middle ml-2 " style="width: 22px"></i>
                             حساب کاربری
                         </a>
                         <a href="{% url 'student:examsHistory' %}" id="company" class="d-block mb-3" style="color: #5a95f5">
                             <i class="fa fa-history align-middle ml-2" style="width: 22px"></i>
                             تاریخچه آزمون ها
+                        </a>
+                        <a href="{% url 'student:changePassword' %}" id="company" class="d-block mb-3" style="color: rgb(102, 102, 102)">
+                            <i class="fa fa-lock align-middle ml-2" style="width: 22px"></i>
+                            تغییر رمز عبور
                         </a>
                         <a href="/logout" class="d-block mb-3" style="color: rgb(102, 102, 102)">
                             <i class="fa fa-sign-out-alt align-middle ml-2" style="width: 22px"></i>

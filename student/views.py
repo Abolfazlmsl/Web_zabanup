@@ -38,7 +38,7 @@ def edit_information(request):
             context = {
                 'conflict_alert': alert
             }
-            return render(request, 'student/edit_information.html', context)
+            return render(request, 'student/student-panel.html', context)
 
         else:
             current_user.first_name = new_first_name
@@ -51,9 +51,9 @@ def edit_information(request):
             context = {
                 'success': 'your information updated successfully!'
             }
-            return render(request, 'student/edit_information.html', context)
+            return render(request, 'student/student-panel.html', context)
     else:
-        return render(request, 'student/edit_information.html')
+        return render(request, 'student/student-panel.html')
 
 
 # view for editing password of user

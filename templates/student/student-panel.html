@@ -58,14 +58,10 @@
                             <i class="fa fa-history align-middle ml-2" style="width: 22px"></i>
                             تاریخچه آزمون ها
                         </a>
-{#                        <a href="#" id="products" class="d-block mb-3" style="color: rgb(102, 102, 102)">#}
-{#                            <i class="fa fa-align-center align-middle ml-2" style="width: 22px"></i>#}
-{#                            محصولات#}
-{#                        </a>#}
-{#                        <a href="#" id="bookmarks" class="d-block mb-3" style="color: rgb(102, 102, 102)">#}
-{#                            <i class="fa fa-heart align-middle ml-2" style="width: 22px"></i>#}
-{#                            علاقه مندی ها#}
-{#                        </a>#}
+                        <a href="{% url 'student:changePassword' %}" id="company" class="d-block mb-3" style="color: rgb(102, 102, 102)">
+                            <i class="fa fa-lock align-middle ml-2" style="width: 22px"></i>
+                            تغییر رمز عبور
+                        </a>
                         <a href="/logout" class="d-block mb-3" style="color: rgb(102, 102, 102)">
                             <i class="fa fa-sign-out-alt align-middle ml-2" style="width: 22px"></i>
                             خروج
@@ -80,33 +76,33 @@
                     حساب کاربری
                 </b>
                 <div class="mt-4 signup-box">
-                    <form method="post" action="" class="form-row mx-auto px-3 px-lg-5 py-0 py-lg-4" style="font-family: webYekan, Calibri">
+                    <form method="post" action="" class="form-row mx-auto px-3 px-lg-5 py-0 py-lg-4" style="font-family: webYekan, Calibri; max-width: 700px">
                         {% csrf_token %}
                         <div class="col-12 mb-4">
                             <b style="font-family: webYekan; font-size: 18px">مشخصات فردی</b>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <input type="text" class="form-control" value="{{ user.first_name }}" name="first-name" id="first-name" placeholder="نام">
-                                <label for="first-name" class="text-right pr-1 d-none"></label>
+                                <label for="first-name" class="text-right pr-1">نام:</label>
+                                <input type="text" class="form-control" value="{{ user.first_name }}" name="new_first_name" id="first-name" placeholder="نام">
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <input type="text" class="form-control" value="{{ user.last_name }}" name="last-name" id="last-name" placeholder="نام خانوادگی">
-                                <label for="last-name" class="text-right pr-1 d-none"></label>
+                                <label for="last-name" class="text-right pr-1">نام خانوادگی:</label>
+                                <input type="text" class="form-control" value="{{ user.last_name }}" name="new_last_name" id="new_last_name" placeholder="نام خانوادگی">
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="phone-number" value="{{ user.username }}" id="phone-number" placeholder="شماره تلفن">
-                                <label for="phone-number" class="text-right pr-1 d-none"></label>
+                                <label for="phone-number" class="text-right pr-1">شماره تلفن همراه:</label>
+                                <input type="text" class="form-control" name="new_phone" value="{{ user.username }}" id="phone-number" placeholder="شماره تلفن">
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 col-lg-3">
+                        <div class="col-12 col-md-6 my-2">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="email" value="{{ user.email }}" id="email" placeholder="ایمیل">
-                                <label for="email" class="text-right pr-1 d-none"></label>
+                                <label for="email" class="text-right pr-1">ایمیل:</label>
+                                <input type="text" class="form-control" name="new_email" value="{{ user.email }}" id="email" placeholder="ایمیل">
                             </div>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
@@ -114,35 +110,6 @@
                         </div>
                     </form>
                     <hr class="hr mt-3">
-                    <form method="post" class="form-row mx-auto px-2 px-lg-5 py-0 py-lg-4">
-                        {% csrf_token %}
-                        <div class="col-12 mb-4">
-                            <b style="font-family: webYekan; font-size: 18px">تغییر رمز عبور</b>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <input type="password" class="form-control" name="current-password"
-                                       id="current-password" placeholder="رمز عبور فعلی" autocomplete="off">
-                                <label for="current-password" class="text-right pr-1 d-none"></label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <input type="password" class="form-control" name="new-password" id="new-password" placeholder="رمز عبور جدید">
-                                <label for="new-password" class="text-right pr-1 d-none"></label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <input type="password" class="form-control" name="re-new-password" id="new-password-again" placeholder="تکرار رمز عبور جدید">
-                                <label for="new-password-again" class="text-right pr-1 d-none"></label>
-                            </div>
-                        </div>
-                        <p>{{ alert }}</p>
-                        <div class="col-12 d-flex justify-content-end">
-                            <input type="submit" class="btn btn-sm btn-primary mt-1" name="password-submit" value="ذخیره" style="width: 95px;">
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
