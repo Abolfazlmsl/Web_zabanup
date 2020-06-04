@@ -65,7 +65,7 @@ function getData() {
 
         },
         success: function (data) {
-            // console.log(JSON.stringify(data));
+            console.log(JSON.stringify(data));
             let books = data["book"];
             let categories = data["category"];
             let questionType = data["question_type"];
@@ -188,7 +188,9 @@ function getData() {
                                     // Categories of This Exam will show here
                                 `</div>`+
                                 `<div class="col-12 d-flex" style="position: absolute; top: 55%">` +
-                                    `<button class="btn peach-gradient w-100 z-depth-4 btn-rounded mx-3" style="font-family: segoe; font-weight: bold; color: black">Take Test</button>`+
+                                    `<a href="/reading/${itm.id}" class="w-100 mx-3">`+
+                                        `<button class="btn peach-gradient w-100 mx-0 z-depth-4 btn-rounded" style="font-family: segoe; font-weight: bold; color: black">Take Test</button>`+
+                                    `</a>`+
                                 `</div>` +
                             `</div>` +
                             `<p class="text-uppercase text-center mt-2 mb-0" style="font-family: segoe, Yekan; font-weight: bold">${itm.name}</p>` +

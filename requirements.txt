@@ -1,4 +1,4 @@
-certifi==2019.11.28
+certifi==2020.4.5.1
 chardet==3.0.4
 Django==2.2.5
 django-ckeditor==5.8.0
@@ -20,3 +20,4 @@ shellescape==3.4.1
 sorl-thumbnail==12.5.0
 sqlparse==0.3.0
 urllib3==1.25.7
+mysqlclient==1.4.6

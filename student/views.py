@@ -251,3 +251,11 @@ def chat(request, pk):
         'all_messages': all_messages
     }
     return render(request, 'student/chat.html', context=context)
+
+
+def student_panel_view(request):
+    return render(request, 'student/student-panel.html')
+
+
+def exams_history_view(request):
+    return render(request, 'student/student-panel-exam.html')

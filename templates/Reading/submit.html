@@ -5,11 +5,23 @@
     <meta charset="UTF-8">
     <title>Answer</title>
      <link rel="stylesheet" href="{% static 'Reading/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Reading/css/mdb.min.css' %}">
      <link rel="stylesheet" href="{% static 'Reading/css/style-comment.css' %}">
      <link rel="stylesheet" href="{% static 'Reading/css/all.css' %}">
-
+        <style>
+            @font-face {
+                src: url("../../static/Reading/Fonts/Yekan/Weblogma_Yekan.ttf");
+                font-family: Yekan;
+            }
+            body{
+                font-family: Yekan, Calibri, serif
+            }
+        </style>
 </head>
 <body>
+<div style="direction: rtl; " class="mt-3">
+    {% include 'Reading/header.html' %}
+</div>
 <div class="" style="margin: 4%">
 {% if comment == 0 %}
 <h4>Dear {{ request.user.first_name }}</h4>
@@ -138,14 +150,14 @@
                                             <div class="col-auto" id="like">
                                                 <small><a href="#" class="text-muted"><i class="fa fa-heart mr-1"></i>Like</a></small>
                                             </div>
-                                            <div class="col-auto" id="to-reply">
+                                            <div class="col-auto" id="to-reply" data-toggle="collapse" data-target="#comment-collapse{{ comment.id }}" aria-expanded="false" aria-controls="comment-collapse{{ comment.id }}">
                                                 <small><a href="#comment-collapse{{ comment.id }}" class="text-muted" data-toggle="collapse"><i class="fa fa-comment mr-1"></i>Reply</a></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="comment-collapse{{ comment.id }}" class="collapse my-2">
+                            <div id="comment-collapse{{ comment.id }}" class="collapse my-2" aria-labelledby="#to-reply">
                                 <div class="row container-fluid border rounded p-3 mx-auto" id="reply">
                                     <div class="col-12 mt-1" id="reply-body">
                                         <label style="width: 100%">

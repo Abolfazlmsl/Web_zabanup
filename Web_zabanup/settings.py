@@ -84,18 +84,41 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'zabanup_db',
+#         'USER': 'admin',
+#         'PASSWORD': '',
+#         'PORT': 3306,
+#         'HOST': 'localhost'
+#
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kilowatt_Pyzaban',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'zabanup_db',
         'USER': 'postgres',
-        'PASSWORD': 'Amir1376',
+        'PASSWORD': '12121212',
         'PORT': 5432,
         'HOST': 'localhost'
 
     }
-
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'myproject',
+#         'USER': 'myprojectuser',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
 
 
 # Password validation
