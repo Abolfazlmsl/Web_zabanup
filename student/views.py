@@ -7,9 +7,9 @@ from django.shortcuts import render, get_object_or_404, redirect, get_list_or_40
 from django.contrib.auth.decorators import login_required
 
 
-# view for editing information of user
+# view for show and editing information of user
 @login_required(login_url="/student/login/")
-def edit_information(request):
+def student_panel_view(request):
     if request.method == 'POST':
         current_user = request.user
         new_user_name = request.POST.get("new_user_name")
@@ -80,7 +80,7 @@ def change_password(request):
             current_user.set_password(new_password)
             current_user.save()
             logout(request)
-            return redirect('student:UserLogin')
+            return redirect('student:studentPanel')
     else:
         return render(request, 'student/change_password.html')
 
@@ -251,10 +251,6 @@ def chat(request, pk):
         'all_messages': all_messages
     }
     return render(request, 'student/chat.html', context=context)
-
-
-def student_panel_view(request):
-    return render(request, 'student/student-panel.html')
 
 
 def exams_history_view(request):

@@ -10,10 +10,9 @@ app_name = 'student'
 
 urlpatterns = [
     path('login/', views.login_view, name='UserLogin'),
-    path('student-panel/', views.student_panel_view, name='studentPanel'),
+    path('panel/', views.student_panel_view, name='studentPanel'),
     path('exams-history/', views.exams_history_view, name='examsHistory'),
     path('', views.panel, name='index'),
-    path('edit/', views.edit_information, name='edit_information'),
     path('change_password/', views.change_password, name='changePassword'),
     path('answers/', views.answers, name='answers'),
     path('answers/<int:pk>/', views.exam_answer_detail, name='examAnswerDetail'),
