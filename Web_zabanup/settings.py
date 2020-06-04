@@ -98,31 +98,31 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 
 #AMIR DB
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'zabanup_db',
-#         'USER': 'postgres',
-#         'PASSWORD': '12121212',
-#         'PORT': 5432,
-#         'HOST': 'localhost'
-#
-#     }
-# }
-
-
-#AMIRHOSSEIN DB
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kilowatt_Pyzaban',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'zabanup_db',
         'USER': 'postgres',
-        'PASSWORD': '1234',
+        'PASSWORD': '12121212',
         'PORT': 5432,
         'HOST': 'localhost'
 
     }
 }
+
+
+#AMIRHOSSEIN DB
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'kilowatt_Pyzaban',
+#         'USER': 'postgres',
+#         'PASSWORD': '1234',
+#         'PORT': 5432,
+#         'HOST': 'localhost'
+#
+#     }
+# }
 
 
 # Password validation

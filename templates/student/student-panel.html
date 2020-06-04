@@ -111,12 +111,12 @@
                                 <input type="tel" class="form-control" name="new_phone" value="{{ user.profile_set.first.phone_number }}" maxlength="11" minlength="11"  id="phone-number" placeholder="شماره تلفن">
                             </div>
                         </div>
-                        <div class="col-12 col-md-6 my-2">
-                            <div class="form-group">
-                                <label for="address" class="text-right pr-1">آدرس:</label>
-                                <textarea type="tel" class="form-control" name="new_address" id="address" placeholder="آدرس">{{ user.profile_set.first.address }}</textarea>
-                            </div>
-                        </div>
+{#                        <div class="col-12 col-md-6 my-2">#}
+{#                            <div class="form-group">#}
+{#                                <label for="address" class="text-right pr-1">آدرس:</label>#}
+{#                                <textarea type="tel" class="form-control" name="new_address" id="address" placeholder="آدرس">{{ user.profile_set.first.address }}</textarea>#}
+{#                            </div>#}
+{#                        </div>#}
                         <div class="col-12 d-flex justify-content-end">
                             <input type="submit" class="btn btn-sm btn-primary" name="info-submit" value="ذخیره" style="width: 95px">
                         </div>
