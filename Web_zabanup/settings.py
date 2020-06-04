@@ -171,9 +171,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/static/media")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'web_zabanup/static/media')
 STATICFILES_DIRS = [
-    os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/static"),
+    os.path.join(os.path.dirname(BASE_DIR), 'web_zabanup/static'),
 ]
 
 
