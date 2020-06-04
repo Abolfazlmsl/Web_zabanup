@@ -26,14 +26,6 @@
                         <span style="font-size: 15px">{{ current_exam.book }}</span>
                     </div>
                 </div>
-                {% if request.user.is_authenticated %}
-                    <button class="btn-primary"><a href="{% url 'Reading:LogOut' %}">LogOut</a> </button>
-
-            {% else %}
-            <div>
-                <button class="btn-primary"><a href="{% url 'Reading:Login' %}">Login</a> </button>
-            </div>
-            {% endif %}
             </div>
 {#             some information about test. time of publishment, number of views and test taken number #}
             <div class="col-3 pt-3">
@@ -222,7 +214,7 @@
                                         <div class="col-auto questionNumber rounded m-auto">
                                             <strong class="text-white q-num">{{ dd.2 }}</strong>
                                         </div>
-                                            <p>favorite</p><input type="checkbox" name="favorite{{ dd.1.id }}">
+{#                                            <p>favorite</p><input type="checkbox" name="favorite{{ dd.1.id }}">#}
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
@@ -294,7 +286,7 @@
                                         <div class="col-auto questionNumber rounded m-auto">
                                             <strong class="text-white q-num">{{ dd.2 }}</strong>
                                         </div>
-                                            <p>favorite</p><input type="checkbox" name="favorite{{ dd.1.id }}">
+{#                                            <p>favorite</p><input type="checkbox" name="favorite{{ dd.1.id }}">#}
                                     </div>
                                 </div>
                                 <div class="col-4 col-md-auto mr-3 mt-2 mt-md-0">
@@ -360,14 +352,14 @@
                                         <div class="col-auto questionNumber rounded m-auto">
                                         <strong class="text-white">{{ tb.2 }}</strong>
                                     </div>
-                                        <p>favorite</p><input type="checkbox" name="favorite{{ tb.1.id }}">
+{#                                        <p>favorite</p><input type="checkbox" name="favorite{{ tb.1.id }}">#}
                                     </div>
                                 </div>
                                 <div class="col-auto mr-3"  id="q{{ tb.1.id|add:forloop.counter}}">
                                     <label>
-                                    <input type="text" placeholder="Your answer" name="hidden{{ tb.1.id }}" hidden value="{{ tb.id }}">
+                                    <input type="text" placeholder="Your answer" name="hidden{{ tb.1.id }}" hidden value="{{ tb.id }}" >
                                     </label>
-                                    <input type="text" class="textboxAnswer" name="q{{ tb.1.id }}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer">
+                                    <input type="text" class="textboxAnswer" name="q{{ tb.1.id }}" id="answer{{ answer.id }}" value="{{ answer.id }}" placeholder="Your answer" style="outline: none">
                                 </div>
                             </div>
                         {% endfor %}
@@ -411,7 +403,7 @@
                                         <div class="col-auto questionNumber rounded m-auto">
                                             <strong class="text-white q-num">{{ rb.2 }}</strong>
                                         </div>
-                                             <p>favorite</p><input type="checkbox" name="favorite{{ rb.1.id }}">
+{#                                             <p>favorite</p><input type="checkbox" name="favorite{{ rb.1.id }}">#}
                                     </div>
                                 </div>
                                 <div class="col-10 mt-1">
@@ -470,7 +462,7 @@
                                         <div class="col-auto questionNumber rounded m-auto">
                                             <strong class="text-white q-num">{{ cb.2 }}</strong>
                                         </div>
-                                         <p>favorite</p><input type="checkbox" name="favorite{{ cb.1.id }}">
+{#                                         <p>favorite</p><input type="checkbox" name="favorite{{ cb.1.id }}">#}
                                     </div>
                                 </div>
                                 <div class="col-10 mt-1">

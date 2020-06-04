@@ -14,8 +14,8 @@ urlpatterns = [
     path('signup/', views.signup_view, name='SignUp'),
     path('login/', views.login_view, name='Login'),
     path('logout/', views.logout_view, name='LogOut'),
-    url(r'^Reading/(?P<exam_id>[0-9]+)/$', views.passage_body, name='passage_body'),
-    url(r'^Reading/(?P<exam_id>[0-9]+)/submit$', views.submit, name='submit'),
+    url(r'^reading/(?P<exam_id>[0-9]+)/$', views.passage_body, name='passage_body'),
+    url(r'^reading/(?P<exam_id>[0-9]+)/submit$', views.submit, name='submit'),
 
 ]
 

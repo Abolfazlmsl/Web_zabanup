@@ -1,0 +1,155 @@
+{% include 'Reading/base.html' %}
+{% load static %}
+{% block title %}
+    <title>پنل دانش آموز</title>
+{% endblock %}
+
+
+{% block body %}
+    {% if request.user.is_authenticated %}
+        <style>
+        div{
+            font-family: webYekan, Calibri, serif;
+        }
+        @media (max-width: 992px) {
+            .user-sidebar{
+                padding: 0;
+                position: fixed;
+                top: 108px;
+                height: 580px;
+                z-index: 10;
+                right: -250px;
+                width: 250px !important;
+                transition-duration: 0.5s;
+            }
+        }
+        @media (min-width: 992px) {
+            .user-sidebar{
+                padding: 0;
+                height: 100%;
+                min-height: 500px;
+            }
+        }
+        </style>
+        {% include 'Reading/header.html' %}
+        <div class="row mx-auto py-2" id="row" style="background-color: whitesmoke;">
+            <div class="col-12 col-md-6 col-lg-2 mt-4">
+                <div class="user-sidebar d-block border">
+                    <div class="media pr-2 pt-2">
+                        <div class="media-body my-auto">
+                            <b class="pr-3 d-block">{{user.first_name}} {{ user.last_name }}</b>
+                            <span class="pr-3 d-block text-muted" style="font-size: 12px">{{user.username}}</span>
+                        </div>
+                    </div>
+                    <hr class="hr my-2">
+                    <b class="pr-2" style="color: #3a848e; font-size: 15px">
+                        <a href="{% url 'student:studentPanel' %}">
+                            <i class="fa fa-tachometer-alt-fast align-middle ml-2"></i>
+                            داشبورد
+                        </a>
+                    </b>
+                    <hr class="hr mt-2">
+                    <div class="pt-2 pr-2">
+                        <a href="{% url 'student:studentPanel' %}" id="profile" class="d-block mb-3" style="color: #5a95f5">
+                            <i class="fa fa-id-card align-middle ml-2 " style="width: 22px"></i>
+                            حساب کاربری
+                        </a>
+                        <a href="{% url 'student:examsHistory' %}" id="company" class="d-block mb-3" style="color: rgb(102, 102, 102)">
+                            <i class="fa fa-history align-middle ml-2" style="width: 22px"></i>
+                            تاریخچه آزمون ها
+                        </a>
+{#                        <a href="#" id="products" class="d-block mb-3" style="color: rgb(102, 102, 102)">#}
+{#                            <i class="fa fa-align-center align-middle ml-2" style="width: 22px"></i>#}
+{#                            محصولات#}
+{#                        </a>#}
+{#                        <a href="#" id="bookmarks" class="d-block mb-3" style="color: rgb(102, 102, 102)">#}
+{#                            <i class="fa fa-heart align-middle ml-2" style="width: 22px"></i>#}
+{#                            علاقه مندی ها#}
+{#                        </a>#}
+                        <a href="/logout" class="d-block mb-3" style="color: rgb(102, 102, 102)">
+                            <i class="fa fa-sign-out-alt align-middle ml-2" style="width: 22px"></i>
+                            خروج
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-10 mt-4">
+                <b class="d-block pr-4 text-white"
+                   style="font-size: 19px; background-color: #0071C5; font-family: webYekan; padding: 21px 0; margin-left: -15px; margin-right: -30px">
+                    <i class="fa fa-id-card align-middle ml-2"></i>
+                    حساب کاربری
+                </b>
+                <div class="mt-4 signup-box">
+                    <form method="post" action="" class="form-row mx-auto px-3 px-lg-5 py-0 py-lg-4" style="font-family: webYekan, Calibri">
+                        {% csrf_token %}
+                        <div class="col-12 mb-4">
+                            <b style="font-family: webYekan; font-size: 18px">مشخصات فردی</b>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" value="{{ user.first_name }}" name="first-name" id="first-name" placeholder="نام">
+                                <label for="first-name" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" value="{{ user.last_name }}" name="last-name" id="last-name" placeholder="نام خانوادگی">
+                                <label for="last-name" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="phone-number" value="{{ user.username }}" id="phone-number" placeholder="شماره تلفن">
+                                <label for="phone-number" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="email" value="{{ user.email }}" id="email" placeholder="ایمیل">
+                                <label for="email" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <input type="submit" class="btn btn-sm btn-primary" name="info-submit" value="ذخیره" style="width: 95px">
+                        </div>
+                    </form>
+                    <hr class="hr mt-3">
+                    <form method="post" class="form-row mx-auto px-2 px-lg-5 py-0 py-lg-4">
+                        {% csrf_token %}
+                        <div class="col-12 mb-4">
+                            <b style="font-family: webYekan; font-size: 18px">تغییر رمز عبور</b>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="current-password"
+                                       id="current-password" placeholder="رمز عبور فعلی" autocomplete="off">
+                                <label for="current-password" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="new-password" id="new-password" placeholder="رمز عبور جدید">
+                                <label for="new-password" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="re-new-password" id="new-password-again" placeholder="تکرار رمز عبور جدید">
+                                <label for="new-password-again" class="text-right pr-1 d-none"></label>
+                            </div>
+                        </div>
+                        <p>{{ alert }}</p>
+                        <div class="col-12 d-flex justify-content-end">
+                            <input type="submit" class="btn btn-sm btn-primary mt-1" name="password-submit" value="ذخیره" style="width: 95px;">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block JavaScript %}
+    <script>
+        $("#row").css('height', window.innerHeight - 45)
+    </script>
+{% endblock %}
