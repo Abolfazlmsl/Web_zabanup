@@ -58,14 +58,14 @@ getData();
 function getData() {
     $(".book-page-loader").removeClass('d-none').addClass('d-flex');
     $.ajax({
-        url: 'http://127.0.0.1:8000/api/book/',
+        url: '/api/book/',
         type: "GET",
         dataType: "json",
         data: {
 
         },
         success: function (data) {
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
             let books = data["book"];
             let categories = data["category"];
             let questionType = data["question_type"];
@@ -293,7 +293,7 @@ function filtering(){
     } else {
         $(".book-page-loader").removeClass('d-none').addClass('d-flex');
         $.ajax({
-        url: 'http://127.0.0.1:8000/api/book/',
+        url: '/api/book/',
         type: "GET",
         dataType: 'json',
         data: {

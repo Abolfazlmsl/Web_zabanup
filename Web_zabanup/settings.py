@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'student.apps.StudentConfig',
     'manager.apps.ManagerConfig',
     'ckeditor',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    "http://kilowatt.ir",
+    "http://127.0.0.1:8000",
 ]
 
 ROOT_URLCONF = 'Web_zabanup.urls'
