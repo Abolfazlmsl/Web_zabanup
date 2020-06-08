@@ -80,7 +80,7 @@ def change_password(request):
             current_user.set_password(new_password)
             current_user.save()
             logout(request)
-            return render(request, 'student/student-panel.html')
+            return redirect('student:studentPanel')
     else:
         return render(request, 'student/change_password.html')
 
