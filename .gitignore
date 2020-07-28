@@ -1,7 +1,7 @@
 # ignore an entire directory
 /.idea/
-/Reading/__pycache__/
-/Reading/migrations/
+/core/__pycache__/
+/core/migrations/
 /static/media/
 /venv/
 /__pycache__/
@@ -18,7 +18,7 @@
 
 # ignore a single file
 # mycode.class
-/Reading/__init__.py
+/core/__init__.py
 /LanguageExam/__init__.py
 /Reading/api/__init__.py
 __init__.py
