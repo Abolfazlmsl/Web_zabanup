@@ -40,12 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Reading.apps.ReadingConfig',
-    'rest_framework',
+    'core',
+    # 'Reading.apps.ReadingConfig',
+    # 'rest_framework',
     'django_cleanup.apps.CleanupConfig',
-    'sorl.thumbnail',
-    'student.apps.StudentConfig',
-    'manager.apps.ManagerConfig',
+    # 'sorl.thumbnail',
+    # 'student.apps.StudentConfig',
+    # 'manager.apps.ManagerConfig',
     'ckeditor',
     'corsheaders',
 ]
@@ -105,18 +106,24 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 
 #AMIR DB
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'zabanup_db',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'PORT': '3306',
+#         'HOST': 'localhost'
+#
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'zabanup_db',
-        'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
-        'HOST': 'localhost'
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 #AMIRHOSSEIN DB
 # DATABASES = {
@@ -200,15 +207,15 @@ USE_TZ = True
 # Static files (CSS, js, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "web_zabanup/assets")
-
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'web_zabanup/static/media')
-STATICFILES_DIRS = [
-    os.path.join(os.path.dirname(BASE_DIR), 'web_zabanup/static'),
-]
+
+# local
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'core.User'
+
 
 
 
