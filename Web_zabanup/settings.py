@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'ckeditor',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,9 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 ROOT_URLCONF = 'Web_zabanup.urls'
+
+KAVENEGAR_APIKEY = '686F47626F616A397639556D7A78316E357945474235477544586E323879355855516568695059383941413D'
+
 
 TEMPLATES = [
     {
@@ -157,12 +161,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 SIMPLE_JWT = {
