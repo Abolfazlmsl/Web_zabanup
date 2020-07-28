@@ -22,7 +22,7 @@ urlpatterns = [
     # path('', include('core.urls')),
     # path('reading/', include('reading.urls')),
     path('user-panel/', include('user_panel.urls')),
-    # path('manager-panel/', include('manager_panel.urls')),
+    path('manager-panel/', include('manager_panel.urls')),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

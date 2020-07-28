@@ -43,3 +43,19 @@ class UserDetailSerializer(serializers.ModelSerializer):
                 'gender',
                 'favorite_question',
         )
+
+
+class UserPhoneRegisterSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ('phone_number', 'generated_token')
+
+    
+class ChangePasswordSerializer(serializers.Serializer):
+    """Serializer for password change"""
+
+    model = get_user_model()
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)

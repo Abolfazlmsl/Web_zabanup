@@ -110,7 +110,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
     gender = models.CharField(max_length=128, choices=GENDER)
-    favorite_question = models.ManyToManyField('Question')
+    favorite_question = models.ManyToManyField('Question', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
