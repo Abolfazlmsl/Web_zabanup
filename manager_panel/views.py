@@ -150,7 +150,6 @@ class ManagerTicketViewSet(viewsets.GenericViewSet,
 
 
 class ManagerTicketMessageViewSet(viewsets.GenericViewSet,
-                                  mixins.ListModelMixin,
                                   mixins.CreateModelMixin):
     """Manage ticket message in database"""
 
@@ -159,9 +158,6 @@ class ManagerTicketMessageViewSet(viewsets.GenericViewSet,
     permission_classes = (permissions.IsManager,)
     pagination_class = StandardResultsSetPagination
     queryset = models.TicketMessage.objects.all()
-
-    def get_queryset(self):
-        return self.queryset.filter(sender=self.request.user)
 
     def perform_create(self, serializer):
         """Save authenticated user"""
