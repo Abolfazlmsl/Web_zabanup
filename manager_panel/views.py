@@ -155,13 +155,15 @@ class ManagerTicketViewSet(viewsets.GenericViewSet,
             return serializers.TicketDetailSerializer
 
 
-class ManagerTicketMessageViewSet(viewsets.GenericViewSet,
-                                  mixins.CreateModelMixin):
+class ManagerTicketMessageAPIView(generics.CreateAPIView):
     """Manage ticket message in database"""
 
     serializer_class = serializers.TickerMessageSerializer
     authentication_classes = (JWTAuthentication,)
-    permission_classes = (permissions.IsManager,)
+    permission_classes = (
+        permissions.IsManager,
+        permissions.IsTickerMessageOwner
+    )
     pagination_class = StandardResultsSetPagination
     queryset = models.TicketMessage.objects.all()
 

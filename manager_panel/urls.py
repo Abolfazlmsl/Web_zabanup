@@ -16,10 +16,10 @@ router.register('answer', views.ManagerAnswerViewSet)
 router.register('user-answer', views.ManagerUserAnswerViewSet)
 router.register('comment', views.ManagerCommentViewSet)
 router.register('ticket', views.ManagerTicketViewSet)
-router.register('ticket-message', views.ManagerTicketMessageViewSet)
 
 
 urlpatterns = [
     path('info/', views.ManagerInfoView.as_view(), name='ManagerInfo'),
+    path('ticket-message/', views.ManagerTicketMessageAPIView.as_view(), name='TicketMessage'),
     path('', include(router.urls)),
 ]
