@@ -231,7 +231,11 @@ class Ticket(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     relate_unit = models.CharField(max_length=255, choices=CHOICES)
 
-    def str(self):
+    @property
+    def message_set(self):
+        return self.ticketmessage_set.all().order_by('created_on')
+
+    def __str__(self):
         return f'{self.title}, {self.relate_unit}, {self.staff}, {self.student}'
 
 
@@ -241,7 +245,7 @@ class TicketMessage(models.Model):
     text = models.TextField(blank=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return f'{self.ticket}, {self.text}'
 
 
