@@ -10,8 +10,14 @@ router.register('user', views.ManagerUserViewSet)
 router.register('book', views.ManagerBookViewSet)
 router.register('exam-category', views.ManagerExamCategoryViewSet)
 router.register('exam', views.ManagerExamViewSet)
+router.register('reading', views.ManagerReadingViewSet)
+router.register('question', views.ManagerQuestionViewSet)
+router.register('answer', views.ManagerAnswerViewSet)
+router.register('user-answer', views.ManagerUserAnswerViewSet)
+router.register('comment', views.ManagerCommentViewSet)
 
 
 urlpatterns = [
+    path('info/', views.ManagerInfoView.as_view(), name='ManagerInfo'),
     path('', include(router.urls)),
 ]

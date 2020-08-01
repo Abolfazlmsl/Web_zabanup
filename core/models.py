@@ -204,7 +204,7 @@ class UserAnswer(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user}, {self.exam}, {self.grade}, {self.time}'
+        return f'{self.user}, {self.exam}, {self.grade}, {self.created_on}'
 
 
 class Comment(models.Model):

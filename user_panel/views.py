@@ -58,7 +58,6 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-
 class UserPhoneRegisterAPIView(APIView):
 
     def put(self, request):

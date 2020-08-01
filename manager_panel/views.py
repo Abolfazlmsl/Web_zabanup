@@ -71,3 +71,92 @@ class ManagerExamViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsManager,)
     pagination_class = StandardResultsSetPagination
     queryset = models.Exam.objects.all()
+
+
+class ManagerReadingViewSet(viewsets.ModelViewSet):
+    """Manage reading in database"""
+
+    serializer_class = serializers.ReadingSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Reading.objects.all()
+
+
+class ManagerQuestionViewSet(viewsets.ModelViewSet):
+    """Manage question in database"""
+
+    serializer_class = serializers.QuestionSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Question.objects.all()
+
+
+class ManagerAnswerViewSet(viewsets.ModelViewSet):
+    """Manage question in database"""
+
+    serializer_class = serializers.AnswerSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Answer.objects.all()
+
+
+class ManagerUserAnswerViewSet(viewsets.GenericViewSet,
+                               mixins.ListModelMixin,
+                               mixins.RetrieveModelMixin):
+    """Manage user answer in database"""
+
+    serializer_class = serializers.UserAnswerSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.UserAnswer.objects.all()
+
+
+class ManagerCommentViewSet(viewsets.GenericViewSet,
+                            mixins.RetrieveModelMixin,
+                            mixins.ListModelMixin,
+                            mixins.DestroyModelMixin):
+    """Manage comment in database"""
+
+    serializer_class = serializers.CommentSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Comment.objects.all()
+
+
+class ManagerTicketViewSet(viewsets.GenericViewSet,
+                           mixins.ListModelMixin,
+                           mixins.RetrieveModelMixin):
+    """Manage ticket in database"""
+
+    serializer_class = serializers.TicketSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Ticket.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.filter(staff=self.request.user)
+
+
+class ManagerTicketMessageViewSet(viewsets.GenericViewSet,
+                                  mixins.ListModelMixin,
+                                  mixins.CreateModelMixin):
+    """Manage ticket message in database"""
+
+    serializer_class = serializers.TickerMessageSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (permissions.IsManager,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.TicketMessage.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.filter(sender=self.request.user)
+
+    def perform_create(self, serializer):
+        """Save authenticated user"""
+        serializer.save(sender=self.request.user)

@@ -45,3 +45,65 @@ class ExamSerializer(serializers.ModelSerializer):
         model = models.Exam
         fields = '__all__'
         read_only_fields = ('id',)
+
+
+class ReadingSerializer(serializers.ModelSerializer):
+    """Serialize reading model"""
+
+    class Meta:
+        model = models.Reading
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    """Serialize question model"""
+
+    class Meta:
+        model = models.Question
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    """Serialize answer model"""
+
+    class Meta:
+        model = models.Answer
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class UserAnswerSerializer(serializers.ModelSerializer):
+    """Serialize user answer model"""
+
+    class Meta:
+        model = models.UserAnswer
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    """Serialize comment model"""
+
+    class Meta:
+        model = models.Comment
+        fields = '__all__'
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    """Serialize ticket model"""
+
+    class Meta:
+        model = models.Ticket
+        fields = '__all__'
+
+
+class TickerMessageSerializer(serializers.ModelSerializer):
+    """Serialize ticket message model"""
+
+    class Meta:
+        model = models.TicketMessage
+        fields = '__all__'
+        read_only_fields = ('id', 'sender')
+
+
