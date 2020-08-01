@@ -114,7 +114,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Ticket
-        exclude = ['created_on']
+        fields = '__all__'
 
 
 class TicketDetailSerializer(TicketSerializer):
