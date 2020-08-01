@@ -6,6 +6,7 @@
 /venv/
 /__pycache__/
 /admin/
+/media/
 
 # ignore a file type
 # *.json
