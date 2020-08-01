@@ -2,7 +2,7 @@ from random import randint
 
 from django.contrib.auth import get_user_model
 from kavenegar import KavenegarAPI, APIException, HTTPException
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets, mixins
 from rest_framework.generics import UpdateAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,6 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from Web_zabanup.settings import KAVENEGAR_APIKEY
+from core import models
 from . import serializers
 
 
@@ -58,7 +59,6 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-
 class UserPhoneRegisterAPIView(APIView):
 
     def put(self, request):
@@ -78,6 +78,8 @@ class UserPhoneRegisterAPIView(APIView):
                     )
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class ChangePasswordView(UpdateAPIView):
@@ -113,3 +115,15 @@ class ChangePasswordView(UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserAnswerViewSet(viewsets.GenericViewSet,
+                        mixins.ListModelMixin,
+                        mixins.RetrieveModelMixin):
+    serializer_class = serializers.UserAnswerSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+    queryset = models.UserAnswer.objects.all()
+
+    def get_queryset(self):
+        queryset = models.UserAnswer.objects.filter(user=self.request.user)

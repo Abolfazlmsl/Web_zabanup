@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
+from core import models
+
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object"""
@@ -59,3 +61,10 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+
+class UserAnswerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.UserAnswer
+        fields = '__all__'
