@@ -98,14 +98,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TicketSerializer(serializers.ModelSerializer):
-    """Serialize ticket model"""
-
-    class Meta:
-        model = models.Ticket
-        fields = '__all__'
-
-
 class TickerMessageSerializer(serializers.ModelSerializer):
     """Serialize ticket message model"""
 
@@ -115,3 +107,16 @@ class TickerMessageSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'sender')
 
 
+class TicketSerializer(serializers.ModelSerializer):
+    """Serialize ticket model"""
+    staff = UserSerializer(many=False)
+    student = UserSerializer(many=False)
+
+    class Meta:
+        model = models.Ticket
+        exclude = ['created_on']
+
+
+class TicketDetailSerializer(TicketSerializer):
+    """Serialize detail ticket model"""
+    message_set = TickerMessageSerializer(many=True)

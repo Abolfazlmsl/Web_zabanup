@@ -148,6 +148,12 @@ class ManagerTicketViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         return self.queryset.filter(staff=self.request.user)
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.serializer_class
+        else:
+            return serializers.TicketDetailSerializer
+
 
 class ManagerTicketMessageViewSet(viewsets.GenericViewSet,
                                   mixins.CreateModelMixin):
