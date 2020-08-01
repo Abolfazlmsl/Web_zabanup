@@ -10,14 +10,22 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = (
             'id',
-            'email',
             'name',
             'phone_number',
-            'national_code',
-            'is_foreign_people',
-            'bank_card_number'
         )
-        read_only_fields = ('id',)
+
+
+class UserDetailSerializer(UserSerializer):
+    """Serialize user detail model"""
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + (
+            (
+                'gender',
+                'email',
+                'is_verified',
+            )
+        )
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -26,7 +34,7 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Book
         fields = '__all__'
-        read_only_fields = ('id', 'test_taken', 'created_on')
+        read_only_fields = ('id', 'test_taken', 'created_on', 'rate')
 
 
 class ExamCategorySerializer(serializers.ModelSerializer):

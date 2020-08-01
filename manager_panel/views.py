@@ -15,7 +15,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class ManagerInfoView(generics.RetrieveUpdateAPIView):
     """Show detailed of manager user"""
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.UserDetailSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (permissions.IsManager,)
     queryset = get_user_model().objects.all()
@@ -41,6 +41,12 @@ class ManagerUserViewSet(viewsets.GenericViewSet,
         return self.queryset.filter(
             is_superuser=False, is_staff=False
         ).exclude(groups__name='Manager')
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.serializer_class
+        else:
+            return serializers.UserDetailSerializer
 
 
 class ManagerBookViewSet(viewsets.ModelViewSet):

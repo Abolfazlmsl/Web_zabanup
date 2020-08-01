@@ -15,6 +15,8 @@ router.register('question', views.ManagerQuestionViewSet)
 router.register('answer', views.ManagerAnswerViewSet)
 router.register('user-answer', views.ManagerUserAnswerViewSet)
 router.register('comment', views.ManagerCommentViewSet)
+router.register('ticket', views.ManagerCommentViewSet)
+router.register('ticket-message', views.ManagerCommentViewSet)
 
 
 urlpatterns = [
