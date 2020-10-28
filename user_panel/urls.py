@@ -15,5 +15,6 @@ urlpatterns = [
     path('me/', views.ManageUserView.as_view(), name='me'),
     path('verify-user/', views.UserPhoneRegisterAPIView.as_view(), name='verify-user'),
     path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),
+    path('resend/', views.ResendSignUpTokenAPIView.as_view(), name='resend-token'),
     path('ticket-message/', views.TicketMessageAPIView.as_view(), name='ticket-message'),
 ]

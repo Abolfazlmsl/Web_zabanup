@@ -63,6 +63,16 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)
 
 
+class ResendSignUpTokenSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ['phone_number', 'generated_token']
+        read_only_fields = (
+            'generated_token',
+        )
+
+
 class UserAnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
