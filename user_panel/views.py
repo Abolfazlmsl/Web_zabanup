@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from kavenegar import KavenegarAPI, APIException, HTTPException
 from rest_framework import generics, status, viewsets, mixins
 from rest_framework.generics import UpdateAPIView, get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -11,7 +12,13 @@ from rest_framework.permissions import IsAuthenticated
 
 from Web_zabanup.settings import KAVENEGAR_APIKEY
 from core import models
-from . import serializers
+from . import serializers, permissions
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -28,7 +35,7 @@ class CreateUserView(generics.CreateAPIView):
             params = {'sender': '1000596446', 'receptor': serializer.validated_data['phone_number'],
                       'message': 'کالا نگار\n' + 'کد تایید:' + str(serializer.validated_data['generated_token'])}
             api.sms_send(params)
-            return Response({"user": "signed up successfully",})
+            return Response({"user": "signed up successfully", })
 
         except APIException:
             return Response(
@@ -80,8 +87,6 @@ class UserPhoneRegisterAPIView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 class ChangePasswordView(UpdateAPIView):
     """
     An endpoint for changing password.
@@ -127,3 +132,57 @@ class UserAnswerViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         queryset = models.UserAnswer.objects.filter(user=self.request.user)
+        return queryset
+
+
+class TicketViewSet(viewsets.GenericViewSet,
+                    mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.CreateModelMixin,):
+    """Manage ticket in database"""
+
+    serializer_class = serializers.TicketListSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Ticket.objects.all()
+
+    def get_queryset(self):
+        return self.queryset.filter(staff=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.serializer_class
+        elif self.action == 'create':
+            return serializers.TicketCreateSerializer
+        else:
+            return serializers.TicketDetailSerializer
+
+    def perform_create(self, serializer):
+        """Save authenticated user"""
+        serializer.save(student=self.request.user)
+
+
+class TicketMessageAPIView(generics.CreateAPIView):
+    serializer_class = serializers.TicketMessageSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated, permissions.IsTicketMessageOwner)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.TicketMessage.objects.all()
+
+    def perform_create(self, serializer):
+        """Save authenticated user"""
+        serializer.save(sender=self.request.user)
+
+
+class CommentViewSet(viewsets.GenericViewSet,
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin):
+    serializer_class = serializers.CommentSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated, permissions.IsTicketMessageOwner)
+    pagination_class = StandardResultsSetPagination
+    queryset = models.Comment.objects.all()
+
+    def get_queryset(self):
+        return models.Comment.objects.filter(user=self.request.user)

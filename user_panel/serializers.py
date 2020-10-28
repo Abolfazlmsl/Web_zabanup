@@ -68,3 +68,43 @@ class UserAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAnswer
         fields = '__all__'
+
+
+class TicketMessageSerializer(serializers.ModelSerializer):
+    """Serialize ticket message model"""
+
+    class Meta:
+        model = models.TicketMessage
+        fields = '__all__'
+        read_only_fields = ('id', 'sender')
+
+
+class TicketListSerializer(serializers.ModelSerializer):
+    """Serialize ticket model"""
+    staff = UserSerializer(many=False)
+    student = UserSerializer(many=False)
+
+    class Meta:
+        model = models.Ticket
+        fields = '__all__'
+
+
+class TicketDetailSerializer(TicketListSerializer):
+    """Serialize detail ticket model"""
+    message_set = TicketMessageSerializer(many=True)
+
+
+class TicketCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Ticket
+        fields = '__all__'
+        read_only_fields = ('id', 'student')
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Comment
+        fields = '__all__'
+        depth = 1
