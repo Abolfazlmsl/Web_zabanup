@@ -1,4 +1,6 @@
 from django.contrib.auth import get_user_model
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework import generics, status, viewsets, mixins
 from rest_framework.generics import UpdateAPIView, get_object_or_404
 from rest_framework.pagination import PageNumberPagination
@@ -20,4 +22,33 @@ class BookViewSet(viewsets.GenericViewSet,
     queryset = models.Book.objects.all()
 
 
+class ExamViewSet(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin):
+    """ list and retrieve exams """
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    # ordering_fields = ['rate',]
+    search_fields = ('book',)
+    serializer_class = serializers.ExamSerializer
+    authentication_classes = (JWTAuthentication,)
+    queryset = models.Exam.objects.all()
 
+
+class ReadingViewSet(viewsets.GenericViewSet,
+                        mixins.ListModelMixin,
+                        mixins.RetrieveModelMixin):
+    """ list and retrieve readings """
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter
+    ]
+    # ordering_fields = ['rate',]
+    search_fields = ('exam',)
+    serializer_class = serializers.ReadingSerializer
+    authentication_classes = (JWTAuthentication,)
+    queryset = models.Reading.objects.all()

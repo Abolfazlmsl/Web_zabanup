@@ -23,7 +23,7 @@ from Web_zabanup import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('core.urls')),
-    # path('reading/', include('reading.urls')),
+    path('reading/', include('reading.urls')),
     path('user-panel/', include('user_panel.urls')),
     path('manager-panel/', include('manager_panel.urls')),
 

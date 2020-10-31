@@ -163,6 +163,10 @@ class Reading(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def questions(self):
+        return self.question_set.all()
+
 
 class Question(models.Model):
     CHOICES = [
