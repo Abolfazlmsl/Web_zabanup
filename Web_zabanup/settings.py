@@ -69,7 +69,7 @@ CORS_ORIGIN_WHITELIST = [
 
 ROOT_URLCONF = 'Web_zabanup.urls'
 
-KAVENEGAR_APIKEY = '686F47626F616A397639556D7A78316E357945474235477544586E323879355855516568695059383941413D'
+KAVENEGAR_APIKEY = '4E684B335365634263623735477732303676314F6751347345785A685969634F56676B486E704E695478453D'
 
 
 TEMPLATES = [
@@ -109,24 +109,24 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 
 #AMIR DB
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'zabanup_db',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'PORT': '3306',
-#         'HOST': 'localhost'
-#
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'zabanup_db',
+        'USER': 'root',
+        'PASSWORD': '',
+        'PORT': '3306',
+        'HOST': 'localhost'
+
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 #AMIRHOSSEIN DB
 # DATABASES = {
