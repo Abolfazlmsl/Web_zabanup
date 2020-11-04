@@ -1,3 +1,5 @@
+import secrets
+import string
 from random import randint
 
 from django.contrib.auth import get_user_model
@@ -162,6 +164,54 @@ class ResendSignUpTokenAPIView(APIView):
                     )
         else:
             return Response({"user": "چنین کاربری وجود ندارد"})
+
+
+class ForgetPasswordAPIView(generics.CreateAPIView):
+    serializer_class = serializers.UserForgetSerializer
+    queryset = models.User.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        phone_number = self.request.POST.get('phone_number')
+        alphabet = string.ascii_letters + string.digits
+        password = ''.join(secrets.choice(alphabet) for i in range(8))
+        try:
+            user = get_user_model().objects.get(phone_number=phone_number)
+        except get_user_model().DoesNotExist:
+            return Response(
+                {
+                    'message': 'شماره مورد نظر یافت نشد',
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        try:
+            api = KavenegarAPI(KAVENEGAR_APIKEY)
+            params = {'sender': '1000596446', 'receptor': phone_number,
+                      'message': 'زبان آپ\n' + 'رمزعبور جدید شما:' + password}
+            api.sms_send(params)
+            user.set_password(password)
+            user.save()
+            return Response(
+                {
+                    'message': 'رمز عبور به شماره موبایل وارد شده ارسال گردید',
+                },
+                status=status.HTTP_200_OK
+            )
+        except APIException:
+            return Response(
+                {
+                    'error': 'ارسال رمز عبور با مشکل مواجه شده است',
+                    'type': 'APIException'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except HTTPException:
+            return Response(
+                {
+                    'error': 'ارسال رمز عبور با مشکل مواجه شده است',
+                    'type': 'HTTPException'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class UserAnswerViewSet(viewsets.GenericViewSet,

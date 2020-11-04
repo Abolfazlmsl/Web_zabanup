@@ -73,6 +73,13 @@ class ResendSignUpTokenSerializer(serializers.ModelSerializer):
         )
 
 
+class UserForgetSerializer(serializers.Serializer):
+    phone_number = serializers.IntegerField()
+
+    class Meta:
+        model = models.User
+
+
 class UserAnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
