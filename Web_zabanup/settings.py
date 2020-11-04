@@ -95,17 +95,17 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'zabanup_db',
-#         'USER': 'admin',
-#         'PASSWORD': '',
-#         'PORT': 3306,
-#         'HOST': 'localhost'
-#
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'zabanup_db',
+        'USER': 'admin',
+        'PASSWORD': '',
+        'PORT': 3306,
+        'HOST': 'localhost'
+
+    }
+}
 
 #AMIR DB
 
@@ -121,12 +121,12 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 #AMIRHOSSEIN DB
 # DATABASES = {
