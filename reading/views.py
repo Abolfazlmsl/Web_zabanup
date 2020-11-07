@@ -53,3 +53,8 @@ class ReadingViewSet(viewsets.GenericViewSet,
     authentication_classes = (JWTAuthentication,)
     queryset = models.Reading.objects.all()
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.ReadingWithQuestionsSerializer
+        else:
+            return self.serializer_class

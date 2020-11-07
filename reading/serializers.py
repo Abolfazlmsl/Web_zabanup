@@ -23,6 +23,12 @@ class ExamSerializer(serializers.ModelSerializer):
 
 
 class ReadingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Reading
+        fields = '__all__'
+
+
+class ReadingWithQuestionsSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
     class Meta:
         model = models.Reading
