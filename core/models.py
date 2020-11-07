@@ -195,7 +195,7 @@ class Answer(models.Model):
     truth = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.question
+        return self.question.text
 
 
 class UserAnswer(models.Model):

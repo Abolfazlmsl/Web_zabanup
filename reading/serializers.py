@@ -33,3 +33,16 @@ class ReadingWithQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Reading
         fields = '__all__'
+
+
+class UserAnswerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.UserAnswer
+        fields = '__all__'
+        read_only_fields = (
+            'id',
+            'user',
+            'grade',
+            'created_on'
+        )

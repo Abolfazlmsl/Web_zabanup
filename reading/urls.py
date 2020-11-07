@@ -14,4 +14,5 @@ router.register('reading', views.ReadingViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('exam-result/', views.UserAnswerAPIView.as_view()),
 ]

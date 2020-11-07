@@ -58,3 +58,24 @@ class ReadingViewSet(viewsets.GenericViewSet,
             return serializers.ReadingWithQuestionsSerializer
         else:
             return self.serializer_class
+
+class UserAnswerAPIView(APIView):
+    serializer_class = serializers.UserAnswerSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        answers = request.data['answer']
+        exam = request.data['exam']
+        correct_answerlist = models.Answer.objects.filter(question__passage__exam_id=exam)
+        for a in correct_answerlist:
+            print(a.text)
+            print(a.truth)
+        print(answers)
+        message = {
+            'message': 'ok'
+        }
+        return Response(
+            message,
+            status=status.HTTP_201_CREATED
+        )
