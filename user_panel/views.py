@@ -35,7 +35,7 @@ class CreateUserView(generics.CreateAPIView):
         try:
             api = KavenegarAPI(KAVENEGAR_APIKEY)
             # print("phone", serializer.validated_data['phone_number'])
-            params = {'sender': '10006000660600', 'receptor': serializer.validated_data['phone_number'],
+            params = {'sender': '10008445', 'receptor': serializer.validated_data['phone_number'],
                       'message': 'زبان آپ\n' + 'کد تایید:' + str(serializer.validated_data['generated_token'])}
             api.sms_send(params)
             return Response({"user": "signed up successfully", })
@@ -141,7 +141,7 @@ class ResendSignUpTokenAPIView(APIView):
                 user.save()
                 try:
                     api = KavenegarAPI(KAVENEGAR_APIKEY)
-                    params = {'sender': '10006000660600', 'receptor': serializer.validated_data['phone_number'],
+                    params = {'sender': '10008445', 'receptor': serializer.validated_data['phone_number'],
                               'message': 'زبان آپ\n' + 'کد تایید:' + str(serializer.validated_data['generated_token'])}
                     response = api.sms_send(params)
                     return Response({"message": "کاربر با موفقیت ثبت نام شد."})
@@ -185,7 +185,7 @@ class ForgetPasswordAPIView(generics.CreateAPIView):
             )
         try:
             api = KavenegarAPI(KAVENEGAR_APIKEY)
-            params = {'sender': '1000596446', 'receptor': phone_number,
+            params = {'sender': '10008445', 'receptor': phone_number,
                       'message': 'زبان آپ\n' + 'رمزعبور جدید شما:' + password}
             api.sms_send(params)
             user.set_password(password)
