@@ -166,12 +166,13 @@ class ResendSignUpTokenAPIView(APIView):
             return Response({"user": "چنین کاربری وجود ندارد"})
 
 
-class ForgetPasswordAPIView(generics.CreateAPIView):
-    serializer_class = serializers.UserForgetSerializer
+class ForgetPasswordAPIView(APIView):
+    # serializer_class = serializers.UserForgetSerializer
     # queryset = models.User.objects.all()
 
-    def create(self, request, *args, **kwargs):
-        phone_number = self.request.POST.get('phone_number')
+    def post(self, request):
+        phone_number = request.data['phone_number']
+        print(phone_number)
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for i in range(8))
         try:
