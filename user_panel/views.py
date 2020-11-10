@@ -31,6 +31,8 @@ class CreateUserView(generics.CreateAPIView):
         serializer = serializers.UserSerializer(data=self.request.data)
         if serializer.is_valid():
             serializer.validated_data['generated_token'] = randint(100000, 999999)
+            if serializer.validated_data['email'] == '':
+                serializer.validated_data['email'] = None
             serializer.save()
         try:
             api = KavenegarAPI(KAVENEGAR_APIKEY)
@@ -38,7 +40,10 @@ class CreateUserView(generics.CreateAPIView):
             params = {'sender': '10008445', 'receptor': serializer.validated_data['phone_number'],
                       'message': 'زبان آپ\n' + 'کد تایید:' + str(serializer.validated_data['generated_token'])}
             api.sms_send(params)
-            return Response({"user": "signed up successfully", })
+            return Response({"message": "ثبت نام با موفقیت انجام شد. کد تایید به تلفن همراه شما ارسال شد."}, status=status.HTTP_201_CREATED)
+
+        except KeyError:
+            return Response({"message": "ثبت نام با مشکل مواجه شده است! لطفا مجدد تلاش کنید"}, status=status.HTTP_400_BAD_REQUEST)
 
         except APIException:
             return Response(
@@ -176,7 +181,7 @@ class ForgetPasswordAPIView(APIView):
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for i in range(8))
         try:
-            user = get_user_model().objects.get(phone_number=phone_number)
+            user = get_user_model().objects.get(phone_number=str(phone_number))
         except get_user_model().DoesNotExist:
             return Response(
                 {
