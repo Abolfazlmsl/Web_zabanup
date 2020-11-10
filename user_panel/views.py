@@ -168,7 +168,7 @@ class ResendSignUpTokenAPIView(APIView):
 
 class ForgetPasswordAPIView(generics.CreateAPIView):
     serializer_class = serializers.UserForgetSerializer
-    queryset = models.User.objects.all()
+    # queryset = models.User.objects.all()
 
     def create(self, request, *args, **kwargs):
         phone_number = self.request.POST.get('phone_number')
