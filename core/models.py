@@ -145,6 +145,7 @@ class Exam(models.Model):
         ('upper_intermediate', 'Upper intermediate'),
         ('advanced', 'Advanced'),
     ]
+    exam_code = models.CharField(max_length=64)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     category = models.ManyToManyField(ExamCategory)
     difficulty = models.CharField(max_length=255, choices=DIFFICULTY)
