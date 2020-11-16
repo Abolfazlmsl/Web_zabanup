@@ -59,14 +59,14 @@ class ManagerBookViewSet(viewsets.ModelViewSet):
     queryset = models.Book.objects.all()
 
 
-class ManagerExamCategoryViewSet(viewsets.ModelViewSet):
+class ManagerCategoryViewSet(viewsets.ModelViewSet):
     """Manage exams in database"""
 
-    serializer_class = serializers.ExamCategorySerializer
+    serializer_class = serializers.CategorySerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (permissions.IsManager,)
     pagination_class = StandardResultsSetPagination
-    queryset = models.ExamCategory.objects.all()
+    queryset = models.Category.objects.all()
 
 
 class ManagerExamViewSet(viewsets.ModelViewSet):

@@ -48,7 +48,7 @@ class UserAdmin(UserAdminBase):
 
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Book)
-admin.site.register(models.ExamCategory)
+admin.site.register(models.Category)
 admin.site.register(models.Exam)
 admin.site.register(models.Reading)
 admin.site.register(models.Question)

@@ -14,5 +14,6 @@ router.register('reading', views.ReadingViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('category/', views.CategoryListAPIView.as_view()),
     path('exam-result/', views.UserAnswerAPIView.as_view()),
 ]

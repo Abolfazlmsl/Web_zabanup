@@ -41,7 +41,7 @@ class ExamViewSet(viewsets.GenericViewSet,
 class ReadingViewSet(viewsets.GenericViewSet,
                         mixins.ListModelMixin,
                         mixins.RetrieveModelMixin):
-    """ list and retrieve readings """
+    """ list and retrieve readings"""
     filter_backends = [
         DjangoFilterBackend,
         filters.OrderingFilter,
@@ -58,6 +58,7 @@ class ReadingViewSet(viewsets.GenericViewSet,
             return serializers.ReadingWithQuestionsSerializer
         else:
             return self.serializer_class
+
 
 class UserAnswerAPIView(APIView):
     serializer_class = serializers.UserAnswerSerializer
@@ -79,3 +80,15 @@ class UserAnswerAPIView(APIView):
             message,
             status=status.HTTP_201_CREATED
         )
+
+
+class CategoryListAPIView(generics.ListAPIView):
+    """
+        List category
+    """
+    serializer_class = serializers.CategorySerializer
+    queryset = models.Category.objects.all()
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+    filterset_fields = ['type']

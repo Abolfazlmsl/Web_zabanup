@@ -8,7 +8,7 @@ app_name = 'manager'
 router = DefaultRouter()
 router.register('user', views.ManagerUserViewSet)
 router.register('book', views.ManagerBookViewSet)
-router.register('exam-category', views.ManagerExamCategoryViewSet)
+router.register('exam-category', views.ManagerCategoryViewSet)
 router.register('exam', views.ManagerExamViewSet)
 router.register('reading', views.ManagerReadingViewSet)
 router.register('question', views.ManagerQuestionViewSet)

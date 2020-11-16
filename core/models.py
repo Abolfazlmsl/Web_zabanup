@@ -121,34 +121,33 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Book(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    rate = models.CharField(max_length=1, blank=True, null=True)
     created_on = models.DateField(auto_now_add=True)
-    test_taken = models.IntegerField(default=0)
     image = models.ImageField(upload_to='uploads/book/', null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
-class ExamCategory(models.Model):
+class Category(models.Model):
+    CHOICES = (
+        ('difficulty', 'Difficulty'),
+        ('passage_type', 'Passage type'),
+        ('question', 'Question'),
+        ('passage_category', 'Passage category'),
+    )
     name = models.CharField(max_length=255, unique=True)
+    type = models.CharField(max_length=255, choices=CHOICES)
 
     def __str__(self):
         return self.name
 
 
 class Exam(models.Model):
-    DIFFICULTY = [
-        ('beginner', 'Beginner'),
-        ('pre_intermediate', 'Pre intermediate'),
-        ('intermediate', 'Intermediate'),
-        ('upper_intermediate', 'Upper intermediate'),
-        ('advanced', 'Advanced'),
-    ]
     exam_code = models.CharField(max_length=64)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    category = models.ManyToManyField(ExamCategory)
-    difficulty = models.CharField(max_length=255, choices=DIFFICULTY)
+    difficulty = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    rate = models.CharField(max_length=1, blank=True, null=True)
+    test_taken = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.book}, {self.category}, {self.difficulty}'
@@ -160,6 +159,8 @@ class Reading(models.Model):
     image = models.ImageField(upload_to='uploads/reading/')
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     priority = models.PositiveIntegerField()
+    category = models.ManyToManyField(Category, related_name='category')
+    passage_type = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.title
@@ -170,19 +171,9 @@ class Reading(models.Model):
 
 
 class Question(models.Model):
-    CHOICES = [
-        ('truefalse', 'TrueFalse'),
-        ('yesno', 'YesNo'),
-        ('text', 'Text'),
-        ('matching_heading', 'Matching Heading'),
-        ('matching_paragraph', 'Matching Paragraph'),
-        ('summary_completion', 'Summary Completion'),
-        ('radiobutton', 'Radiobutton'),
-        ('checkbox', 'Checkbox'),
-    ]
     passage = models.ForeignKey(Reading, on_delete=models.CASCADE)
     text = RichTextField()
-    type = models.CharField(max_length=255, choices=CHOICES)
+    type = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     priority = models.PositiveIntegerField()
     description = RichTextField()
 

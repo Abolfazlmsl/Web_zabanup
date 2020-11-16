@@ -37,11 +37,11 @@ class BookSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'test_taken', 'created_on', 'rate')
 
 
-class ExamCategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     """Serialize exam model"""
 
     class Meta:
-        model = models.ExamCategory
+        model = models.Category
         fields = '__all__'
         read_only_fields = ('id',)
 

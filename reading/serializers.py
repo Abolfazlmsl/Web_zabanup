@@ -46,3 +46,10 @@ class UserAnswerSerializer(serializers.ModelSerializer):
             'grade',
             'created_on'
         )
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Category
+        fields = '__all__'
