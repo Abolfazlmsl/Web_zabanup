@@ -136,6 +136,7 @@ class Category(models.Model):
         ('passage_category', 'Passage category'),
     )
     name = models.CharField(max_length=255, unique=True)
+    sub_name = models.CharField(max_length=255, null=True, blank=True)
     type = models.CharField(max_length=255, choices=CHOICES)
 
     def __str__(self):
