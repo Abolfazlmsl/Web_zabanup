@@ -131,9 +131,9 @@ class Book(models.Model):
 class Category(models.Model):
     CHOICES = (
         ('difficulty', 'Difficulty'),
-        ('passage_type', 'Passage type'),
+        ('type', 'Type'),
         ('question', 'Question'),
-        ('passage_category', 'Passage category'),
+        ('subject', 'Subject'),
     )
     name = models.CharField(max_length=255, unique=True)
     sub_name = models.CharField(max_length=255, null=True, blank=True)
@@ -144,24 +144,24 @@ class Category(models.Model):
 
 
 class Exam(models.Model):
-    exam_code = models.CharField(max_length=64)
+    # exam_code = models.CharField(max_length=64)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     difficulty = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     rate = models.CharField(max_length=1, blank=True, null=True)
     test_taken = models.IntegerField(default=0)
 
     def __str__(self):
-        return f'{self.book}, {self.category}, {self.difficulty}'
+        return f'{self.book}, {self.difficulty}'
 
 
 class Reading(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     text = RichTextField()
-    image = models.ImageField(upload_to='uploads/reading/')
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    priority = models.PositiveIntegerField()
-    category = models.ManyToManyField(Category, related_name='category')
-    passage_type = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    image = models.ImageField(upload_to='uploads/reading/', null=True, blank=True)
+    exam = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, blank=True)
+    priority = models.PositiveIntegerField(null=True, blank=True)
+    subject = models.ManyToManyField(Category, related_name='subject')
+    passage_type = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='passage_type')
 
     def __str__(self):
         return self.title
@@ -170,13 +170,19 @@ class Reading(models.Model):
     def questions(self):
         return self.question_set.all()
 
+    @property
+    def book(self):
+        if self.exam:
+            return self.exam.book
+        return None
+
 
 class Question(models.Model):
     passage = models.ForeignKey(Reading, on_delete=models.CASCADE)
     text = RichTextField()
     type = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    priority = models.PositiveIntegerField()
-    description = RichTextField()
+    priority = models.PositiveIntegerField(null=True, blank=True)
+    description = RichTextField(null=True, blank=True)
 
     def __str__(self):
         return self.text

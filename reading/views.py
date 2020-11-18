@@ -39,8 +39,8 @@ class ExamViewSet(viewsets.GenericViewSet,
 
 
 class ReadingViewSet(viewsets.GenericViewSet,
-                        mixins.ListModelMixin,
-                        mixins.RetrieveModelMixin):
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin):
     """ list and retrieve readings"""
     filter_backends = [
         DjangoFilterBackend,
@@ -58,6 +58,34 @@ class ReadingViewSet(viewsets.GenericViewSet,
             return serializers.ReadingWithQuestionsSerializer
         else:
             return self.serializer_class
+
+    def get_queryset(self):
+        """Custom queryset and filter it"""
+
+        # get query param
+        book = self.request.query_params.get('book')
+        subject = self.request.query_params.get('subject')
+        passage = self.request.query_params.get('passage')
+        question_type = self.request.query_params.get('question_type')
+
+        # get queryset
+        queryset = self.queryset
+
+        # filter query
+        if book:
+            book = book.split(',')
+            queryset = queryset.filter(exam__book_id__in=book).distinct()
+        if subject:
+            subject = subject.split(',')
+            queryset = queryset.filter(subject__in=subject).distinct()
+        if passage:
+            passage = passage.split(',')
+            queryset = queryset.filter(passage_type__in=passage).distinct()
+        if question_type:
+            question_type = question_type.split(',')
+            queryset = queryset.filter(question__type__in=question_type).distinct()
+            
+        return queryset
 
 
 class UserAnswerAPIView(APIView):

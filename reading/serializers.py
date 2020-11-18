@@ -23,16 +23,27 @@ class ExamSerializer(serializers.ModelSerializer):
 
 
 class ReadingSerializer(serializers.ModelSerializer):
+    book = serializers.CharField(max_length=255)
     class Meta:
         model = models.Reading
-        fields = '__all__'
+        fields = (
+            'id',
+            'title',
+            'image',
+            'passage_type',
+            'subject',
+            'book'
+        )
+        depth = 1
 
 
 class ReadingWithQuestionsSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
+
     class Meta:
         model = models.Reading
         fields = '__all__'
+        depth = 1
 
 
 class UserAnswerSerializer(serializers.ModelSerializer):
