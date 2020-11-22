@@ -84,7 +84,7 @@ class ReadingViewSet(viewsets.GenericViewSet,
         if question_type:
             question_type = question_type.split(',')
             queryset = queryset.filter(question__type__in=question_type).distinct()
-            
+
         return queryset
 
 

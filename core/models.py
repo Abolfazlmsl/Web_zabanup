@@ -185,7 +185,11 @@ class Question(models.Model):
     description = RichTextField(null=True, blank=True)
 
     def __str__(self):
-        return self.text
+        return f'{self.text}, {self.passage.title}, {self.id}'
+
+    @property
+    def answers(self):
+        return self.answer_set.exclude(question__type_id=10)
 
 
 class Answer(models.Model):

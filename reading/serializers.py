@@ -9,10 +9,23 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class AnswerSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Question
-        fields = '__all__'
+        fields = (
+            'id',
+            'text'
+        )
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    answers = AnswerSerializer(many=True)
+
+    class Meta:
+        model = models.Question
+        exclude = ['passage']
+        depth = 1
 
 
 class ExamSerializer(serializers.ModelSerializer):
@@ -24,6 +37,7 @@ class ExamSerializer(serializers.ModelSerializer):
 
 class ReadingSerializer(serializers.ModelSerializer):
     book = serializers.CharField(max_length=255)
+
     class Meta:
         model = models.Reading
         fields = (
