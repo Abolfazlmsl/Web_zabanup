@@ -135,9 +135,12 @@ class Category(models.Model):
         ('question', 'Question'),
         ('subject', 'Subject'),
     )
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     sub_name = models.CharField(max_length=255, null=True, blank=True)
     type = models.CharField(max_length=255, choices=CHOICES)
+
+    class Meta:
+        unique_together = ('name', 'sub_name',)
 
     def __str__(self):
         return self.name
