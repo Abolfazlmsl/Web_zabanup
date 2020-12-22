@@ -108,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
     gender = models.CharField(max_length=128, choices=GENDER)
-    favorite_question = models.ManyToManyField('Question', blank=True, null=True)
+    favorite_question = models.ManyToManyField('MatchingQuestion', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -169,9 +169,9 @@ class Reading(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def questions(self):
-        return self.question_set.all()
+    # @property
+    # def questions(self):
+    #     return self.question_set.all()
 
     @property
     def book(self):

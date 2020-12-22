@@ -96,7 +96,7 @@ class ManagerQuestionViewSet(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (permissions.IsManager,)
     pagination_class = StandardResultsSetPagination
-    queryset = models.Question.objects.all()
+    queryset = models.MatchingQuestion.objects.all()
 
 
 class ManagerAnswerViewSet(viewsets.ModelViewSet):

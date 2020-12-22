@@ -12,7 +12,7 @@ class BookSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.Question
+        model = models.MatchingQuestion
         fields = (
             'id',
             'text'
@@ -23,7 +23,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
 
     class Meta:
-        model = models.Question
+        model = models.MatchingQuestion
         exclude = ['passage']
         depth = 1
 
