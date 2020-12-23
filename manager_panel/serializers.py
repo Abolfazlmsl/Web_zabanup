@@ -68,7 +68,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     """Serialize question model"""
 
     class Meta:
-        model = models.MatchingQuestion
+        model = models.Question
         fields = '__all__'
         read_only_fields = ('id',)
 

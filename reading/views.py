@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics, status, viewsets, mixins
@@ -43,12 +44,12 @@ class ReadingViewSet(viewsets.GenericViewSet,
                      mixins.RetrieveModelMixin):
     """ list and retrieve readings"""
     filter_backends = [
-        DjangoFilterBackend,
+        # DjangoFilterBackend,
         filters.OrderingFilter,
         filters.SearchFilter
     ]
-    # ordering_fields = ['rate',]
-    search_fields = ('exam',)
+    ordering_fields = ['exam.rate']
+    search_fields = ('title',)
     serializer_class = serializers.ReadingSerializer
     authentication_classes = (JWTAuthentication,)
     queryset = models.Reading.objects.all()
@@ -61,7 +62,7 @@ class ReadingViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         """Custom queryset and filter it"""
-
+        # print(self.queryset)
         # get query param
         book = self.request.query_params.get('book')
         subject = self.request.query_params.get('subject')
@@ -83,7 +84,7 @@ class ReadingViewSet(viewsets.GenericViewSet,
             queryset = queryset.filter(passage_type__in=passage).distinct()
         if question_type:
             question_type = question_type.split(',')
-            queryset = queryset.filter(question__type__in=question_type).distinct()
+            queryset = queryset.filter(questiondescription__type__in=question_type).distinct()
 
         return queryset
 

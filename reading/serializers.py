@@ -12,7 +12,7 @@ class BookSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.MatchingQuestion
+        model = models.Answer
         fields = (
             'id',
             'text'
@@ -23,8 +23,8 @@ class QuestionSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
 
     class Meta:
-        model = models.MatchingQuestion
-        exclude = ['passage']
+        model = models.Question
+        exclude = ['description']
         depth = 1
 
 
@@ -51,8 +51,17 @@ class ReadingSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class ReadingWithQuestionsSerializer(serializers.ModelSerializer):
+class QuestionDescriptionSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
+
+    class Meta:
+        model = models.QuestionDescription
+        exclude = ['passage']
+        depth = 1
+
+
+class ReadingWithQuestionsSerializer(serializers.ModelSerializer):
+    question_description = QuestionDescriptionSerializer(many=True)
 
     class Meta:
         model = models.Reading

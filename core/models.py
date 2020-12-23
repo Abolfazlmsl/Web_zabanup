@@ -108,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
     gender = models.CharField(max_length=128, choices=GENDER)
-    favorite_question = models.ManyToManyField('MatchingQuestion', blank=True, null=True)
+    favorite_question = models.ManyToManyField('Question', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -143,7 +143,7 @@ class Category(models.Model):
         unique_together = ('name', 'sub_name',)
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, {self.type}, {self.id}'
 
 
 class Exam(models.Model):
@@ -154,7 +154,7 @@ class Exam(models.Model):
     test_taken = models.IntegerField(default=0)
 
     def __str__(self):
-        return f'{self.book}, {self.difficulty}'
+        return f'{self.id}, {self.book}, {self.difficulty}'
 
 
 class Reading(models.Model):
@@ -169,9 +169,9 @@ class Reading(models.Model):
     def __str__(self):
         return self.title
 
-    # @property
-    # def questions(self):
-    #     return self.question_set.all()
+    @property
+    def question_description(self):
+        return self.questiondescription_set.all()
 
     @property
     def book(self):
@@ -185,20 +185,19 @@ class QuestionDescription(models.Model):
     number_of_choices = models.PositiveIntegerField(null=True, blank=True)
     priority = models.PositiveIntegerField(null=True, blank=True)
     passage = models.ForeignKey(Reading, on_delete=models.CASCADE)
+    type = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.passage}, {self.priority}'
+
+    @property
+    def questions(self):
+        return self.question_set.all()
 
 
-class MatchingQuestion(models.Model):
-    CHOICES = (
-        ('classifying-information', 'Classifying Information'),
-        ('main-idea', 'Main Idea'),
-        ('matching-heading', 'Matching Heading'),
-        ('matching-information', 'Matching Information'),
-        ('matching-sentence', 'Matching Sentence'),
-        ('matching-statement', 'Matching Statement'),
-    )
+class Question(models.Model):
     description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
     text = RichTextField()
-    type = models.CharField(max_length=127, choices=CHOICES)
     priority = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -206,76 +205,76 @@ class MatchingQuestion(models.Model):
 
     @property
     def answers(self):
-        return self.answer_set.exclude(question__type_id=10)
+        return self.answer_set.all()
 
 
-class CompletionQuestion(models.Model):
-    CHOICES = (
-        ('summary', 'Summary Completion'),
-        ('sentence', 'Sentence Completion'),
-    )
-    description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
-    text = RichTextField()
-    type = models.CharField(max_length=127, choices=CHOICES)
-    priority = models.PositiveIntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.text}, {self.description.passage.title}, {self.id}'
-
-
-class MapQuestion(models.Model):
-    description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
-    text = RichTextField()
-    priority = models.PositiveIntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.text}, {self.description.passage.title}, {self.id}'
-
-
-class MultipleQuestion(models.Model):
-    description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
-    text = RichTextField()
-    priority = models.PositiveIntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.text}, {self.description.passage.title}, {self.id}'
-
-
-class ShortQuestion(models.Model):
-    description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
-    text = RichTextField()
-    priority = models.PositiveIntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.text}, {self.description.passage.title}, {self.id}'
-
-
-class TrueFalseQuestion(models.Model):
-    CHOICES = (
-        ('true-false', 'True False'),
-        ('yes-no', 'Yes No'),
-    )
-    description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
-    text = RichTextField()
-    type = models.CharField(max_length=127, choices=CHOICES)
-    priority = models.PositiveIntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.text}, {self.description.passage.title}, {self.id}'
+# class CompletionQuestion(models.Model):
+#     CHOICES = (
+#         ('summary', 'Summary Completion'),
+#         ('sentence', 'Sentence Completion'),
+#     )
+#     description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
+#     text = RichTextField()
+#     type = models.CharField(max_length=127, choices=CHOICES)
+#     priority = models.PositiveIntegerField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return f'{self.text}, {self.description.passage.title}, {self.id}'
+#
+#
+# class MapQuestion(models.Model):
+#     description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
+#     text = RichTextField()
+#     priority = models.PositiveIntegerField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return f'{self.text}, {self.description.passage.title}, {self.id}'
+#
+#
+# class MultipleQuestion(models.Model):
+#     description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
+#     text = RichTextField()
+#     priority = models.PositiveIntegerField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return f'{self.text}, {self.description.passage.title}, {self.id}'
+#
+#
+# class ShortQuestion(models.Model):
+#     description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
+#     text = RichTextField()
+#     priority = models.PositiveIntegerField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return f'{self.text}, {self.description.passage.title}, {self.id}'
+#
+#
+# class TrueFalseQuestion(models.Model):
+#     CHOICES = (
+#         ('true-false', 'True False'),
+#         ('yes-no', 'Yes No'),
+#     )
+#     description = models.ForeignKey(QuestionDescription, on_delete=models.CASCADE)
+#     text = RichTextField()
+#     type = models.CharField(max_length=127, choices=CHOICES)
+#     priority = models.PositiveIntegerField(null=True, blank=True)
+#
+#     def __str__(self):
+#         return f'{self.text}, {self.description.passage.title}, {self.id}'
 
 
 class Answer(models.Model):
-    matching_question = models.ForeignKey(MatchingQuestion, on_delete=models.CASCADE, null=True, blank=True)
-    completion_question = models.ForeignKey(CompletionQuestion, on_delete=models.CASCADE, null=True, blank=True)
-    map_question = models.ForeignKey(MapQuestion, on_delete=models.CASCADE, null=True, blank=True)
-    multiple_question = models.ForeignKey(MultipleQuestion, on_delete=models.CASCADE, null=True, blank=True)
-    short_question = models.ForeignKey(ShortQuestion, on_delete=models.CASCADE, null=True, blank=True)
-    true_false_question = models.ForeignKey(TrueFalseQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
+    # completion_question = models.ForeignKey(CompletionQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    # map_question = models.ForeignKey(MapQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    # multiple_question = models.ForeignKey(MultipleQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    # short_question = models.ForeignKey(ShortQuestion, on_delete=models.CASCADE, null=True, blank=True)
+    # true_false_question = models.ForeignKey(TrueFalseQuestion, on_delete=models.CASCADE, null=True, blank=True)
     text = models.CharField(max_length=255)
     truth = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.text
+        return f'{self.id}, {self.question.text}, {self.text}'
 
 
 class UserAnswer(models.Model):
