@@ -48,7 +48,7 @@ class ReadingViewSet(viewsets.GenericViewSet,
         filters.OrderingFilter,
         filters.SearchFilter
     ]
-    ordering_fields = ['exam.rate']
+    # ordering_fields = ['exam.rate']
     search_fields = ('title',)
     serializer_class = serializers.ReadingSerializer
     authentication_classes = (JWTAuthentication,)
@@ -62,7 +62,7 @@ class ReadingViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         """Custom queryset and filter it"""
-        # print(self.queryset)
+        print(self.queryset)
         # get query param
         book = self.request.query_params.get('book')
         subject = self.request.query_params.get('subject')
