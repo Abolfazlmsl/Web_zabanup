@@ -188,7 +188,7 @@ class QuestionDescription(models.Model):
     type = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.passage}, {self.priority}'
+        return f'{self.passage}, {self.type}'
 
     @property
     def questions(self):
