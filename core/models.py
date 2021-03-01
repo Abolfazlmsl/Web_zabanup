@@ -46,6 +46,11 @@ def is_valid_phone_number(number):
         return False
 
 
+def reading_counter(exam):
+    if Reading.objects.filter(exam_id=exam).count() >= 3:
+        raise ValidationError('شما نمی توانید بیش از 3 متن ریدینگ در یک آزمون ذخیره نمایید.')
+
+
 class UserManager(BaseUserManager):
 
     def create_user(self, phone_number, password, email=None,
@@ -165,7 +170,7 @@ class Reading(models.Model):
     title = models.CharField(max_length=255, unique=True)
     text = RichTextField()
     image = models.ImageField(upload_to='uploads/reading/', null=True, blank=True)
-    exam = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, blank=True)
+    exam = models.ForeignKey(Exam, on_delete=models.SET_NULL, null=True, blank=True, validators=(reading_counter,))
     priority = models.PositiveIntegerField(null=True, blank=True)
     subject = models.ManyToManyField(Category, related_name='subject')
     passage_type = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='passage_type')
@@ -192,7 +197,7 @@ class QuestionDescription(models.Model):
     type = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.passage}, {self.priority}'
+        return f'{self.passage}, {self.type}'
 
     @property
     def questions(self):

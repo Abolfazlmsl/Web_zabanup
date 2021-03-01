@@ -75,10 +75,9 @@ class ReadingViewSet(viewsets.GenericViewSet,
     """ list and retrieve readings"""
     filter_backends = [
         # DjangoFilterBackend,
-        filters.OrderingFilter,
+        # filters.OrderingFilter,
         filters.SearchFilter
     ]
-    # ordering_fields = ['exam.rate']
     search_fields = ('title',)
     serializer_class = serializers.ReadingSerializer
     authentication_classes = (JWTAuthentication,)
