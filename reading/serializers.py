@@ -29,6 +29,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class ExamSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Exam
         fields = '__all__'
@@ -87,3 +88,12 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = '__all__'
+
+
+class ExamRetrieveSerializer(serializers.ModelSerializer):
+    passages = ReadingWithQuestionsSerializer(many=True)
+
+    class Meta:
+        model = models.Exam
+        fields = '__all__'
+        depth = 1

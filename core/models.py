@@ -153,6 +153,10 @@ class Exam(models.Model):
     rate = models.CharField(max_length=1, blank=True, null=True)
     test_taken = models.IntegerField(default=0)
 
+    @property
+    def passages(self):
+        return self.reading_set.all()
+
     def __str__(self):
         return f'{self.id}, {self.book}, {self.difficulty}'
 

@@ -32,11 +32,41 @@ class ExamViewSet(viewsets.GenericViewSet,
         filters.OrderingFilter,
         filters.SearchFilter
     ]
-    # ordering_fields = ['rate',]
     search_fields = ('book',)
+    ordering_fields = ('test_taken', 'rate')
     serializer_class = serializers.ExamSerializer
     authentication_classes = (JWTAuthentication,)
     queryset = models.Exam.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.ExamRetrieveSerializer
+        else:
+            return self.serializer_class
+
+    def get_queryset(self):
+        """Custom queryset and filter it"""
+        print(self.queryset)
+        # get query param
+        book = self.request.query_params.get('book')
+        subject = self.request.query_params.get('subject')
+        difficulty = self.request.query_params.get('difficulty')
+
+        # get queryset
+        queryset = self.queryset
+
+        # filter query
+        if book:
+            book = book.split(',')
+            queryset = queryset.filter(book_id__in=book).distinct()
+        if subject:
+            subject = subject.split(',')
+            queryset = queryset.filter(reading__subject__in=subject).distinct()
+        if difficulty:
+            difficulty = difficulty.split(',')
+            queryset = queryset.filter(difficulty_id__in=difficulty).distinct()
+
+        return queryset
 
 
 class ReadingViewSet(viewsets.GenericViewSet,
