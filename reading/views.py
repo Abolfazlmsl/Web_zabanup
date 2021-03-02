@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Q
+from django.db.models import Q, Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics, status, viewsets, mixins
@@ -51,6 +51,7 @@ class ExamViewSet(viewsets.GenericViewSet,
         book = self.request.query_params.get('book')
         subject = self.request.query_params.get('subject')
         difficulty = self.request.query_params.get('difficulty')
+        full = self.request.query_params.get('full')
 
         # get queryset
         queryset = self.queryset
@@ -65,6 +66,8 @@ class ExamViewSet(viewsets.GenericViewSet,
         if difficulty:
             difficulty = difficulty.split(',')
             queryset = queryset.filter(difficulty_id__in=difficulty).distinct()
+        if full == 'true':
+            queryset = queryset.annotate(readings_num=Count('reading')).filter(readings_num=3).distinct()
 
         return queryset
 
