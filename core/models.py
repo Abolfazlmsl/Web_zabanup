@@ -303,6 +303,7 @@ class Comment(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField()
+    like = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
