@@ -306,6 +306,10 @@ class Comment(models.Model):
     like = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def children(self):
+        return self.comment_set.all().order_by('-created_on')
+
     def __str__(self):
         return f'{self.id}, {self.user}, {self.text}, {self.parent_id}'
 

@@ -11,7 +11,7 @@ class IsManager(BasePermission):
         return False
 
 
-class IsTickerMessageOwner(BasePermission):
+class IsTicketMessageOwner(BasePermission):
     message = 'شما اجازه دسترسی ندارید'
 
     def has_permission(self, request, view):

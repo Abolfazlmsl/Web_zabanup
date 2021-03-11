@@ -11,6 +11,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from core import models
+from reading import permissions
 from . import serializers
 
 
@@ -153,3 +154,24 @@ class CategoryListAPIView(generics.ListAPIView):
         DjangoFilterBackend,
     ]
     filterset_fields = ['type']
+
+
+class CommentViewSet(viewsets.ModelViewSet,
+                     mixins.CreateModelMixin,
+                     mixins.ListModelMixin):
+    """
+        Send comment for exam
+    """
+    serializer_class = serializers.CommentSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated, permissions.IsComment)
+    queryset = models.Comment.objects.filter(parent=None).order_by('-created_on')
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter
+    ]
+    filterset_fields = ['exam']
+    ordering_fields = ('like', 'created_on')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

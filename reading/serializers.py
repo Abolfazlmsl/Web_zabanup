@@ -97,3 +97,26 @@ class ExamRetrieveSerializer(serializers.ModelSerializer):
         model = models.Exam
         fields = '__all__'
         depth = 1
+
+
+class CommentChildrenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Comment
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    children = CommentChildrenSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Comment
+        fields = '__all__'
+        read_only_fields = (
+            'id',
+            'user',
+            'created_on',
+            'like',
+            'children'
+        )
+
+

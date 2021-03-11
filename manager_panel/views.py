@@ -162,7 +162,7 @@ class ManagerTicketMessageAPIView(generics.CreateAPIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (
         permissions.IsManager,
-        permissions.IsTickerMessageOwner
+        permissions.IsTicketMessageOwner
     )
     pagination_class = StandardResultsSetPagination
     queryset = models.TicketMessage.objects.all()

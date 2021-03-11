@@ -10,6 +10,7 @@ router.register('book', views.BookViewSet)
 # router.register('exam-category', views.ManagerExamCategoryViewSet)
 router.register('exam', views.ExamViewSet)
 router.register('reading', views.ReadingViewSet)
+router.register('comment', views.CommentViewSet)
 
 
 urlpatterns = [
