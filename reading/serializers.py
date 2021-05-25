@@ -13,10 +13,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Answer
-        fields = (
-            'id',
-            'text'
-        )
+        exclude = ['question']
 
 
 class QuestionSerializer(serializers.ModelSerializer):
