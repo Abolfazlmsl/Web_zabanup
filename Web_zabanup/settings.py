@@ -109,17 +109,17 @@ WSGI_APPLICATION = 'Web_zabanup.wsgi.application'
 
 #AMIR DB
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'zabanup_db',
-        'USER': 'root',
-        'PASSWORD': '',
-        'PORT': '3306',
-        'HOST': 'localhost'
-
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'zabanup_db',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'PORT': '3306',
+#         'HOST': 'localhost'
+#
+#     }
+# }
 
 # DATABASES = {
 #     'default': {

@@ -113,7 +113,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True
     )
     gender = models.CharField(max_length=128, choices=GENDER)
-    favorite_question = models.ManyToManyField('Question', blank=True, null=True)
+    favorite_question = models.ManyToManyField('Question', blank=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -290,8 +290,10 @@ class Answer(models.Model):
 class UserAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    answer = models.TextField()
+    # answer = models.TextField()
     grade = models.FloatField()
+    minute = models.PositiveIntegerField(default=60)
+    second = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -76,6 +76,8 @@ class UserAnswerSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'grade',
+            'minute',
+            'second',
             'created_on'
         )
 
