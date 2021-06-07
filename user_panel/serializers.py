@@ -78,6 +78,7 @@ class UserAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAnswer
         fields = '__all__'
+        depth = 1
 
 
 class TicketMessageSerializer(serializers.ModelSerializer):
