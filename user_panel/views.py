@@ -229,7 +229,7 @@ class UserAnswerViewSet(viewsets.GenericViewSet,
     queryset = models.UserAnswer.objects.all()
 
     def get_queryset(self):
-        queryset = models.UserAnswer.objects.filter(user=self.request.user)
+        queryset = models.UserAnswer.objects.filter()
         return queryset
 
 
@@ -283,4 +283,4 @@ class CommentViewSet(viewsets.GenericViewSet,
     queryset = models.Comment.objects.all()
 
     def get_queryset(self):
-        return models.Comment.objects.filter(user=self.request.user)
+        return models.Comment.objects.filter()
