@@ -306,6 +306,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField()
     like = models.PositiveIntegerField(default=0)
+    like_persons = models.ManyToManyField(User, related_name='Liked_persons', blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
 
     @property
