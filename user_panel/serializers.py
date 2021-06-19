@@ -81,6 +81,13 @@ class UserAnswerSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class UserAnswerCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.UserAnswer
+        fields = '__all__'
+
+
 class TicketMessageSerializer(serializers.ModelSerializer):
     """Serialize ticket message model"""
 
@@ -119,3 +126,10 @@ class CommentSerializer(serializers.ModelSerializer):
         model = models.Comment
         fields = '__all__'
         depth = 1
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Comment
+        fields = '__all__'

@@ -153,7 +153,7 @@ class Category(models.Model):
 
 class Exam(models.Model):
     # exam_code = models.CharField(max_length=64)
-    title = models. CharField(max_length=255, blank=True, null=True)
+    title = models. CharField(max_length=255, null=True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     difficulty = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     rate = models.CharField(max_length=1, blank=True, null=True)

@@ -222,7 +222,8 @@ class ForgetPasswordAPIView(APIView):
 
 class UserAnswerViewSet(viewsets.GenericViewSet,
                         mixins.ListModelMixin,
-                        mixins.RetrieveModelMixin):
+                        mixins.RetrieveModelMixin,
+                        mixins.CreateModelMixin,):
     serializer_class = serializers.UserAnswerSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
@@ -231,6 +232,12 @@ class UserAnswerViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         queryset = models.UserAnswer.objects.filter()
         return queryset
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.serializer_class
+        elif self.action == 'create':
+            return serializers.UserAnswerCreateSerializer
 
 
 class TicketViewSet(viewsets.GenericViewSet,
@@ -275,7 +282,9 @@ class TicketMessageAPIView(generics.CreateAPIView):
 
 class CommentViewSet(viewsets.GenericViewSet,
                      mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin):
+                     mixins.RetrieveModelMixin,
+                     mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin):
     serializer_class = serializers.CommentSerializer
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated, permissions.IsTicketMessageOwner)
@@ -284,3 +293,11 @@ class CommentViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
         return models.Comment.objects.filter()
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return self.serializer_class
+        elif self.action == 'create':
+            return serializers.CommentCreateSerializer
+        else:
+            return serializers.CommentCreateSerializer
