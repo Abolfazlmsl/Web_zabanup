@@ -39,8 +39,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta(UserSerializer.Meta):
         fields = (
+                'id',
                 'name',
                 'email',
+                'phone_number',
                 'picture',
                 'gender',
                 'favorite_question',
