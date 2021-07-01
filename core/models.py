@@ -100,6 +100,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         max_length=255,
         unique=True,
+        blank=True,
         null=True,
     )
     generated_token = models.IntegerField(
